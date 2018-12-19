@@ -1,6 +1,7 @@
 # Virtual Exhibitions
 
 Virtual Reality Exhibitions with HTC Vive and Unity3d.
+This is the front-end repository. For the back-end see https://github.com/dbisUnibas/virtual-exhibition-manager
 
 ## Vision
 
@@ -13,14 +14,6 @@ virtual exhibition space.
  * freely movable character / player
  * Generic: Support for multiple / interchangeable exhibitions
  * Interface / communication between back-end (exhibition provider) and front-end (3D world)
-
-### Optional Features
-
- * Exhibition creator: UI for creating exhibitions
- * Nation wide exhibitions: Main menu is map of nation and multiple exhibitions are located at their real-world location
- * Exhibition generator: Deeply, automagically created exhibitions based on parameters
- * Multimedia
- * VR
 
 ## Unity
 
@@ -69,9 +62,15 @@ These steps are taken from https://stackoverflow.com/a/18225479
 
 To start working on the project
 
+ 0. Have a HTC Vive / SteamVR setup. For the installation process, see the [manual](https://support.steampowered.com/steamvr/HTC_Vive/)
  1. Start Unity3d
  2. On the start screen click the `Open` button
- 3. Select `VirtualExhibitions` from this repository
+ 3. Select this repository
+ 4. Get yourself the [backend](https://github.com/dbisUnibas/virtual-exhibition-manager)
+ 5. Start the backend
+ 6. Feed the backend with an exhibition
+ 7. Adopt the exhibition id within unity. Click on the `VirtualExhibitionManager` game object in the hierarchy window and set the `Exhitibion Id` to your id.
+ 8. Start the incredible immersive experience of having an exhibition at your place
  
 ## Contributors
 
