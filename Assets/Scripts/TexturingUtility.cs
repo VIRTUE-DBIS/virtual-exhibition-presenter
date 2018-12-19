@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,14 +6,14 @@ namespace DefaultNamespace
 {
     public class TexturingUtility
     {
-        public static Material getMaterial(string name)
+        public static string Translate(string name)
         {
             var material = "";
             
             switch(name) {
                 case "BRICKS": 
-                material = "NBricksMaterial";
-                break;
+                    material = "NBricksMaterial";
+                    break;
                 case "CONCRETE": 
                     material = "NConcreteMaterial";
                     break;
@@ -55,10 +56,17 @@ namespace DefaultNamespace
                 case "NONE":
                     material = "";
                     break;
-                 default:
+                default:
                     material = "WallpaperMaterial"; //TODO: add default option 
                     break;
             }
+
+            return material;
+        }
+        
+        public static Material getMaterial(string name)
+        {
+            var material = Translate(name);
             
             //TODO: NONE option is missing!
 

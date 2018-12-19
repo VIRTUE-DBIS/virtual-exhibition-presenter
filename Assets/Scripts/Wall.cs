@@ -2,7 +2,7 @@
 using DefaultNamespace;
 using UnityEngine;
 
-public class Wall : MonoBehaviour {
+public class Wall : TexturedMonoBehaviour {
   
   public WallOrientation Orientation;
 
@@ -64,23 +64,5 @@ public class Wall : MonoBehaviour {
     }
   }
 
-  // Use this for initialization
-  private void Start()
-  {    
-  }
-  
-  
-  public void LoadTexture(string materialName)
-  {
-    var material = TexturingUtility.getMaterial(materialName);
-			
-    Renderer rend = GetComponent<Renderer>();
-    if (rend != null && material != null)
-    {
-      rend.material = material;
-    }
-  }
-
-  // Update is called once per frame
-  private void Update() { }
+ 
 }

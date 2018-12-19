@@ -177,8 +177,8 @@ public class Room : MonoBehaviour {
 		
 		Debug.Log("adjusting ceiling and floor");
 		// TODO Use new material loading code
-		this.gameObject.transform.Find("Ceiling").gameObject.GetComponent<Ceiling>().LoadTexture(room.ceiling);
-		this.gameObject.transform.Find("Floor").gameObject.GetComponent<Floor>().LoadTexture(room.floor);
+		this.gameObject.transform.Find("Ceiling").gameObject.GetComponent<TexturedMonoBehaviour>().LoadMaterial(TexturingUtility.Translate(room.ceiling));
+		this.gameObject.transform.Find("Floor").gameObject.GetComponent<TexturedMonoBehaviour>().LoadMaterial(TexturingUtility.Translate(room.floor));
 		
 		/*Debug.Log("add globe");
 		if(GlobePrefab != null){ //TODO: add a new check
@@ -232,22 +232,22 @@ public class Room : MonoBehaviour {
 		foreach (var wall in walls) {
 			if (wall.direction == "NORTH") {
 				LoadExhibits(wall, WallOrientation.NORTH);
-				GetWallForOrientation(WallOrientation.NORTH).LoadTexture(wall.texture);
+				GetWallForOrientation(WallOrientation.NORTH).LoadMaterial(TexturingUtility.Translate(wall.texture));
 			}
 
 			if (wall.direction == "EAST") {
 				LoadExhibits(wall, WallOrientation.EAST);
-				GetWallForOrientation(WallOrientation.EAST).LoadTexture(wall.texture);
+				GetWallForOrientation(WallOrientation.EAST).LoadMaterial(TexturingUtility.Translate(wall.texture));
 			}
 
 			if (wall.direction == "SOUTH") {
 				LoadExhibits(wall, WallOrientation.SOUTH);
-				GetWallForOrientation(WallOrientation.SOUTH).LoadTexture(wall.texture);
+				GetWallForOrientation(WallOrientation.SOUTH).LoadMaterial(TexturingUtility.Translate(wall.texture));
 			}
 
 			if (wall.direction == "WEST") {
 				LoadExhibits(wall, WallOrientation.WEST);
-				GetWallForOrientation(WallOrientation.WEST).LoadTexture(wall.texture);
+				GetWallForOrientation(WallOrientation.WEST).LoadMaterial(TexturingUtility.Translate(wall.texture));
 			}
 		}
 	}

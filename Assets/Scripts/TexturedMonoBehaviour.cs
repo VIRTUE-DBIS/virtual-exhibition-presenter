@@ -11,7 +11,7 @@ namespace DefaultNamespace {
     /// </summary>
     public void LoadMaterial(string materialName)
     {
-      Debug.Log("Floor texture" + materialName);
+      Debug.Log("Loading material " + materialName);
             
       var material = Resources.Load("Materials/" + materialName, typeof(Material)) as Material;
 			
