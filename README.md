@@ -1,11 +1,11 @@
 # Virtual Exhibitions
 
-VR Exhibitions on Vive. A hackathon prototype created at the [4th Swiss Open Cultural Data Hackathon](http://make.opendata.ch/wiki/event:2018-10). Read more about our project on the [Opendata Wiki](http://make.opendata.ch/wiki/project:virtual_3d_exhibition). This repository is more for the technically inclined people.
+Virtual Reality Exhibitions with HTC Vive and Unity3d.
 
 ## Vision
 
 The goal is to create a customisable
-virtual exhibition space with a focus on GLAM datasets.
+virtual exhibition space.
 
 ### Core Features
 
@@ -81,3 +81,6 @@ To start working on the project
  * Mahnaz Parian
  * Loris Sauter
 
+---
+
+This piece of software originates from the [4th Swiss Open Cultural Data Hackathon](http://make.opendata.ch/wiki/event:2018-10). Read more about our project on the [Opendata Wiki](http://make.opendata.ch/wiki/project:virtual_3d_exhibition).
