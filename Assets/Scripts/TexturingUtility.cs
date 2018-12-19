@@ -18,10 +18,10 @@ namespace DefaultNamespace
                     material = "NConcreteMaterial";
                     break;
                 case "CONCRETETILES":
-                    material = "ConcreteMaterial2";
+                    material = "NConcreteMaterial2";
                     break;
                 case "FABRIC":
-                    material = "FabricMaterial";
+                    material = "Fabric02Material";
                     break;
                 case "GOLD":
                     material = "GoldMaterial";
@@ -48,7 +48,7 @@ namespace DefaultNamespace
                     material = "NWoodFloorMaterial";
                     break;
                 case"WOOD2":
-                    material = "WoodMaterial2";
+                    material = "NWoodMaterial";
                     break;
                 case"WOOD3":
                     material = "WoodMaterial3";

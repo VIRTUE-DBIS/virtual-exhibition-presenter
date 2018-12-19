@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 33706544582435154}
   - component: {fileID: 64566593328496822}
   - component: {fileID: 23263260881038954}
-  - component: {fileID: 114723926061167412}
+  - component: {fileID: 114779238539270182}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -300,7 +300,7 @@ GameObject:
   - component: {fileID: 33627639329211432}
   - component: {fileID: 64484302935778246}
   - component: {fileID: 23194243019520318}
-  - component: {fileID: 114209612156555450}
+  - component: {fileID: 114606928041078842}
   m_Layer: 0
   m_Name: Ceiling
   m_TagString: Untagged
@@ -376,7 +376,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1907049585453288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4147558842932452}
@@ -1168,7 +1168,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 1.5
   m_Range: 8
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -1187,7 +1187,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
@@ -1269,17 +1269,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114209612156555450
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1698979688592890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 533ea44e5d81e4237a4cbcdf7d6aa28d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114340927558037262
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1340,6 +1329,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Orientation: 2
   RoomRadius: 5
+--- !u!114 &114606928041078842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1698979688592890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fb5bf3c30a649d1b054325b00d88a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114653927589157550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1373,7 +1373,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 0.8
   m_Text: 
---- !u!114 &114723926061167412
+--- !u!114 &114779238539270182
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1381,7 +1381,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1218106531942820}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d8a8fabe44046d9a486c47d1ffacad5, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fb5bf3c30a649d1b054325b00d88a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114827660552076380
