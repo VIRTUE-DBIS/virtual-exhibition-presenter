@@ -352,7 +352,7 @@ Light:
   m_SpotAngle: 70
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 0.3
@@ -366,7 +366,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0.1
   m_ColorTemperature: 6570
@@ -434,6 +434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 114050182069843912}
+  font: {fileID: 0}
 --- !u!114 &114302990138164502
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -553,6 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 114420626376548140}
+  font: {fileID: 0}
 --- !u!114 &114865178109114850
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -19,7 +19,7 @@ namespace DefaultNamespace {
 
     public void LoadAndCreateExhibition() {
       _restClient.ServerUrl = ServerSettings.SERVER_ID;
-      _restClient.RequestExhibition("exhibitions/load/" + this.ExhibitionId, ParseExhibition);
+      _restClient.RequestExhibition(this.ExhibitionId, ParseExhibition);
       Debug.Log("Requested ex");
     }
 
