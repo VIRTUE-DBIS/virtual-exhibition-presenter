@@ -9,7 +9,7 @@ public class BuildingManager : MonoBehaviour {
 
 	public float RoomSize = 10f;
 
-	public float Offset = 2f;
+	public float Offset = 5f;
 
 	public GameObject RoomPrefab;
 

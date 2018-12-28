@@ -10,7 +10,16 @@ namespace DefaultNamespace {
     private BuildingManager _buildingManager;
     public String ExhibitionId = "5c17b10ea6abfddbb3fa66ae";
 
-    private void Start() {
+    public Vector3 LobbySpawn = new Vector3(0,-9,0);
+    
+    private void Start()
+    {
+      Debug.Log("Persistent Path: "+Application.persistentDataPath);
+      var go = GameObject.FindWithTag("Player");
+      if (go != null)
+      {
+        go.transform.position = new Vector3(0,-9.9f,0);
+      }
       Debug.Log("Starting ExMan");
       _restClient = gameObject.AddComponent<RESTClient>();
       _buildingManager = GetComponent<BuildingManager>();

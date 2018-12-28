@@ -20,7 +20,7 @@ public class Room : MonoBehaviour {
 
 	private List<GameObject> displayedImages = new List<GameObject>();
 
-	private bool LightingActivated = true;
+	private bool LightingActivated = false;
 
 	public GameObject GlobePrefab;
 
