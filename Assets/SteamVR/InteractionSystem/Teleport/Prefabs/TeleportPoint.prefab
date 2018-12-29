@@ -492,14 +492,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   locked: 0
   markerActive: 1
-  teleportType: 1
-  title: hhjv
+  teleportType: 0
+  title: 
   switchToScene: 1
   titleVisibleColor: {r: 0.13885128, g: 0.6527193, b: 0.78677076, a: 0.5}
   titleHighlightedColor: {r: 0.45280647, g: 0.9191189, b: 0.45602244, a: 0.5}
   titleLockedColor: {r: 0.7867738, g: 0.5544188, b: 0.1388565, a: 0.5}
-  targetX: 0
-  targetZ: 0
+  destination: {x: 0, y: 0, z: 0}
   playerSpawnPoint: 1
 --- !u!114 &11493574
 MonoBehaviour:
