@@ -6,10 +6,6 @@
 #
 # Custom Ignoring
 #------------------------
-SteamVR/
-SteamVR.meta
-VirtualExhibitions/bindings_*.json
-VirtualExhibitions/actions.json
 .idea/
 *~
 
