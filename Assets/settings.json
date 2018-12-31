@@ -1,0 +1,10 @@
+{
+    "StartInLobby": false,
+    "VREMAddress": "127.0.0.1:4567",
+    "SpotsEnabled": false,
+    "FloorLogoEnabled": true,
+    "CeilingLogoEnabled": true,
+    "PlaygroundEnabled": false,
+    "RequestExhibitions": false,
+    "exhibitionIds": []
+}

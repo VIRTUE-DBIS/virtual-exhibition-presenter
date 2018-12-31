@@ -11,7 +11,19 @@ namespace DefaultNamespace {
     public String ExhibitionId = "5c17b10ea6abfddbb3fa66ae";
 
     public Vector3 LobbySpawn = new Vector3(0,-9,0);
-    
+
+    public Settings Settings;
+
+    private void Awake()
+    {
+      Settings = Settings.LoadSettings();
+    }
+
+    private void OnApplicationQuit()
+    {
+      Settings.StoreSettings();
+    }
+
     private void Start()
     {
       Debug.Log("Persistent Path: "+Application.persistentDataPath);

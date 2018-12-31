@@ -1164,5 +1164,15 @@ namespace Valve.VR.InteractionSystem
 				return hand.transform;
 			}
 		}
-	}
+
+	    public float GetCurrentFadeTime()
+	    {
+		    return teleportFadeTime;
+	    }
+
+	    public Player GetPlayer()
+	    {
+		    return player;
+	    }
+    }
 }
