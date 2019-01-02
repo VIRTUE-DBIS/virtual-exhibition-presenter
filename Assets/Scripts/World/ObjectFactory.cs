@@ -3,6 +3,7 @@ using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP.World {
   
@@ -43,6 +44,15 @@ namespace Unibas.DBIS.VREP.World {
       l.transform.parent = room.transform;
       l.transform.localPosition = new Vector3(0,2.5f,0);
       room.name = "Room";
+      
+      GameObject teleportArea = new GameObject("TeleportArea");
+      var col = teleportArea.AddComponent<BoxCollider>();
+      col.size = new Vector3(modelData.Size, 0.01f, modelData.Size);
+      teleportArea.AddComponent<MeshRenderer>();
+      var tpa = teleportArea.AddComponent<TeleportArea>();
+      tpa.transform.parent = room.transform;
+      tpa.transform.localPosition = new Vector3(0,0.01f,0);
+      
       return room;
     }
 

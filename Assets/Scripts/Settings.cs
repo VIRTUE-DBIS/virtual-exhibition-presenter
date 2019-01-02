@@ -11,7 +11,7 @@ namespace DefaultNamespace
         /// Whether the player starts in the lobby
         /// Default: False
         /// </summary>
-        public bool StartInLobby = false;
+        public bool StartInLobby = true;
 
         /// <summary>
         /// The Address of the VREM server instance, inclusive port
