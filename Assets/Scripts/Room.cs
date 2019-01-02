@@ -5,7 +5,9 @@ using System.Linq;
 using DefaultNamespace;
 using DefaultNamespace.ObjImport;
 using DefaultNamespace.VREM.Model;
+using Unibas.DBIS.VREP;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 public class Room : MonoBehaviour {
 
@@ -94,6 +96,22 @@ public class Room : MonoBehaviour {
 	public Displayal Display(string url,  WallOrientation wall, float x, float y, float w, float h, bool lightOn =  true, string audioUrl  = null) {
 		Debug.Log(string.Format("{0}, {1}, {2}/{3}, {4}/{5}",url,wall,x,y,w,h));
 		GameObject displayal = Instantiate(PlanePrefab);
+
+		var go = GameObject.Find("VirtualExhibitionManager");
+		if (go.GetComponent<VREPController>().Settings.PlaygroundEnabled)
+		{
+			//var r = displayal.AddComponent<Rigidbody>();
+			//r.useGravity = false;
+			/*var i = displayal.AddComponent<Interactable>();
+			i.hideHandOnAttach = true;
+			i.useHandObjectAttachmentPoint = true;
+			i.handFollowTransformPosition = true;
+			i.handFollowTransformRotation = true;
+			i.highlightOnHover = true;
+			var t = displayal.AddComponent<Throwable>();
+			t.releaseVelocityStyle = ReleaseStyle.NoChange;
+			t.restoreOriginalParent = false;*/
+		}
 		
 		if(!LightingActivated || !lightOn){	
 			displayal.transform.Find("Directional light").gameObject.SetActive(false);

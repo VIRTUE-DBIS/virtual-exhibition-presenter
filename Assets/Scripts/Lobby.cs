@@ -17,6 +17,25 @@ public class Lobby : MonoBehaviour
         return model;
     }
 
+    public static GameObject CreateTeleportButtonModel(Vector3 position, Vector3 destination, float size, float border)
+    {
+        var modelData = GenerateButtonModel(size, border, border / 2f);
+        GameObject buttonObj = ModelFactory.CreateModel(modelData);
+        TeleportButton tpBtn = buttonObj.AddComponent<TeleportButton>();
+        tpBtn.Destination = destination;
+        BoxCollider col = buttonObj.AddComponent<BoxCollider>();
+        buttonObj.AddComponent<Button>();
+        var hand = new CustomEvents.UnityEventHand();
+        hand.AddListener(h =>
+        {
+            Debug.Log("CLICKED!");
+            tpBtn.TeleportPlayer();
+        });
+        buttonObj.AddComponent<UIElement>().onHandClick = hand;
+        buttonObj.transform.position = position;
+        return buttonObj;
+    }
+
     // Use this for initialization
     void Start()
     {
