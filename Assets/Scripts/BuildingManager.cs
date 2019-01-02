@@ -22,11 +22,11 @@ public class BuildingManager : MonoBehaviour {
 	private List<Room> theRooms = new List<Room>();
 
 	private int GetNextPosition(int pos) {
-		return pos + 1 % _exhibition.rooms.Length;
+		return (pos + 1) % _exhibition.rooms.Length;
 	}
 
 	private int GetPreviousPosition(int pos) {
-		return pos - 1 + _exhibition.rooms.Length % _exhibition.rooms.Length;
+		return (pos - 1 + _exhibition.rooms.Length) % _exhibition.rooms.Length;
 	}
 	
 

@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd383596e0c94e46a6268577549e3d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExhibitionId: 5c263f204d7ec8ccb89be7fa
+  ExhibitionId: 5c2c65934d7ec8ccb89bef9e
   LobbySpawn: {x: 0, y: -9.9, z: 0}
   Settings:
     StartInLobby: 0
@@ -605,6 +605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 471107342}
   - component: {fileID: 471107341}
+  - component: {fileID: 471107343}
   m_Layer: 0
   m_Name: Lobby
   m_TagString: Untagged
@@ -657,6 +658,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &471107343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 471107340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fc6b505433faa4e8ea130f1a8f0f0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &477856384
 GameObject:
   m_ObjectHideFlags: 0

@@ -85,6 +85,10 @@ namespace Valve.VR.InteractionSystem
         }
         private bool ShouldIgnore(GameObject check)
         {
+            if (hideHighlight == null)
+            {
+                return false;
+            }
             for (int ignoreIndex = 0; ignoreIndex < hideHighlight.Length; ignoreIndex++)
             {
                 if (check == hideHighlight[ignoreIndex])
