@@ -57,20 +57,21 @@ namespace DefaultNamespace
                     material = "";
                     break;
                 default:
-                    material = "WallpaperMaterial"; //TODO: add default option 
+                    material = name;
                     break;
             }
 
             return material;
         }
         
-        public static Material getMaterial(string name)
+        public static Material LoadMaterialByName(string name)
         {
+            if (!name.EndsWith("Material")) {
+                name = name + "Material";
+            }
             var material = Translate(name);
-            
-            //TODO: NONE option is missing!
 
-            if (material != "")
+            if (!string.IsNullOrEmpty(material))
             {
                 return Resources.Load("Materials/" + material, typeof(Material)) as Material; 
             }

@@ -9,7 +9,6 @@ using Valve.VR.InteractionSystem;
 public class Lobby : MonoBehaviour
 {
 
-
 	private static ComplexCuboidModel GenerateButtonModel(float size, float border, float height)
 	{
 		ComplexCuboidModel model = new ComplexCuboidModel();

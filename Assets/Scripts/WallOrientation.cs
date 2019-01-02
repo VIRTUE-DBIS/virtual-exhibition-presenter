@@ -2,9 +2,6 @@
   public enum WallOrientation {
     
     
-    // Z axis of wall looks in direction of 
-    
-    
     /// <summary>
     /// Looks into negative X direction. Red
     /// </summary>

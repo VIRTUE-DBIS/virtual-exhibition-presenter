@@ -167,14 +167,16 @@ namespace Unibas.DBIS.DynamicModelling
             ceiling.name = "Ceiling";
             ceiling.transform.parent = ceilingAnchor.transform;
 
-            root.transform.position = model.Position;
+            
             // North Aligned
-            ceilingAnchor.transform.position = new Vector3(halfSize, model.Height, halfSize);
+            ceilingAnchor.transform.position = new Vector3(-halfSize, model.Height, halfSize);
             ceilingAnchor.transform.Rotate(Vector3.right, -90);
             // East Aligned
             //ceilingAnchor.transform.position = new Vector3(halfSize, height, -halfSize);
             //ceilingAnchor.transform.Rotate( Vector3.back, -90);
 
+            root.transform.position = model.Position;
+            
             root.AddComponent<ModelContainer>().Model = model;
             return root;
         }

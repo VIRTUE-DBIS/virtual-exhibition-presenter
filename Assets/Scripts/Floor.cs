@@ -18,7 +18,7 @@ namespace DefaultNamespace
         {
             Debug.Log("Floor texture" + materialName);
             
-            var material = TexturingUtility.getMaterial(materialName);
+            var material = TexturingUtility.LoadMaterialByName(materialName);
 			
             Renderer rend = GetComponent<Renderer>();
             if (rend != null && material != null)

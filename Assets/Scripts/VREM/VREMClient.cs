@@ -6,12 +6,15 @@ using UnityEngine;
 
 namespace DefaultNamespace.VREM
 {
-    public class RESTClient : MonoBehaviour
+    public class VREMClient : MonoBehaviour
     {
         public string ServerUrl;
         private string suffix;
 
         private string response;
+
+        private const string LOAD_EXHIBITION_ACTION = "exhibitions/load/";
+        private const string LIST_EXHIBITIONS_ACTION = "exhibitions/list";
 
         private Action<string> responseProcessor;
 
@@ -30,7 +33,7 @@ namespace DefaultNamespace.VREM
         private IEnumerator DoExhibitionRequest()
         {
             Debug.Log("[RC] Requesting...");
-            WWW www = new WWW(ServerUrl + "exhibitions/load/" + suffix);
+            WWW www = new WWW(ServerUrl + LOAD_EXHIBITION_ACTION + suffix);
             yield return www;
             if (www.error == null)
             {

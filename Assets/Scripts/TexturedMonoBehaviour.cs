@@ -2,7 +2,20 @@
 
 namespace DefaultNamespace {
   
+  
   public class TexturedMonoBehaviour : MonoBehaviour {
+
+    /// <summary>
+    /// Loads the specified material as the renderer's main material.
+    /// </summary>
+    /// <param name="material">The material to load</param>
+    public void LoadMaterial(Material material) {
+      Renderer rend = GetComponent<Renderer>();
+      if (rend != null && material != null)
+      {
+        rend.material = material;
+      }
+    }
     
     /// <summary>
     /// Loads the specified material from the resources folder.
@@ -15,11 +28,7 @@ namespace DefaultNamespace {
             
       var material = Resources.Load("Materials/" + materialName, typeof(Material)) as Material;
 			
-      Renderer rend = GetComponent<Renderer>();
-      if (rend != null && material != null)
-      {
-        rend.material = material;
-      }
+      LoadMaterial(material);
     }
     
   }

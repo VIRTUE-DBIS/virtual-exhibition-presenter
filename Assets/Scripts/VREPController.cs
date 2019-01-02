@@ -1,12 +1,13 @@
 ﻿using System;
+using DefaultNamespace;
 using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using UnityEngine;
 
-namespace DefaultNamespace {
-  public class ExhibitionManager : MonoBehaviour {
+namespace Unibas.DBIS.VREP {
+  public class VREPController : MonoBehaviour {
 
-    private RESTClient _restClient;
+    private VREMClient _vremClient;
     private BuildingManager _buildingManager;
     public String ExhibitionId = "5c17b10ea6abfddbb3fa66ae";
 
@@ -28,19 +29,19 @@ namespace DefaultNamespace {
     {
       Debug.Log("Persistent Path: "+Application.persistentDataPath);
       var go = GameObject.FindWithTag("Player");
-      if (go != null)
+      if (go != null && Settings.StartInLobby)
       {
         go.transform.position = new Vector3(0,-9.9f,0);
       }
       Debug.Log("Starting ExMan");
-      _restClient = gameObject.AddComponent<RESTClient>();
+      _vremClient = gameObject.AddComponent<VREMClient>();
       _buildingManager = GetComponent<BuildingManager>();
       LoadAndCreateExhibition();
     }
 
     public void LoadAndCreateExhibition() {
-      _restClient.ServerUrl = ServerSettings.SERVER_ID;
-      _restClient.RequestExhibition(this.ExhibitionId, ParseExhibition);
+      _vremClient.ServerUrl = ServerSettings.SERVER_ID;
+      _vremClient.RequestExhibition(this.ExhibitionId, ParseExhibition);
       Debug.Log("Requested ex");
     }
 

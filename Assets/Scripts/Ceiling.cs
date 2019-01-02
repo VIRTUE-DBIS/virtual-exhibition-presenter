@@ -17,7 +17,7 @@ namespace DefaultNamespace
 		/// </summary>
 		public void LoadTexture(string materialName)
 		{
-			var material = TexturingUtility.getMaterial(materialName);
+			var material = TexturingUtility.LoadMaterialByName(materialName);
 			
 			Renderer rend = GetComponent<Renderer>();
 			if (rend != null && material != null)
