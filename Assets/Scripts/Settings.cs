@@ -18,7 +18,7 @@ namespace DefaultNamespace
         /// Usually this is 127.0.0.1:4567
         /// Default: 127.0.0.1:4567
         /// </summary>
-        public string VREMAddress = "127.0.0.1:4567";
+        public string VREMAddress = "http://127.0.0.1:4567";
 
         /// <summary>
         /// Whether each exhibit has its own spotlight
@@ -86,10 +86,29 @@ namespace DefaultNamespace
             }
             else
             {
-                Settings s = new Settings();
-                s._default = true;
-                return s;
+                return createDefault();
             }
+        }
+
+        public static Settings LoadSettings(string path)
+        {
+            var filePath = Application.dataPath + "/" + path;
+            if (File.Exists(filePath))
+            {
+                string json = File.ReadAllText(filePath);
+                return JsonUtility.FromJson<Settings>(json);
+            }
+            else
+            {
+                return createDefault();
+            }
+        }
+
+        private static Settings createDefault()
+        {
+            Settings s = new Settings();
+            s._default = true;
+            return s;
         }
 
         private static string getPath()

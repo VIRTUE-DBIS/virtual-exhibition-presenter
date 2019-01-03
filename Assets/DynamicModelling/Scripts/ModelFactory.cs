@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unibas.DBIS.DynamicModelling.Models;
 using UnityEngine;
 
@@ -344,6 +347,12 @@ namespace Unibas.DBIS.DynamicModelling
             return go;
         }
 
+
+        private static Vector3 CalculateUnit(Vector3 dimensions)
+        {
+            float m = Math.Max(Math.Max(dimensions.x, dimensions.y), dimensions.z);
+            return new Vector3(m/dimensions.x, m/dimensions.y, m/dimensions.z);
+        }
         
         private static Vector2 CalculateUnit(float width, float height)
         {
@@ -462,9 +471,19 @@ namespace Unibas.DBIS.DynamicModelling
 
             // Cube based uv mapping
 
+            Vector3 units = CalculateUnit(new Vector3(width, height, depth));
+            
+            Vector2 xyUnits = new Vector2(units.x,units.y);
+            Vector2 xzUnits = new Vector2(units.x, units.z);
+            Vector2 yzUnits = new Vector2(units.y, units.z);
+            
+            Debug.Log(units);
+            
+            /*
             Vector2 xyUnits = CalculateUnit(width, height);
             Vector2 xzUnits = CalculateUnit(width, depth);//CalculateUnit(width, depth);
             Vector2 yzUnits = CalculateUnit(depth, height);//CalculateUnit(depth, height);
+            */
 
             float xyThird = xyUnits.y / 3f;
             float xyQuart = xyUnits.x / 4f;
@@ -500,6 +519,10 @@ namespace Unibas.DBIS.DynamicModelling
                 new Vector2(2 * xzQuart, xzThird)
             };
 
+            //List<string> list= new List<string>();
+            //uv.ToList().ForEach(vector2 => list.Add(vector2.ToString()));
+            //Debug.Log("[Cuboid] "+string.Join(", ",list.ToArray()));
+            
             mesh.uv = uv;
 
             mesh.RecalculateBounds();

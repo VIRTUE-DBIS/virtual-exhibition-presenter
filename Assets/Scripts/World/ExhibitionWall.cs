@@ -7,7 +7,7 @@ namespace Unibas.DBIS.VREP.World {
   /// <summary>
   /// A representation of a wall, attachable to a gameobject.
   /// </summary>
-  public class Wall : MonoBehaviour {
+  public class ExhibitionWall : MonoBehaviour {
 
     /// <summary>
     /// The wall's data
@@ -19,6 +19,18 @@ namespace Unibas.DBIS.VREP.World {
     /// </summary>
     public WallModel WallModel;
 
+    /// <summary>
+    /// The Anchor for adding exhibits.
+    /// </summary>
+    public GameObject Anchor;
+
+    public void AttachExhibits()
+    {
+      foreach (var e in WallData.exhibits)
+      {
+        
+      }
+    }
 
   }
 }

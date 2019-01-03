@@ -24,6 +24,7 @@ public class ImageLoader : MonoBehaviour {
         			GetComponent<Renderer>().material.mainTexture = tex;
 			} else {
 				Debug.LogError(www.error);
+				Debug.LogError(www.url);
 				Debug.LogError(www.responseHeaders);
 			}
 			

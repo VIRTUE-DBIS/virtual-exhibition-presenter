@@ -15,9 +15,36 @@ namespace Unibas.DBIS.VREP {
 
     public Settings Settings;
 
+    public string settingsPath;
+
+    public static VREPController Instance;
+
     private void Awake()
     {
+      if (string.IsNullOrEmpty(settingsPath))
+      {
       Settings = Settings.LoadSettings();
+        
+      }
+      else
+      {
+        Settings = Settings.LoadSettings(settingsPath);
+      }
+      SanitizeHost();
+      Instance = this;
+    }
+
+    private void SanitizeHost()
+    {
+      if (!Settings.VREMAddress.EndsWith("/"))
+      {
+        Settings.VREMAddress += "/";
+      }
+
+      if (!Settings.VREMAddress.StartsWith("http://"))
+      {
+        Settings.VREMAddress = "http://" + Settings.VREMAddress;
+      }
     }
 
     private void OnApplicationQuit()
@@ -40,12 +67,25 @@ namespace Unibas.DBIS.VREP {
     }
 
     public void LoadAndCreateExhibition() {
-      _vremClient.ServerUrl = ServerSettings.SERVER_ID;
-      _vremClient.RequestExhibition(this.ExhibitionId, ParseExhibition);
+      _vremClient.ServerUrl = Settings.VREMAddress;
+
+      var exId = "";
+      if (Settings.exhibitionIds[0] != null)
+      {
+        exId = Settings.exhibitionIds[0];
+      }
+      else
+      {
+        exId= ExhibitionId;
+      }
+      
+      
+      _vremClient.RequestExhibition(exId, ParseExhibition);
       Debug.Log("Requested ex");
     }
 
     private void ParseExhibition(string json) {
+      Debug.Log(json);
       Exhibition ex = JsonUtility.FromJson<Exhibition>(json);
       Debug.Log(json);
       Debug.Log(ex);
