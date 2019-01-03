@@ -28,7 +28,6 @@ public class Lobby : MonoBehaviour
         var hand = new CustomEvents.UnityEventHand();
         hand.AddListener(h =>
         {
-            Debug.Log("CLICKED!");
             tpBtn.TeleportPlayer();
         });
         buttonObj.AddComponent<UIElement>().onHandClick = hand;

@@ -31,6 +31,19 @@ namespace DefaultNamespace.VREM.Model {
       }
       
     }
-    
+
+    public Wall GetWall(WallOrientation orientation)
+    {
+      foreach (var wall in walls)
+      {
+        WallOrientation wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wall.direction, true);
+        if (wor.Equals(orientation))
+        {
+          return wall;
+        }
+      }
+
+      return null;
+    }
   }
 }

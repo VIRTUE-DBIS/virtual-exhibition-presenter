@@ -343,6 +343,10 @@ namespace Unibas.DBIS.DynamicModelling
                 meshRenderer.material.color = Color.white;
             }
 
+            // TODO Highly experimental!
+
+            var boxCollider = go.AddComponent<BoxCollider>();
+            boxCollider.size = new Vector3(width,height,0.0001f);
 
             return go;
         }

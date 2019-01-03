@@ -6,6 +6,11 @@
       "text": "A room",
       "floor": "NWoodFloor",
       "ceiling": "WhiteStucco",
+      "size":{
+        "x": 10.0,
+        "y": 5.0,
+        "z": 10.0
+      },
       "position": {
         "x": 0.0,
         "y": 0.0,
