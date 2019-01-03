@@ -85,6 +85,13 @@ namespace Unibas.DBIS.VREP {
     }
 
     private void ParseExhibition(string json) {
+      if (json == null)
+      {
+        Debug.LogError("Couldn't load exhibition from backend");
+        Debug.Log("Loading placeholder instead");
+        var jtf = Resources.Load<TextAsset>("Configs/placeholder-exhibition");
+        json = jtf.text;
+      }
       Debug.Log(json);
       Exhibition ex = JsonUtility.FromJson<Exhibition>(json);
       Debug.Log(json);
@@ -95,6 +102,8 @@ namespace Unibas.DBIS.VREP {
       //_buildingManager.BuildRoom(ex.rooms[0]);
       
     }
+    
+    
     
   }
 }

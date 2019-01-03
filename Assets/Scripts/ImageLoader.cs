@@ -16,6 +16,7 @@ public class ImageLoader : MonoBehaviour {
 	private IEnumerator LoadImage(string url)
 	{
 		Texture2D tex = new Texture2D(4, 4, TextureFormat.DXT1, true);
+		var hasError = false;
 		using (WWW www = new WWW(url))
 		{
 			yield return www;
@@ -26,12 +27,21 @@ public class ImageLoader : MonoBehaviour {
 				Debug.LogError(www.error);
 				Debug.LogError(www.url);
 				Debug.LogError(www.responseHeaders);
+				hasError = true;
 			}
 			
 		}
 
-		
+		if (hasError)
+		{
+			_renderer.material.mainTexture = Resources.Load<Texture>("Textures/not-available");
+		}
+		else
+		{
 		_renderer.material.mainTexture = tex;
+			
+		}
+		
 	}
 
 	/// <summary>

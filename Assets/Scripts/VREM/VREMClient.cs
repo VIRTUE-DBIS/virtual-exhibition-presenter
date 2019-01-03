@@ -22,7 +22,7 @@ namespace DefaultNamespace.VREM
         /// Requests an exhibition and calls the processor, once the exhibition is loaded.
         /// </summary>
         /// <param name="exhibitionId">The ID of the exhibition</param>
-        /// <param name="processor">An Action which processes VREM's response</param>
+        /// <param name="processor">An Action which processes VREM's response. If null is passed to that action, an error occurred</param>
         public void RequestExhibition(string exhibitionId, Action<string> processor)
         {
             this.suffix = exhibitionId;
@@ -55,10 +55,19 @@ namespace DefaultNamespace.VREM
             }
             else
             {
+                Debug.LogError(www.error);
                 // Error, handle it!
+                error = true;
+                responseProcessor.Invoke(null);
             }
         }
 
+        private bool error = false;
+
+        public bool HasError()
+        {
+            return error;
+        }
 
         /**
              * Generates a WWW object with given params
