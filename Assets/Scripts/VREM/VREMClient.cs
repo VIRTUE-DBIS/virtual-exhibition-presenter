@@ -32,7 +32,17 @@ namespace DefaultNamespace.VREM
 
         private IEnumerator DoExhibitionRequest()
         {
-            Debug.Log("[RC] Requesting...");
+            
+            if (!ServerUrl.StartsWith("http://"))
+            {
+                ServerUrl = "http://" + ServerUrl;
+            }
+
+            if (!ServerUrl.EndsWith("/"))
+            {
+                ServerUrl = ServerUrl + "/";
+            }
+            Debug.Log("[RC] Requesting... "+ServerUrl+LOAD_EXHIBITION_ACTION+suffix);
             WWW www = new WWW(ServerUrl + LOAD_EXHIBITION_ACTION + suffix);
             yield return www;
             if (www.error == null)
