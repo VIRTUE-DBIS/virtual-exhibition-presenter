@@ -36,7 +36,7 @@ namespace Unibas.DBIS.VREP.World
         public TeleportButtonModel Model;
 
         public string Text;
-        public Texture2D Image;
+        public Sprite Image;
 
 
         public GameObject UIElement;
@@ -57,6 +57,21 @@ namespace Unibas.DBIS.VREP.World
             tp.Destination = destination;
             tp.Model = model;
             tp.Text = text;
+            
+            
+            return tp;
+        }
+
+        public static SteamVRTeleportButton Create(GameObject parent, Vector3 position, Vector3 destination,
+            TeleportButtonModel model, Sprite image)
+        {
+            var go = new GameObject("TeleportButton");
+            SteamVRTeleportButton tp = go.AddComponent<SteamVRTeleportButton>();
+            tp.transform.SetParent(parent.transform, false);
+            tp.transform.localPosition = position;
+            tp.Destination = destination;
+            tp.Model = model;
+            tp.Image = image;
             
             
             return tp;
@@ -156,30 +171,43 @@ namespace Unibas.DBIS.VREP.World
 
         private void SetupText(string text)
         {
-            var co = new GameObject("TP Canvas");
-            var canvas = co.AddComponent<Canvas>();
-            var rt = (RectTransform) canvas.transform;
-            //rt.sizeDelta = new Vector2(512,512);
-            co.transform.localScale = new Vector3((GetButtonSize()-2*GetButtonBorder())/rt.rect.width, (GetButtonSize()-2*GetButtonBorder())/rt.rect.height);
-            co.transform.SetParent(Button.transform, false);
-            co.transform.localPosition = new Vector3(GetButtonSize()/2, GetButtonSize()/2, -(GetButtonHeight()+GetButtonBorder()/100f));
+            var canvas = CreateAndPositionCanvas();
             var to = new GameObject("Text");
             to.transform.SetParent(canvas.transform, false);
             var txt = to.AddComponent<Text>();
             txt.text = text;
             txt.alignment = TextAnchor.MiddleCenter;
             txt.resizeTextForBestFit = true;
-            var f = Resources.Load("Fonts/Glacial-Indifference/Glacial-Indifference", typeof(Font)) as Font;
+            var f = Resources.Load<Font>("Fonts/Glacial-Indifference/GlacialIndifference-Regular") ;
             if (f == null)
             {
                 f = Font.CreateDynamicFontFromOSFont("Arial", 14);
             }
             txt.font = f;
-            
+            UIElement = to;
         }
 
-        private void SetupImage(Texture2D img)
+        private Canvas CreateAndPositionCanvas()
         {
+            var co = new GameObject("Canvas");
+            var canvas = co.AddComponent<Canvas>();
+            var rt = (RectTransform) canvas.transform;
+            //rt.sizeDelta = new Vector2(512,512);
+            co.transform.localScale = new Vector3((GetButtonSize()-2*GetButtonBorder())/rt.rect.width, (GetButtonSize()-2*GetButtonBorder())/rt.rect.height);
+            co.transform.SetParent(Button.transform, false);
+            co.transform.localPosition = new Vector3(GetButtonSize()/2, GetButtonSize()/2, -(GetButtonHeight()+GetButtonBorder()/100f));
+            return canvas;
+        }
+
+
+        private void SetupImage(Sprite img)
+        {
+            var canvas = CreateAndPositionCanvas();
+            var io =new GameObject("Image");
+            var image = io.AddComponent<Image>();
+            image.sprite = img;
+            io.transform.SetParent(canvas.transform, false);
+            UIElement = io;
         }
     }
 }
