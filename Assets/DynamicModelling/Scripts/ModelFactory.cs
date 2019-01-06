@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Unibas.DBIS.DynamicModelling.Models;
 using UnityEngine;
 
@@ -8,6 +6,100 @@ namespace Unibas.DBIS.DynamicModelling
 {
     public static class ModelFactory
     {
+        /// <summary>
+        /// Quad of sorts:
+        ///
+        /// c---d
+        /// |   |
+        /// a---b
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <param name="material"></param>
+        /// <returns></returns>
+        public static GameObject CreateFreeformQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d,
+            Material material = null)
+        {
+            GameObject go = new GameObject("FreeformQuad");
+            MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+            Mesh mesh = meshFilter.mesh;
+            Vector3[] vertices = new[]
+            {
+                a, b, c, d
+            };
+            mesh.vertices = vertices;
+
+            int[] tri = new int[6];
+
+            tri[0] = 0;
+            tri[1] = 2;
+            tri[2] = 1;
+
+            tri[3] = 2;
+            tri[4] = 3;
+            tri[5] = 1;
+
+            mesh.triangles = tri;
+
+            /*
+            Vector3[] normals = new Vector3[4];
+
+            normals[0] = -Vector3.forward;
+            normals[1] = -Vector3.forward;
+            normals[2] = -Vector3.forward;
+            normals[3] = -Vector3.forward;
+
+            mesh.normals = normals;*/
+
+            Vector2[] uv = new Vector2[4];
+
+            /*
+            float xUnit = 1;
+            float yUnit = 1;
+
+            if (width > height)
+            {
+                xUnit = width / height;
+            }
+            else
+            {
+                yUnit = height / width;
+            }
+            */
+
+            // TODO
+
+            uv[0] = new Vector2(0, 0);
+            uv[1] = new Vector2(1, 0);
+            uv[2] = new Vector2(0, 1);
+            uv[3] = new Vector2(1, 1);
+
+            mesh.uv = uv;
+
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+
+            if (material != null)
+            {
+                meshRenderer.material.CopyPropertiesFromMaterial(material);
+                //meshRenderer.material.SetTextureScale("_MainTex", new Vector2(1,1));
+                meshRenderer.material.name = material.name + "(Instance)";
+            }
+            else
+            {
+                meshRenderer.material = new Material(Shader.Find("Standard"));
+                meshRenderer.material.color = Color.white;
+            }
+
+
+            return go;
+        }
+
         /// <summary>
         /// Creates a wall between two positions
         /// </summary>
@@ -30,7 +122,7 @@ namespace Unibas.DBIS.DynamicModelling
             go.transform.position = start;
             return go;
         }
-        
+
         public static GameObject CreateWall(WallModel model)
         {
             float width = Vector3.Distance(model.Start, model.End);
@@ -183,6 +275,8 @@ namespace Unibas.DBIS.DynamicModelling
             root.AddComponent<ModelContainer>().Model = model;
             return root;
         }
+        
+        
 
 
         /// <summary>
@@ -196,64 +290,12 @@ namespace Unibas.DBIS.DynamicModelling
         /// <returns></returns>
         public static GameObject CreateWall(float width, float height, string materialName = null)
         {
-            GameObject go = new GameObject("Wall");
-            MeshFilter meshFilter = go.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
-            Mesh mesh = meshFilter.mesh;
-            Vector3[] vertices = new Vector3[4];
-            vertices[0] = new Vector3(0, 0, 0);
-            vertices[1] = new Vector3(width, 0, 0);
-            vertices[2] = new Vector3(0, height, 0);
-            vertices[3] = new Vector3(width, height, 0);
 
-            mesh.vertices = vertices;
+            return CreateWall(width, height, LoadMaterialByName(materialName));
+        }
 
-            int[] tri = new int[6];
-
-            tri[0] = 0;
-            tri[1] = 2;
-            tri[2] = 1;
-
-            tri[3] = 2;
-            tri[4] = 3;
-            tri[5] = 1;
-
-            mesh.triangles = tri;
-
-            Vector3[] normals = new Vector3[4];
-
-            normals[0] = -Vector3.forward;
-            normals[1] = -Vector3.forward;
-            normals[2] = -Vector3.forward;
-            normals[3] = -Vector3.forward;
-
-            mesh.normals = normals;
-
-            Vector2[] uv = new Vector2[4];
-
-            float xUnit = 1;
-            float yUnit = 1;
-
-            if (width > height)
-            {
-                xUnit = width / height;
-            }
-            else
-            {
-                yUnit = height / width;
-            }
-
-            uv[0] = new Vector2(0, 0);
-            uv[1] = new Vector2(xUnit, 0);
-            uv[2] = new Vector2(0, yUnit);
-            uv[3] = new Vector2(xUnit, yUnit);
-
-            mesh.uv = uv;
-
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
-            mesh.RecalculateTangents();
-
+        private static Material LoadMaterialByName(string materialName)
+        {
             if (!string.IsNullOrEmpty(materialName))
             {
                 if (!materialName.EndsWith("Material"))
@@ -261,14 +303,10 @@ namespace Unibas.DBIS.DynamicModelling
                     materialName = materialName + "Material";
                 }
 
-                Material mat = Resources.Load<Material>("Materials/" + materialName);
-                meshRenderer.material.CopyPropertiesFromMaterial(mat);
-                //meshRenderer.material.SetTextureScale("_MainTex", new Vector2(1,1));
-                meshRenderer.material.name = mat.name;
+                return Resources.Load<Material>("Materials/" + materialName);
             }
 
-
-            return go;
+            return null;
         }
 
         public static GameObject CreateWall(float width, float height, Material mat = null)
@@ -473,60 +511,54 @@ namespace Unibas.DBIS.DynamicModelling
             };
             mesh.normals = normals;
 
-            // Cube based uv mapping
-
-            Vector3 units = CalculateUnit(new Vector3(width, height, depth));
-            
-            Vector2 xyUnits = new Vector2(units.x,units.y);
-            Vector2 xzUnits = new Vector2(units.x, units.z);
-            Vector2 yzUnits = new Vector2(units.y, units.z);
-            
-            Debug.Log(units);
             
             /*
-            Vector2 xyUnits = CalculateUnit(width, height);
-            Vector2 xzUnits = CalculateUnit(width, depth);//CalculateUnit(width, depth);
-            Vector2 yzUnits = CalculateUnit(depth, height);//CalculateUnit(depth, height);
+             * Unwrapping of mesh for uf like following
+             *  U
+             * LFRB
+             *  D
             */
 
-            float xyThird = xyUnits.y / 3f;
-            float xyQuart = xyUnits.x / 4f;
+            var u = Math.Min(Math.Min(width, height), depth);
+            var w = width / u;
+            var h = height / u;
+            var d = depth / u;
 
-            float xzThird = xzUnits.y / 3f;
-            float xzQuart = xzUnits.x / 4f;
-
-            float yzThird = yzUnits.y / 3f;
-            float yzQuart = yzUnits.x / 4f;
-
+            Vector2 uvUnits = new Vector2(u,u);
+            var fOff = uvUnits.x * depth;
+            var rOff = uvUnits.x * width + fOff;
+            var bOff = uvUnits.x * depth + rOff;
+            var uOff = uvUnits.y * depth + uvUnits.y * height;
             Vector2[] uv = new[]
             {
                 // Front
-                new Vector2(xyQuart, xyThird), new Vector2(2 * xyQuart, xyThird), new Vector2(xyQuart, 2 * xyThird),
-                new Vector2(2 * xyQuart, 2 * xyThird),
+                new Vector2(fOff, uvUnits.y * depth), new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth),
+                new Vector2(fOff, uvUnits.y * depth + uvUnits.y * height),
+                new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth + uvUnits.y * height),
+
                 // Back
-                new Vector2(3 * xyQuart, xyThird), new Vector2(4 * xyQuart, xyThird),
-                new Vector2(3 * xyQuart, 2 * xyThird),
-                new Vector2(4 * xyQuart, 2 * xyThird),
+                new Vector2(bOff, uvUnits.y * depth), new Vector2(bOff + uvUnits.x * width, uvUnits.y * depth),
+                new Vector2(bOff, uvUnits.y * depth + uvUnits.y * height),
+                new Vector2(bOff + uvUnits.x * width, uvUnits.y * depth + uvUnits.y * height),
+
                 // Left
-                new Vector2(0, yzThird), new Vector2(yzQuart, yzThird), new Vector2(0, 2 * yzThird),
-                new Vector2(yzQuart, 2 * yzThird),
+                new Vector2(0, uvUnits.y * depth), new Vector2(uvUnits.x * depth, uvUnits.y * depth),
+                new Vector2(0, uvUnits.y * depth + uvUnits.y * height),
+                new Vector2(uvUnits.x * depth, uvUnits.y * depth + uvUnits.y * height),
                 // Right
-                new Vector2(2 * yzQuart, yzThird), new Vector2(3 * yzQuart, yzThird),
-                new Vector2(2 * yzQuart, 2 * yzThird),
-                new Vector2(3 * yzQuart, 2 * yzThird),
+                new Vector2(rOff, uvUnits.y * depth), new Vector2(rOff + uvUnits.x * depth, uvUnits.y * depth),
+                new Vector2(rOff, uvUnits.y * depth + uvUnits.y * height),
+                new Vector2(rOff + uvUnits.x * depth, uvUnits.y * depth + uvUnits.y * height),
                 // Up
-                new Vector2(xzQuart, 2 * xzThird), new Vector2(2 * xzQuart, 2 * xzThird),
-                new Vector2(xzQuart, 3 * xzThird),
-                new Vector2(2 * xzQuart, 3 * xzThird),
+                new Vector2(fOff, uOff), new Vector2(fOff + uvUnits.x * width, uOff),
+                new Vector2(fOff, uOff + uvUnits.y * depth),
+                new Vector2(fOff + uvUnits.x * width, uOff + uvUnits.y * depth),
+
                 // Down
-                new Vector2(xzQuart, 0), new Vector2(2 * xzQuart, 0), new Vector2(xzQuart, xzThird),
-                new Vector2(2 * xzQuart, xzThird)
+                new Vector2(fOff, 0), new Vector2(fOff + uvUnits.x * width, 0), new Vector2(fOff, uvUnits.y * depth),
+                new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth)
             };
 
-            //List<string> list= new List<string>();
-            //uv.ToList().ForEach(vector2 => list.Add(vector2.ToString()));
-            //Debug.Log("[Cuboid] "+string.Join(", ",list.ToArray()));
-            
             mesh.uv = uv;
 
             mesh.RecalculateBounds();
@@ -551,6 +583,7 @@ namespace Unibas.DBIS.DynamicModelling
                 cub.transform.parent = root.transform;
                 cub.transform.position = pos;
             }
+
             root.AddComponent<ModelContainer>().Model = model;
             return root;
         }

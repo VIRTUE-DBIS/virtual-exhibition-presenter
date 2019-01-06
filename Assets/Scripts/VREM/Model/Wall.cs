@@ -12,6 +12,11 @@ namespace DefaultNamespace.VREM.Model {
     public Exhibit[] exhibits;
 
     public string texture; // NONE -> debug: colors
+
+    public WallOrientation GetOrientation()
+    {
+      return (WallOrientation) Enum.Parse(typeof(WallOrientation), direction, true);
+    }
     
   }
 }

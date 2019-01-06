@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace DefaultNamespace
 {    
+    [Obsolete("Got replaced by TexturedMonoBehaviour")]
     public class Floor : MonoBehaviour {
         private void Start()
         {    

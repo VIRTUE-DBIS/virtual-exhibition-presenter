@@ -9,6 +9,7 @@ using Unibas.DBIS.VREP;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 
+[Obsolete("Got replaced by CuboidExhibitionRoom")]
 public class Room : MonoBehaviour {
 
 	private string _northWallName = "NorthWall";

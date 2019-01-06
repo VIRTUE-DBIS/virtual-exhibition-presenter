@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c68d093f404f82a3a4e01368162c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 1
+  Enabled: 0
 --- !u!1 &169713636
 GameObject:
   m_ObjectHideFlags: 0
@@ -2688,7 +2688,7 @@ GameObject:
   - component: {fileID: 1717517719}
   - component: {fileID: 1717517718}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: TestThrowable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
 
-public class TeleportButton : MonoBehaviour {
+public class PlayerTeleporter : MonoBehaviour {
 	
 	public Vector3 Destination = Vector3.zero;
 

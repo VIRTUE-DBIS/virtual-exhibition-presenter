@@ -45,7 +45,7 @@ namespace Unibas.DBIS.VREP.World
             CuboidRoomModel modelData = new CuboidRoomModel(roomData.position, roomData.size.x, roomData.size.y,
                 mats[0], mats[1], mats[2], mats[3], mats[4], mats[5]);
             GameObject room = ModelFactory.CreateCuboidRoom(modelData);
-            var er = room.AddComponent<ExhibitionRoom>();
+            var er = room.AddComponent<CuboidExhibitionRoom>();
             er.RoomModel = modelData;
             er.Model = room;
             er.RoomData = roomData;
@@ -156,9 +156,11 @@ namespace Unibas.DBIS.VREP.World
         {
             var modelData = GenerateButtonModel(size, border, border / 2f);
             GameObject buttonObj = ModelFactory.CreateModel(modelData);
-            TeleportButton tpBtn = buttonObj.AddComponent<TeleportButton>();
+            PlayerTeleporter tpBtn = buttonObj.AddComponent<PlayerTeleporter>();
             tpBtn.Destination = destination;
             BoxCollider col = buttonObj.AddComponent<BoxCollider>();
+            col.size = new Vector3(size,size,border*2);
+            col.center = new Vector3(size/2f, size/2f, -border);
             buttonObj.AddComponent<Button>();
             var hand = new CustomEvents.UnityEventHand();
             hand.AddListener(h =>
@@ -167,8 +169,11 @@ namespace Unibas.DBIS.VREP.World
             });
             buttonObj.AddComponent<UIElement>().onHandClick = hand;
             buttonObj.transform.position = position;
+            buttonObj.name = "TeleportButton (Instance)";
             return buttonObj;
         }
+        
+        
         
         /// <summary>
         /// TODO Fix rotations!

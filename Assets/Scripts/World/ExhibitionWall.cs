@@ -60,5 +60,10 @@ namespace Unibas.DBIS.VREP.World {
       }
     }
 
+    public WallOrientation GetOrientation()
+    {
+      return WallData.GetOrientation();
+    }
+
   }
 }

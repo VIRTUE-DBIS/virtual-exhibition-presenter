@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DefaultNamespace
 {    
+	[Obsolete("Got replaced by TexturedMonoBehaviour")]
 	public class Ceiling : MonoBehaviour {       
 		// Use this for initialization
 		private void Start()

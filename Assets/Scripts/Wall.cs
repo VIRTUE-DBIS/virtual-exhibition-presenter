@@ -2,6 +2,7 @@
 using DefaultNamespace;
 using UnityEngine;
 
+[Obsolete("Got replaced by ExhibitionWall")]
 public class Wall : TexturedMonoBehaviour {
   
   public WallOrientation Orientation;
