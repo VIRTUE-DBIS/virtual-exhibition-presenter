@@ -8,6 +8,7 @@ using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+using World;
 
 [Obsolete("Got replaced by CuboidExhibitionRoom")]
 public class Room : MonoBehaviour {

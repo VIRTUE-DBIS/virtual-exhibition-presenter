@@ -1,6 +1,7 @@
 ﻿using System;
 using DefaultNamespace;
 using UnityEngine;
+using World;
 
 [Obsolete("Got replaced by ExhibitionWall")]
 public class Wall : TexturedMonoBehaviour {

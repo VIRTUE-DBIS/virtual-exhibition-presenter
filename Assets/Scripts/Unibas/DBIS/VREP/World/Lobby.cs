@@ -22,6 +22,10 @@ public class Lobby : MonoBehaviour
             new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f, TexturingUtility.LoadMaterialByName("NWood"),
                 TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic")),
             Resources.Load<Sprite>("Sprites/UI/chevron-right"));
+        var tp3 = SteamVRTeleportButton.Create(gameObject, new Vector3(0, 1.5f, 4.98f), Vector3.zero,
+                              new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f, TexturingUtility.LoadMaterialByName("none"),
+                                  TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), hasPedestal:false),
+                              "Wall");
     }
     
     
@@ -29,5 +33,6 @@ public class Lobby : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
     }
 }

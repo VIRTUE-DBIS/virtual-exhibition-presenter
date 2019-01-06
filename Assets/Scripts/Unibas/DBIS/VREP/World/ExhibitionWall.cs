@@ -2,6 +2,7 @@
 using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling.Models;
 using UnityEngine;
+using World;
 
 namespace Unibas.DBIS.VREP.World {
   

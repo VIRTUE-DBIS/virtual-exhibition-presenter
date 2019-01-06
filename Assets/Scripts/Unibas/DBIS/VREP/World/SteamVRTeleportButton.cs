@@ -18,8 +18,10 @@ namespace Unibas.DBIS.VREP.World
             public Material PedestalMaterial;
             public Material PlateMaterial;
             public Material ButtonMaterial;
+            public bool HasPedestal;
 
-            public TeleportButtonModel(float size, float border, float height, Material pedestalMaterial, Material plateMaterial, Material buttonMaterial)
+            public TeleportButtonModel(float size, float border, float height, Material pedestalMaterial,
+                Material plateMaterial, Material buttonMaterial, bool hasPedestal = true)
             {
                 Size = size;
                 Border = border;
@@ -27,13 +29,13 @@ namespace Unibas.DBIS.VREP.World
                 PedestalMaterial = pedestalMaterial;
                 PlateMaterial = plateMaterial;
                 ButtonMaterial = buttonMaterial;
+                HasPedestal = hasPedestal;
             }
         }
 
         public Vector3 Destination;
-        
-        [SerializeField]
-        public TeleportButtonModel Model;
+
+        [SerializeField] public TeleportButtonModel Model;
 
         public string Text;
         public Sprite Image;
@@ -57,8 +59,8 @@ namespace Unibas.DBIS.VREP.World
             tp.Destination = destination;
             tp.Model = model;
             tp.Text = text;
-            
-            
+
+
             return tp;
         }
 
@@ -72,8 +74,8 @@ namespace Unibas.DBIS.VREP.World
             tp.Destination = destination;
             tp.Model = model;
             tp.Image = image;
-            
-            
+
+
             return tp;
         }
 
@@ -84,17 +86,17 @@ namespace Unibas.DBIS.VREP.World
 
         private float GetButtonSize()
         {
-            return Model.Size - 2*Model.Border;
+            return Model.Size - 2 * Model.Border;
         }
 
         private float GetButtonHeight()
         {
-            return Model.Border/2f;
+            return Model.Border / 2f;
         }
 
         private float GetButtonBorder()
         {
-            return Model.Border/2f;
+            return Model.Border / 2f;
         }
 
         private ComplexCuboidModel CreateButtonModel()
@@ -111,7 +113,8 @@ namespace Unibas.DBIS.VREP.World
 
         private CuboidModel CreatePedestalModel()
         {
-            return new CuboidModel(Model.Size -Model.Border, Model.Height, Model.Size - Model.Border, Model.PedestalMaterial);
+            return new CuboidModel(Model.Size - Model.Border, Model.Height, Model.Size - Model.Border,
+                Model.PedestalMaterial);
         }
 
         public void Generate()
@@ -127,15 +130,28 @@ namespace Unibas.DBIS.VREP.World
         {
             name = "TeleportButton";
 
-            Pedestal = ModelFactory.CreateCuboid(CreatePedestalModel());
-            Pedestal.transform.SetParent(transform, false);
-            Pedestal.transform.localPosition = Vector3.zero;
-            Pedestal.name = "Pedestal";
+            if (Model.HasPedestal)
+            {
+                Pedestal = ModelFactory.CreateCuboid(CreatePedestalModel());
+                Pedestal.transform.SetParent(transform, false);
+                Pedestal.transform.localPosition = Vector3.zero;
+                Pedestal.name = "Pedestal";
+            }
+            else
+            {
+                Model.Height = 0;
+            }
+
 
             Button = ModelFactory.CreateModel(CreateButtonModel());
-            Button.transform.SetParent(transform,false);
-            Button.transform.localPosition = new Vector3(Model.Border/2, Model.Height + GetButtonHeight(), Model.Border/2);
-            Button.transform.Rotate(Vector3.right, 90);
+            Button.transform.SetParent(transform, false);
+            Button.transform.localPosition =
+                new Vector3(Model.Border / 2, Model.Height + GetButtonHeight(), Model.Border / 2);
+            if (Model.HasPedestal)
+            {
+                Button.transform.Rotate(Vector3.right, 90);                
+            }
+            
             Button.name = "Button";
         }
 
@@ -159,14 +175,15 @@ namespace Unibas.DBIS.VREP.World
             {
                 return;
             }
+
             if (!string.IsNullOrEmpty(Text))
             {
                 SetupText(Text);
-            }else if (Image != null)
+            }
+            else if (Image != null)
             {
                 SetupImage(Image);
             }
-
         }
 
         private void SetupText(string text)
@@ -178,11 +195,12 @@ namespace Unibas.DBIS.VREP.World
             txt.text = text;
             txt.alignment = TextAnchor.MiddleCenter;
             txt.resizeTextForBestFit = true;
-            var f = Resources.Load<Font>("Fonts/Glacial-Indifference/GlacialIndifference-Regular") ;
+            var f = Resources.Load<Font>("Fonts/Glacial-Indifference/GlacialIndifference-Regular");
             if (f == null)
             {
                 f = Font.CreateDynamicFontFromOSFont("Arial", 14);
             }
+
             txt.font = f;
             UIElement = to;
         }
@@ -193,9 +211,11 @@ namespace Unibas.DBIS.VREP.World
             var canvas = co.AddComponent<Canvas>();
             var rt = (RectTransform) canvas.transform;
             //rt.sizeDelta = new Vector2(512,512);
-            co.transform.localScale = new Vector3((GetButtonSize()-2*GetButtonBorder())/rt.rect.width, (GetButtonSize()-2*GetButtonBorder())/rt.rect.height);
+            co.transform.localScale = new Vector3((GetButtonSize() - 2 * GetButtonBorder()) / rt.rect.width,
+                (GetButtonSize() - 2 * GetButtonBorder()) / rt.rect.height);
             co.transform.SetParent(Button.transform, false);
-            co.transform.localPosition = new Vector3(GetButtonSize()/2, GetButtonSize()/2, -(GetButtonHeight()+GetButtonBorder()/100f));
+            co.transform.localPosition = new Vector3(GetButtonSize() / 2, GetButtonSize() / 2,
+                -(GetButtonHeight() + GetButtonBorder() / 100f));
             return canvas;
         }
 
@@ -203,7 +223,7 @@ namespace Unibas.DBIS.VREP.World
         private void SetupImage(Sprite img)
         {
             var canvas = CreateAndPositionCanvas();
-            var io =new GameObject("Image");
+            var io = new GameObject("Image");
             var image = io.AddComponent<Image>();
             image.sprite = img;
             io.transform.SetParent(canvas.transform, false);

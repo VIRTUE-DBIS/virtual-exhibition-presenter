@@ -24,7 +24,7 @@ namespace Unibas.DBIS.VREP.World
             var prefab = Resources.Load("Prefabs/"+Settings.StandardDisplayalPrefabName, typeof(GameObject)) as GameObject;
             if (prefab == null)
             {
-                throw new Exception("Could not load 'Displayal' as Resource");
+                throw new Exception(string.Format("Could not load '{0}' as Resource", Settings.StandardDisplayalPrefabName));
             }
             
             return prefab;
