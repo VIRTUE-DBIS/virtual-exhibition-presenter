@@ -148,7 +148,8 @@ MonoBehaviour:
     StartInLobby: 0
     VREMAddress: 127.0.0.1:4567
     SpotsEnabled: 0
-    FloorLogoEnabled: 1
+    LobbyFloorLogoEnabled: 1
+    LobbyCeilingLogoEnabled: 1
     CeilingLogoEnabled: 1
     PlaygroundEnabled: 0
     RequestExhibitions: 0
