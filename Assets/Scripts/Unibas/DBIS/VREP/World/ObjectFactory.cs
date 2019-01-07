@@ -70,7 +70,8 @@ namespace World
             l.color = Color.white;
             l.intensity = 1.5f;
             l.renderMode = LightRenderMode.ForcePixel;
-            l.lightmapBakeType = LightmapBakeType.Mixed;
+            //l.lightmapBakeType = LightmapBakeType.Mixed; // Build fails with this line uncommented, even though unity automatically upgrades to this one.
+            //l.lightmappingMode = LightmappingMode.Mixed; // Build fails with this line uncommented. it is obsolete
             l.transform.parent = room.transform;
             l.transform.localPosition = new Vector3(0, 2.5f, 0);
             room.name = "Room";

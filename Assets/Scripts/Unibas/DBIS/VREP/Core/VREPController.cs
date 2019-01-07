@@ -23,13 +23,20 @@ namespace Unibas.DBIS.VREP
 
         private void Awake()
         {
-            if (string.IsNullOrEmpty(settingsPath))
+            if (Application.isEditor)
             {
-                Settings = Settings.LoadSettings();
+                if (string.IsNullOrEmpty(settingsPath))
+                {
+                    Settings = Settings.LoadSettings();
+                }
+                else
+                {
+                    Settings = Settings.LoadSettings(settingsPath);
+                }
             }
             else
             {
-                Settings = Settings.LoadSettings(settingsPath);
+                Settings = Settings.LoadSettings();
             }
 
             SanitizeHost();
@@ -56,7 +63,14 @@ namespace Unibas.DBIS.VREP
 
         private void Start()
         {
-            Debug.Log("Persistent Path: " + Application.persistentDataPath);
+            if (Settings == null)
+            {
+                Settings = Settings.LoadSettings();
+                if (Settings == null)
+                {
+                    Settings = Settings.Default();
+                }
+            }
             var go = GameObject.FindWithTag("Player");
             if (go != null && Settings.StartInLobby)
             {
@@ -66,6 +80,7 @@ namespace Unibas.DBIS.VREP
             Debug.Log("Starting ExMan");
             _vremClient = gameObject.AddComponent<VREMClient>();
             _buildingManager = GetComponent<BuildingManager>();
+
             LoadAndCreateExhibition();
         }
 
@@ -74,7 +89,7 @@ namespace Unibas.DBIS.VREP
             _vremClient.ServerUrl = Settings.VREMAddress;
 
             var exId = "";
-            if (Settings.exhibitionIds[0] != null)
+            if (Settings.exhibitionIds != null && Settings.exhibitionIds.Length > 0 && Settings.exhibitionIds[0] != null)
             {
                 exId = Settings.exhibitionIds[0];
             }
@@ -109,8 +124,10 @@ namespace Unibas.DBIS.VREP
 /*
       if (Settings.PlaygroundEnabled)
       {*/
+            /*
             ex.rooms[0].position = new Vector3(15,0,0);
             ObjectFactory.BuildRoom(ex.rooms[0]);
+            */
             //    }
         }
     }

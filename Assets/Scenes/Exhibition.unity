@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd383596e0c94e46a6268577549e3d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExhibitionId: 
+  ExhibitionId: 5c2c65934d7ec8ccb89bef9e
   LobbySpawn: {x: 0, y: -9.9, z: 0}
   Settings:
     StartInLobby: 0
@@ -2674,7 +2674,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bda95959426457419322df324bc4643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentFadeTime: 1
 --- !u!1 &1717517716
 GameObject:
   m_ObjectHideFlags: 0

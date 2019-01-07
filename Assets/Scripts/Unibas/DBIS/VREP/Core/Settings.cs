@@ -78,7 +78,7 @@ namespace DefaultNamespace
         /// <returns></returns>
         public static Settings LoadSettings()
         {
-            Debug.Log("Settings path: "+getPath());
+            Debug.Log("Settings path: " + getPath());
             if (File.Exists(getPath()))
             {
                 string json = File.ReadAllText(getPath());
@@ -104,6 +104,11 @@ namespace DefaultNamespace
             }
         }
 
+        private Settings()
+        {
+            // no public constructor allowed
+        }
+
         private static Settings createDefault()
         {
             Settings s = new Settings();
@@ -111,9 +116,21 @@ namespace DefaultNamespace
             return s;
         }
 
+        public static Settings Default()
+        {
+            return createDefault();
+        }
+
         private static string getPath()
         {
-            return Application.dataPath + "/" + FILE_NAME;
+            if (Application.isEditor)
+            {
+                return Application.dataPath + "/" + FILE_NAME;
+            }
+            else
+            {
+                return Application.dataPath + "/../" + FILE_NAME;
+            }
         }
 
         /// <summary>
@@ -123,8 +140,8 @@ namespace DefaultNamespace
         {
             if (!File.Exists(getPath()))
             {
-                string json = JsonUtility.ToJson(this,true);
-                File.WriteAllText(getPath(),json);
+                string json = JsonUtility.ToJson(this, true);
+                File.WriteAllText(getPath(), json);
             }
             else
             {

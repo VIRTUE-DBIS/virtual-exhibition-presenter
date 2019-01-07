@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class ImageLoader : MonoBehaviour {
 		
 	private IEnumerator LoadImage(string url)
 	{
-		Texture2D tex = new Texture2D(4, 4, TextureFormat.DXT1, true);
+		Texture2D tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
 		var hasError = false;
 		using (WWW www = new WWW(url))
 		{
@@ -23,6 +24,7 @@ public class ImageLoader : MonoBehaviour {
 			if (string.IsNullOrEmpty(www.error)) {
 				www.LoadImageIntoTexture(tex);
         			GetComponent<Renderer>().material.mainTexture = tex;
+				GC.Collect();
 			} else {
 				Debug.LogError(www.error);
 				Debug.LogError(www.url);
