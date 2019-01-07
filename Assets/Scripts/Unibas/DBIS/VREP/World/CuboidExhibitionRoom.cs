@@ -139,5 +139,10 @@ namespace Unibas.DBIS.VREP.World
                 _audioLoader.ReloadAudio(RoomData.GetURLEncodedAudioPath());
             }
         }
+
+        public Vector3 GetEntryPoint()
+        {
+            return transform.position - (new Vector3(RoomData.size.x, 0, RoomData.size.z)/2) + RoomData.entrypoint;
+        }
     }
 }

@@ -30,11 +30,16 @@ namespace DefaultNamespace
         /// Whether in the Lobby the UNIBAS logo is displayed on the floor
         /// Default: True
         /// </summary>
-        public bool FloorLogoEnabled = true;
+        public bool LobbyFloorLogoEnabled = true;
 
         /// <summary>
         /// Whether in the Lobby the UNIBAS logo is displayed on the ceiling
         /// Default: True
+        /// </summary>
+        public bool LobbyCeilingLogoEnabled = true;
+
+        /// <summary>
+        /// Whether in each room the Logo is placed on the ceiling.
         /// </summary>
         public bool CeilingLogoEnabled = true;
 

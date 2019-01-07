@@ -9,12 +9,13 @@ namespace DefaultNamespace
         public static string Translate(string name)
         {
             var material = "";
-            
-            switch(name) {
-                case "BRICKS": 
+
+            switch (name)
+            {
+                case "BRICKS":
                     material = "NBricksMaterial";
                     break;
-                case "CONCRETE": 
+                case "CONCRETE":
                     material = "NConcreteMaterial";
                     break;
                 case "CONCRETETILES":
@@ -47,10 +48,10 @@ namespace DefaultNamespace
                 case "WOOD1":
                     material = "NWoodFloorMaterial";
                     break;
-                case"WOOD2":
+                case "WOOD2":
                     material = "NWoodMaterial";
                     break;
-                case"WOOD3":
+                case "WOOD3":
                     material = "WoodMaterial3";
                     break;
                 case "NONE":
@@ -63,23 +64,33 @@ namespace DefaultNamespace
 
             return material;
         }
-        
-        public static Material LoadMaterialByName(string name)
+
+        public static Material LoadMaterialByName(string name, bool translate = false)
         {
-            if (!name.EndsWith("Material")) {
-                name = name + "Material";
+            string material = null;
+            if (translate)
+            {
+                material = Translate(name);
             }
-            var material = Translate(name);
+            else
+            {
+                if (!name.EndsWith("Material"))
+                {
+                    name = name + "Material";
+                }
+
+                material = name;
+            }
+
 
             if (!string.IsNullOrEmpty(material))
             {
-                return Resources.Load("Materials/" + material, typeof(Material)) as Material; 
+                return Resources.Load("Materials/" + material, typeof(Material)) as Material;
             }
             else
             {
                 return null; //TODO: return default material
             }
-            
         }
     }
 }

@@ -48,6 +48,9 @@ namespace World
 
         public PlayerTeleporter Teleporter;
 
+        public Action OnTeleportStart;
+        public Action OnTeleportEnd;
+
 
         public static SteamVRTeleportButton Create(GameObject parent, Vector3 position, Vector3 destination,
             TeleportButtonModel model, string text)
@@ -165,8 +168,21 @@ namespace World
             col.center = new Vector3(size / 2f, size / 2f, -border);
             Button.AddComponent<Button>();
             var hand = new CustomEvents.UnityEventHand();
-            hand.AddListener(h => { Teleporter.TeleportPlayer(); });
+            hand.AddListener(h => { ButtonPress(); });
             Button.AddComponent<UIElement>().onHandClick = hand;
+        }
+
+        public void ButtonPress()
+        {
+            if (OnTeleportStart != null)
+            {
+                OnTeleportStart.Invoke();
+            }
+            Teleporter.TeleportPlayer();
+            if (OnTeleportEnd != null)
+            {
+                OnTeleportEnd.Invoke();
+            }
         }
 
         private void SetupUIElement()

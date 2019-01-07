@@ -2,6 +2,7 @@
 using DefaultNamespace;
 using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
+using Unibas.DBIS.VREP.Core;
 using UnityEngine;
 using World;
 
@@ -119,7 +120,12 @@ namespace Unibas.DBIS.VREP
             Debug.Log(ex);
             Debug.Log(_buildingManager);
             // TODO create lobby
-            _buildingManager.Create(ex);
+            
+            ExhibitionManager exhibitionManager = new ExhibitionManager(ex);
+            exhibitionManager.GenerateExhibition();
+            //_buildingManager.Create(ex);
+            
+            
             //_buildingManager.BuildRoom(ex.rooms[0]);
 /*
       if (Settings.PlaygroundEnabled)

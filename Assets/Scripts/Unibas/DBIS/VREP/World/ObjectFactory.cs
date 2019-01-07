@@ -32,6 +32,14 @@ namespace World
             //}
         }
 
+        public static Vector3 CalculateRoomPosition(DefaultNamespace.VREM.Model.Room room)
+        {
+            // TODO exhibition-dependet calculation
+            float x = room.position.x, y = room.position.y, z = room.position.z;
+            var off = Settings.RoomOffset;
+            return new Vector3(x * room.size.x + x * off, y * room.size.y + y * off, z * room.size.z + z * off);
+        }
+
         public static GameObject BuildRoom(DefaultNamespace.VREM.Model.Room roomData)
         {
             Material[] mats =
@@ -43,7 +51,7 @@ namespace World
                 GetMaterialForWallOrientation(WallOrientation.SOUTH, roomData),
                 GetMaterialForWallOrientation(WallOrientation.WEST, roomData)
             };
-            CuboidRoomModel modelData = new CuboidRoomModel(roomData.position, roomData.size.x, roomData.size.y,
+            CuboidRoomModel modelData = new CuboidRoomModel(CalculateRoomPosition(roomData), roomData.size.x, roomData.size.y,
                 mats[0], mats[1], mats[2], mats[3], mats[4], mats[5]);
             GameObject room = ModelFactory.CreateCuboidRoom(modelData);
             var er = room.AddComponent<CuboidExhibitionRoom>();
@@ -72,6 +80,7 @@ namespace World
             l.renderMode = LightRenderMode.ForcePixel;
             //l.lightmapBakeType = LightmapBakeType.Mixed; // Build fails with this line uncommented, even though unity automatically upgrades to this one.
             //l.lightmappingMode = LightmappingMode.Mixed; // Build fails with this line uncommented. it is obsolete
+            // Results in mode Realtime (in Unity editor inspector)
             l.transform.parent = room.transform;
             l.transform.localPosition = new Vector3(0, 2.5f, 0);
             room.name = "Room";
@@ -104,7 +113,7 @@ namespace World
                 WallOrientation wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wallData.direction, true);
                 if (wor.Equals(orientation))
                 {
-                    return TexturingUtility.LoadMaterialByName(wallData.texture);
+                    return TexturingUtility.LoadMaterialByName(wallData.texture, true);
                 }
             }
 
