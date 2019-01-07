@@ -19,7 +19,7 @@ namespace DefaultNamespace
                     material = "NConcreteMaterial";
                     break;
                 case "CONCRETETILES":
-                    material = "NConcreteMaterial2";
+                    material = "NConcreteMaterial";
                     break;
                 case "FABRIC":
                     material = "Fabric02Material";
