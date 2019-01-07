@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.VREP.World;
 using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR.InteractionSystem;
 
-namespace Unibas.DBIS.VREP.World
+namespace World
 {
     /// <summary>
     /// Static class for object generation.

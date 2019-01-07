@@ -1,10 +1,9 @@
-﻿using System;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.VREP;
 using UnityEngine;
-using World;
 
-namespace Unibas.DBIS.VREP.World {
+namespace World {
   
   /// <summary>
   /// A representation of a wall, attachable to a gameobject.

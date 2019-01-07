@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR.InteractionSystem;
 
-namespace Unibas.DBIS.VREP.World
+namespace World
 {
     public class SteamVRTeleportButton : MonoBehaviour
     {

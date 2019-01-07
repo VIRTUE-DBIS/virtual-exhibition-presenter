@@ -1,4 +1,4 @@
-namespace Unibas.DBIS.VREP.World
+namespace World
 {
     
     /// <summary>

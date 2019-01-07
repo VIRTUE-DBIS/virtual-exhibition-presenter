@@ -1,4 +1,4 @@
-﻿namespace DefaultNamespace {
+﻿namespace World {
   public enum WallOrientation {
     
     

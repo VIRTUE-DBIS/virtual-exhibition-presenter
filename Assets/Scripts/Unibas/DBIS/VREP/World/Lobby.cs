@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
-using Unibas.DBIS.VREP.World;
 using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR.InteractionSystem;
+using World;
 
 public class Lobby : MonoBehaviour
 {

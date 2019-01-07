@@ -2,8 +2,8 @@
 using DefaultNamespace;
 using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
-using Unibas.DBIS.VREP.World;
 using UnityEngine;
+using World;
 
 namespace Unibas.DBIS.VREP
 {

@@ -1,5 +1,5 @@
-﻿using Unibas.DBIS.VREP.World;
-using UnityEngine;
+﻿using UnityEngine;
+using World;
 using Wall = DefaultNamespace.VREM.Model.Wall;
 
 namespace DefaultNamespace {
