@@ -76,6 +76,18 @@ namespace Unibas.DBIS.VREP.Core
                 var roomGameObject = ObjectFactory.BuildRoom(room);
                 var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
                 _rooms.Add(exhibitionRoom);
+
+                if (VREPController.Instance.Settings.CeilingLogoEnabled)
+                {
+                    GameObject pref = Resources.Load<GameObject>("Objects/unibas");
+                    var logo = GameObject.Instantiate(pref);
+                    logo.name = "UnibasLogo";
+                    logo.transform.SetParent(exhibitionRoom.transform, false);
+                    //logo.transform.localPosition = new Vector3(-1.493f, room.size.y-.1f, -0.642f); // manually found values
+                    logo.transform.localPosition = new Vector3(-1.493f, room.size.y-.1f, 3.35f); // manually found values
+                    logo.transform.localRotation = Quaternion.Euler(new Vector3(90, 180));
+                    logo.transform.localScale = Vector3.one * 10000;
+                }
             }
             // For teleporting, each room needs to be created.
             foreach (var room in _rooms)
@@ -121,7 +133,7 @@ namespace Unibas.DBIS.VREP.Core
             
             if (VREPController.Instance.Settings.StartInLobby)
             {
-                var lobbyTpBtn = SteamVRTeleportButton.Create(room.gameObject, Vector3.zero, VREPController.Instance.LobbySpawn,
+                var lobbyTpBtn = SteamVRTeleportButton.Create(room.gameObject, new Vector3(0,0,.2f), VREPController.Instance.LobbySpawn,
                     model,
                     "Lobby");
                 lobbyTpBtn.OnTeleportStart = room.OnRoomLeave;

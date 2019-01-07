@@ -142,7 +142,7 @@ namespace Unibas.DBIS.VREP.World
 
         public Vector3 GetEntryPoint()
         {
-            return transform.position - (new Vector3(RoomData.size.x, 0, RoomData.size.z)/2) + RoomData.entrypoint;
+            return transform.position + RoomData.entrypoint;
         }
     }
 }
