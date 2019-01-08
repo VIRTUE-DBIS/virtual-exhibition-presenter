@@ -4,7 +4,7 @@
   "SpotsEnabled": false,
   "FloorLogoEnabled": true,
   "CeilingLogoEnabled": true,
-  "PlaygroundEnabled": false,
+  "PlaygroundEnabled": true,
   "RequestExhibitions": false,
   "exhibitionIds": [
     "5c2e1a53f3b1ef84a9174879"
