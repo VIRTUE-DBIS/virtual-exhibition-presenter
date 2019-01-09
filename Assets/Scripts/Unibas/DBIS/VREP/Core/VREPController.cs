@@ -21,6 +21,7 @@ namespace Unibas.DBIS.VREP
         public string settingsPath;
 
         public static VREPController Instance;
+        private ExhibitionManager _exhibitionManager;
 
         private void Awake()
         {
@@ -104,6 +105,16 @@ namespace Unibas.DBIS.VREP
             Debug.Log("Requested ex");
         }
 
+        private void Update() {
+            if (!Settings.PlaygroundEnabled) {
+                return;
+            }
+
+            if (Input.GetKey(KeyCode.F12)) {
+                _exhibitionManager.RestoreExhibits();
+            }
+        }
+
         private void ParseExhibition(string json)
         {
             if (json == null)
@@ -121,8 +132,8 @@ namespace Unibas.DBIS.VREP
             Debug.Log(_buildingManager);
             // TODO create lobby
             
-            ExhibitionManager exhibitionManager = new ExhibitionManager(ex);
-            exhibitionManager.GenerateExhibition();
+            _exhibitionManager = new ExhibitionManager(ex);
+            _exhibitionManager.GenerateExhibition();
             //_buildingManager.Create(ex);
             
             

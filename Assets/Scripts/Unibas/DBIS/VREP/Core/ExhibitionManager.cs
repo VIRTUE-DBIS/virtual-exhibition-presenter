@@ -23,6 +23,10 @@ namespace Unibas.DBIS.VREP.Core
             return _rooms[index];
         }
 
+        public void RestoreExhibits() {
+            _rooms.ForEach(r => r.RestoreWallExhibits());
+        }
+
         private int GetNextRoomIndex(int pos)
         {
             return (pos + 1) % _exhibition.rooms.Length;

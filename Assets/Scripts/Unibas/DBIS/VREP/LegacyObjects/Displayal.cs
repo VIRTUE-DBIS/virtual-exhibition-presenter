@@ -13,9 +13,17 @@ public class Displayal : MonoBehaviour
 
 
     public string id;
-    
+
+    public Vector3 OriginalPosition;
+    public Quaternion OriginalRotation;
     
     private CuboidModel _anchor = new CuboidModel(1,0.01f,.1f);
+    
+
+    public void RestorePosition() {
+        transform.localPosition = OriginalPosition;
+        transform.localRotation = OriginalRotation;
+    }
     
     public void SetExhibitModel(Exhibit exhibit)
     {

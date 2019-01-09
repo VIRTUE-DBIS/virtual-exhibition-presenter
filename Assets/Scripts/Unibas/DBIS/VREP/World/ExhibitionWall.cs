@@ -1,4 +1,5 @@
-﻿using DefaultNamespace;
+﻿using System.Collections.Generic;
+using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP;
 using UnityEngine;
@@ -25,6 +26,12 @@ namespace World {
     /// </summary>
     public GameObject Anchor{ get; set; }
 
+    public List<Displayal> Displayals = new List<Displayal>();
+
+    public void RestoreDisplayals() {
+      Displayals.ForEach(d => d.RestorePosition());
+    }
+
     public void AttachExhibits()
     {
       // TODO Make displayal configurable
@@ -34,9 +41,11 @@ namespace World {
         GameObject displayal = Instantiate(prefab);
         displayal.name = "Displayal (" + e.name + ")";
         displayal.transform.parent = Anchor.transform;
-        displayal.transform.localPosition = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
+        var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
+        displayal.transform.localPosition = pos;
         //displayal.transform.rotation = Quaternion.Euler(ObjectFactory.CalculateRotation(WallData.direction));
-        displayal.transform.localRotation = Quaternion.Euler(90,0,180); // Because prefab is messed up
+        var rot =  Quaternion.Euler(90,0,180);
+        displayal.transform.localRotation = rot;// Because prefab is messed up
         
         
         if(!VREPController.Instance.Settings.SpotsEnabled || !e.light){	
@@ -45,6 +54,9 @@ namespace World {
 		
         Displayal disp = displayal.gameObject.GetComponent<Displayal>();
         disp.SetExhibitModel(e);
+        disp.OriginalPosition = pos;
+        disp.OriginalRotation = rot;
+        Displayals.Add(disp);
 		
         ImageLoader image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>(); // Displayal
         //ImageLoader image = displayal.AddComponent<ImageLoader>();// ImageDisplayPlane

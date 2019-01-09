@@ -144,5 +144,9 @@ namespace Unibas.DBIS.VREP.World
         {
             return transform.position + RoomData.entrypoint;
         }
+
+        public void RestoreWallExhibits() {
+            Walls.ForEach(w => w.RestoreDisplayals());
+        }
     }
 }
