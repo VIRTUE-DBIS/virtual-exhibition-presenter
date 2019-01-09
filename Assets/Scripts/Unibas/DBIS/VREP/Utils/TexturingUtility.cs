@@ -85,7 +85,13 @@ namespace DefaultNamespace
 
             if (!string.IsNullOrEmpty(material))
             {
-                return Resources.Load("Materials/" + material, typeof(Material)) as Material;
+                var mat =  Resources.Load("Materials/" + material, typeof(Material)) as Material;
+                if (mat == null)
+                {
+                    Debug.LogWarning("Couldn't load material for name: "+material);
+                }
+
+                return mat;
             }
             else
             {

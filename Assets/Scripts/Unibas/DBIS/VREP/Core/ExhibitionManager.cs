@@ -88,9 +88,9 @@ namespace Unibas.DBIS.VREP.Core
                     var logo = GameObject.Instantiate(pref);
                     logo.name = "UnibasLogo";
                     logo.transform.SetParent(exhibitionRoom.transform, false);
-                    //logo.transform.localPosition = new Vector3(-1.493f, room.size.y-.1f, -0.642f); // manually found values
+                    //logo.transform.localPosition = new Vector3(-1.493f, room.size.y-.01f, -0.642f); // manually found values
                     logo.transform.localPosition =
-                        new Vector3(-1.493f, room.size.y - .1f, 3.35f); // manually found values
+                        new Vector3(-1.493f, room.size.y - .01f, 3.35f); // manually found values
                     logo.transform.localRotation = Quaternion.Euler(new Vector3(90, 180));
                     logo.transform.localScale = Vector3.one * 10000;
                 }

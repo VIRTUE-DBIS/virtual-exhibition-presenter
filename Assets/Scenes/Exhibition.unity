@@ -154,7 +154,7 @@ MonoBehaviour:
     PlaygroundEnabled: 0
     RequestExhibitions: 0
     exhibitionIds: []
-  settingsPath: demo-settings.json
+  settingsPath: 
 --- !u!114 &123453531
 MonoBehaviour:
   m_ObjectHideFlags: 0
