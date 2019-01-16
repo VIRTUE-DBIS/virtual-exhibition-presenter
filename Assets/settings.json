@@ -5,7 +5,7 @@
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
   "CeilingLogoEnabled": true,
-  "PlaygroundEnabled": false,
+  "PlaygroundEnabled": true,
   "RequestExhibitions": false,
   "exhibitionIds": [
     "5c2c65934d7ec8ccb89bef9e"

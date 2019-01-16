@@ -23,6 +23,8 @@ public class Displayal : MonoBehaviour
     public void RestorePosition() {
         transform.localPosition = OriginalPosition;
         transform.localRotation = OriginalRotation;
+        var rigid = GetComponent<Rigidbody>();
+        rigid.velocity = Vector3.zero;
     }
     
     public void SetExhibitModel(Exhibit exhibit)
