@@ -79,6 +79,12 @@ namespace Unibas.DBIS.VREP
                 go.transform.position = new Vector3(0, -9.9f, 0);
             }
 
+            var lby = GameObject.Find("Lobby");
+            if (lby != null && !Settings.StartInLobby)
+            {
+                lby.SetActive(false);
+            }
+
             Debug.Log("Starting ExMan");
             _vremClient = gameObject.AddComponent<VREMClient>();
             _buildingManager = GetComponent<BuildingManager>();
