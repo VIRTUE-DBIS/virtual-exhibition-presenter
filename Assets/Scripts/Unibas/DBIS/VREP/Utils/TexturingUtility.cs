@@ -19,7 +19,7 @@ namespace DefaultNamespace
                     material = "NConcreteMaterial";
                     break;
                 case "CONCRETETILES":
-                    material = "NConcreteMaterialö";
+                    material = "NConcreteMaterial";
                     break;
                 case "FABRIC":
                     material = "Fabric02Material";
@@ -67,20 +67,20 @@ namespace DefaultNamespace
 
         public static Material LoadMaterialByName(string name, bool translate = false)
         {
-            string material = null;
+            string material = name;
             if (translate)
             {
                 material = Translate(name);
             }
-            else
-            {
-                if (!name.EndsWith("Material"))
+            //else
+            //{
+                if (!material.EndsWith("Material"))
                 {
-                    name = name + "Material";
+                    material = material + "Material";
                 }
 
-                material = name;
-            }
+                //material = name;
+            //}
 
 
             if (!string.IsNullOrEmpty(material))

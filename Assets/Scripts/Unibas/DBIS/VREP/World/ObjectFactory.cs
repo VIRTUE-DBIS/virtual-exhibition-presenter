@@ -113,6 +113,7 @@ namespace World
                 WallOrientation wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wallData.direction, true);
                 if (wor.Equals(orientation))
                 {
+                    Debug.Log("Material "+wallData.texture+" for room " + roomData.position);
                     return TexturingUtility.LoadMaterialByName(wallData.texture, true);
                 }
             }
