@@ -1,5 +1,5 @@
 {
-  "StartInLobby": false,
+  "StartInLobby": true,
   "VREMAddress": "http://127.0.0.1:4567",
   "SpotsEnabled": false,
   "LobbyFloorLogoEnabled": true,

@@ -25,6 +25,7 @@ namespace DefaultNamespace.VREM
         /// <param name="processor">An Action which processes VREM's response. If null is passed to that action, an error occurred</param>
         public void RequestExhibition(string exhibitionId, Action<string> processor)
         {
+            // TODO Refactor Action to a proper interface
             this.suffix = exhibitionId;
             responseProcessor = processor;
             StartCoroutine(DoExhibitionRequest());
@@ -32,17 +33,9 @@ namespace DefaultNamespace.VREM
 
         private IEnumerator DoExhibitionRequest()
         {
+            SanitizeServerUrl();
             
-            if (!ServerUrl.StartsWith("http://"))
-            {
-                ServerUrl = "http://" + ServerUrl;
-            }
-
-            if (!ServerUrl.EndsWith("/"))
-            {
-                ServerUrl = ServerUrl + "/";
-            }
-            Debug.Log("[RC] Requesting... "+ServerUrl+LOAD_EXHIBITION_ACTION+suffix);
+            Debug.Log("[VREMClient] Requesting... "+ServerUrl+LOAD_EXHIBITION_ACTION+suffix);
             WWW www = new WWW(ServerUrl + LOAD_EXHIBITION_ACTION + suffix);
             yield return www;
             if (www.error == null)
@@ -56,9 +49,45 @@ namespace DefaultNamespace.VREM
             else
             {
                 Debug.LogError(www.error);
-                // Error, handle it!
+                // TODO Error, handle it!
                 error = true;
                 responseProcessor.Invoke(null);
+            }
+        }
+
+        private IEnumerator DoListExhibitionRequest()
+        {
+            SanitizeServerUrl();
+            
+            Debug.Log("[VREMClient] Requesting exhibition list ");
+            
+            WWW www = new WWW(ServerUrl+LIST_EXHIBITIONS_ACTION);
+            yield return www;
+            if (www.error == null)
+            {
+                response = www.text;
+                // TODO Parse list of IDs and further loading of the exhibitions.
+                // Will induce follow-up DoExhibitonRequests
+            }
+            else
+            {
+                Debug.LogError(www.error);
+                // TODO Handle error properly
+                error = true;
+                responseProcessor.Invoke(null);
+            }
+        }
+
+        private void SanitizeServerUrl()
+        {
+            if (!ServerUrl.StartsWith("http://"))
+            {
+                ServerUrl = "http://" + ServerUrl;
+            }
+
+            if (!ServerUrl.EndsWith("/"))
+            {
+                ServerUrl = ServerUrl + "/";
             }
         }
 
