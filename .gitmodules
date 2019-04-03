@@ -1,0 +1,6 @@
+[submodule "Packages/SteamVR/repo"]
+	path = Packages/SteamVR/repo
+	url = https://github.com/sauterl/steamvr_unity_plugin.git
+[submodule "Packages/SteamVRPlugin/repo"]
+	path = Packages/SteamVRPlugin/repo
+	url = https://github.com/sauterl/steamvr_unity_plugin.git
