@@ -66,16 +66,16 @@ namespace Unibas.DBIS.VREP.Puzzle {
       };
     }
 
-    public static Vector2[] CreateTiledMasterUVMap(float width, float height, int k = 3) {
+    public static Vector2[] CreateTiledMasterUVMap(float width, float height, int nbXcubes, int nbYcubes) {
       float r = width / height;
       float u = width / r;
       float v = height / r;
 
-      Vector2[] arr = new Vector2[(k + 1) * (k + 1)];
+      Vector2[] arr = new Vector2[(nbXcubes + 1) * (nbYcubes + 1)];
 
-      for (int y = 0; y <= k; y++) {
-        for (int x = 0; x <= k; x++) {
-          arr[k * y + x] = new Vector2(x * u, y * v);
+      for (int y = 0; y <= nbYcubes; y++) {
+        for (int x = 0; x <= nbXcubes; x++) {
+          arr[nbYcubes * y + x] = new Vector2(x * u, y * v);
         }
       }
 
