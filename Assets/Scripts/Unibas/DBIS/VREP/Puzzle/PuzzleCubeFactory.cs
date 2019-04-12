@@ -6,29 +6,56 @@ namespace Unibas.DBIS.VREP.Puzzle {
     public static GameObject createPuzzleCube(int id, int size, Vector2[] uvmap, Material mat, int k = 3) {
       GameObject cube = new GameObject("PuzzleCube");
       var s2 = size / 2f;
-      GameObject frontPlane = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      frontPlane.transform.parent = cube.transform;
-      frontPlane.transform.position = new Vector3(-s2, -s2);
-      GameObject backPlane = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      backPlane.transform.parent = cube.transform;
-      backPlane.transform.position = new Vector3(s2,s2);
-      backPlane.transform.Rotate(Vector3.up, 180);
-      GameObject leftPlane = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      leftPlane.transform.parent = cube.transform;
-      leftPlane.transform.position = new Vector3(-s2,s2);
-      leftPlane.transform.Rotate(Vector3.up, 270);
-      GameObject rightPlane = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      rightPlane.transform.parent = cube.transform;
-      rightPlane.transform.position = new Vector3(s2,-s2);
-      rightPlane.transform.Rotate(Vector3.up, 90);
-      GameObject topPlane = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      topPlane.transform.parent = cube.transform;
-      topPlane.transform.position = new Vector3(-s2,-s2,s2);
-      topPlane.transform.Rotate(Vector3.forward, 90);
-      GameObject bottomPlane = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      bottomPlane.transform.parent = cube.transform;
-      bottomPlane.transform.position = new Vector3(s2,s2,-s2);
-      bottomPlane.transform.Rotate(Vector3.back, 90);
+
+      // Front
+//      GameObject north = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
+      GameObject north = CreatePlane(size, size);
+      north.name = "Front";
+      north.transform.parent = cube.transform;
+      north.transform.position = new Vector3(-s2, 0, -s2);
+      // Right
+      GameObject east = CreatePlane(size, size);
+      east.name = "Right";
+      east.transform.parent = cube.transform;
+      east.transform.position = new Vector3(-s2, 0, s2);
+      east.transform.Rotate(Vector3.up, 90);
+      
+      // Back
+      GameObject south = CreatePlane(size, size);
+      south.name = "Back";
+      south.transform.parent = cube.transform;
+      south.transform.position = new Vector3(s2, 0, s2);
+      south.transform.Rotate(Vector3.up, 180);
+      // Left
+      GameObject west = CreatePlane(size, size);
+      west.name = "Left";
+      west.transform.parent = cube.transform;
+      west.transform.position = new Vector3(s2, 0, -s2);
+      west.transform.Rotate(Vector3.up, -90);
+
+      // Bottom
+      GameObject floorAnchor = new GameObject("BottomAnchor");
+      floorAnchor.transform.parent = cube.transform;
+
+      GameObject floor = CreatePlane(size, size);
+      floor.name = "Bottom";
+      floor.transform.parent = floorAnchor.transform;
+      floor.transform.Rotate(Vector3.right, -90);
+
+      floorAnchor.transform.position = new Vector3(-s2, 0, s2);
+      
+      // Top
+      GameObject ceilingAnchor = new GameObject("TopAnchor");
+      ceilingAnchor.transform.parent = cube.transform;
+
+      GameObject ceiling = CreatePlane(size, size);
+      ceiling.name = "Top";
+      ceiling.transform.parent = ceilingAnchor.transform;
+
+      // North Aligned
+      ceilingAnchor.transform.position = new Vector3(-s2, size, -s2);
+      ceilingAnchor.transform.Rotate(Vector3.right, 90);
+
       return cube;
     }
 
