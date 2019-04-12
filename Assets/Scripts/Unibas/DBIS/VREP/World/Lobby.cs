@@ -28,7 +28,8 @@ public class Lobby : MonoBehaviour
                                   TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), hasPedestal:false),
                               "Wall");
 
-        var uvmap = PuzzleCubeFactory.CreateTiledMasterUVMap(100, 100);
+        var uvmap = PuzzleCubeFactory.CreateTiledMasterUVMap(200, 100, 20, 10);
+        
         var test = PuzzleCubeFactory.createPuzzleCube(0, 1, uvmap, TexturingUtility.LoadMaterialByName("LimeBricks"));
         test.transform.parent = transform;
         test.transform.position = Vector3.zero;
