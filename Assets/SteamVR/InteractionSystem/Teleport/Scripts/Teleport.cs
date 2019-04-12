@@ -13,8 +13,7 @@ namespace Valve.VR.InteractionSystem
 	//-------------------------------------------------------------------------
 	public class Teleport : MonoBehaviour
     {
-        [SteamVR_DefaultAction("Teleport", "default")]
-        public SteamVR_Action_Boolean teleportAction;
+        public SteamVR_Action_Boolean teleportAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Teleport");
 
         public LayerMask traceLayerMask;
 		public LayerMask floorFixupTraceLayerMask;
@@ -142,8 +141,8 @@ namespace Valve.VR.InteractionSystem
 
 		//-------------------------------------------------
 		void Awake()
-		{
-			_instance = this;
+        {
+            _instance = this;
 
 			chaperoneInfoInitializedAction = ChaperoneInfo.InitializedAction( OnChaperoneInfoInitialized );
 
@@ -169,8 +168,8 @@ namespace Valve.VR.InteractionSystem
 
 		//-------------------------------------------------
 		void Start()
-		{
-			teleportMarkers = GameObject.FindObjectsOfType<TeleportMarkerBase>();
+        {
+            teleportMarkers = GameObject.FindObjectsOfType<TeleportMarkerBase>();
 
 			HidePointer();
 
@@ -178,7 +177,7 @@ namespace Valve.VR.InteractionSystem
 
 			if ( player == null )
 			{
-				Debug.LogError( "Teleport: No Player instance found in map." );
+				Debug.LogError("<b>[SteamVR Interaction]</b> Teleport: No Player instance found in map.");
 				Destroy( this.gameObject );
 				return;
 			}
@@ -839,11 +838,6 @@ namespace Valve.VR.InteractionSystem
 				Teleport.ChangeScene.Send( currentFadeTime );
 			}
 
-			if (teleportPoint != null && teleportPoint.teleportType == TeleportPoint.TeleportPointType.MoveToPoint)
-			{
-				currentFadeTime *= 3.0f;
-			}
-
 			SteamVR_Fade.Start( Color.clear, 0 );
 			SteamVR_Fade.Start( Color.black, currentFadeTime );
 
@@ -876,12 +870,6 @@ namespace Valve.VR.InteractionSystem
 				{
 					teleportPoint.TeleportToScene();
 					return;
-				}
-
-				if (teleportPoint.teleportType == TeleportPoint.TeleportPointType.MoveToPoint)
-				{
-					//Debug.Log(string.Format("MoveToPoint Teleportation", teleportPoint.targetX, teleportPoint.targetZ));
-					teleportPosition = teleportPoint.destination;
 				}
 			}
 
@@ -1122,8 +1110,6 @@ namespace Valve.VR.InteractionSystem
 				else
                 {
                     return teleportAction.GetState(hand.handType);
-
-                    //return hand.controller.GetPress( SteamVR_Controller.ButtonMask.Touchpad );
 				}
 			}
 
@@ -1164,15 +1150,5 @@ namespace Valve.VR.InteractionSystem
 				return hand.transform;
 			}
 		}
-
-	    public float GetCurrentFadeTime()
-	    {
-		    return teleportFadeTime;
-	    }
-
-	    public Player GetPlayer()
-	    {
-		    return player;
-	    }
-    }
+	}
 }

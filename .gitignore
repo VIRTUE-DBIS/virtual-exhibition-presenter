@@ -85,7 +85,7 @@ sysinfo.txt
 [Bb]in/
 [Oo]bj/
 _UpgradeReport_Files/
-[Pp]ackages/
+#[Pp]ackages/
 
 Thumbs.db
 Desktop.ini
