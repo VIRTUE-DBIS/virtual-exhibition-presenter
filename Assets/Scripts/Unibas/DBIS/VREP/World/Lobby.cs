@@ -30,9 +30,10 @@ public class Lobby : MonoBehaviour
 
         var uvmap = PuzzleCubeFactory.CreateTiledMasterUVMap(100, 100);
         var test = PuzzleCubeFactory.createPuzzleCube(0, 1, uvmap, TexturingUtility.LoadMaterialByName("LimeBricks"));
-        
+        var new_tex = Utils.Letterboxing(tex);
     }
-    
+
+    public Texture2D tex;
     
 
     // Update is called once per frame
