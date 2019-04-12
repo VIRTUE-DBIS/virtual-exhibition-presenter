@@ -3,6 +3,30 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Puzzle {
   public class PuzzleCubeFactory {
+
+
+    public static GameObject[] createPuzzle(Texture2D texture, int size, Vector3 position) {
+      var nbCubes = getNumberOfCubes(texture.width, texture.height);
+      GameObject[] cubes = new GameObject[(int) (nbCubes.x * nbCubes.y)];
+
+      var material = new Material(Shader.Find("Standard"));
+      material.mainTexture = texture;
+      for (int i=0; i<cubes.Length; i++) {
+        cubes[i] = createPuzzleCube(i, size, material, nbCubes.x, nbCubes.y);
+        // TODO cubes[i].transform.position = new Vector3();
+      }
+      
+      return cubes;
+    }
+    
+    public static Vector2Int getNumberOfCubes(int width, int height) {
+      float asp_ratio = (float) width / (float) height;
+      float w_prime = 3;
+      int h_prime = (int) (w_prime * asp_ratio);
+      return new Vector2Int(h_prime,(int) w_prime);
+    }
+    
+    
     public static GameObject createPuzzleCube(int id, int size, Material mat, int nbXcubes, int nbYcubes) {
       GameObject cube = new GameObject("PuzzleCube");
       var s2 = size / 2f;
