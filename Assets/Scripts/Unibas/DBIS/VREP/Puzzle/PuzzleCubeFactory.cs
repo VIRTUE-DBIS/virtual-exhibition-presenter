@@ -3,31 +3,34 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Puzzle {
   public class PuzzleCubeFactory {
-    public static GameObject createPuzzleCube(int id, int size, Vector2[] uvmap, Material mat, int k = 3) {
+    public static GameObject createPuzzleCube(int id, int size, Material mat, int nbXcubes, int nbYcubes) {
       GameObject cube = new GameObject("PuzzleCube");
       var s2 = size / 2f;
 
       // Front
-//      GameObject north = CreatePlaneForCube(id, ExtractTileUVMap(id, uvmap, k), mat);
-      GameObject north = CreatePlane(size, size);
+      GameObject north = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      //GameObject north = CreatePlane(size, size);
       north.name = "Front";
       north.transform.parent = cube.transform;
       north.transform.position = new Vector3(-s2, 0, -s2);
       // Right
-      GameObject east = CreatePlane(size, size);
+      GameObject east = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      // GameObject east = CreatePlane(size, size);
       east.name = "Right";
       east.transform.parent = cube.transform;
       east.transform.position = new Vector3(-s2, 0, s2);
       east.transform.Rotate(Vector3.up, 90);
       
       // Back
-      GameObject south = CreatePlane(size, size);
+      GameObject south = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      // GameObject south = CreatePlane(size, size);
       south.name = "Back";
       south.transform.parent = cube.transform;
       south.transform.position = new Vector3(s2, 0, s2);
       south.transform.Rotate(Vector3.up, 180);
       // Left
-      GameObject west = CreatePlane(size, size);
+      GameObject west = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      //GameObject west = CreatePlane(size, size);
       west.name = "Left";
       west.transform.parent = cube.transform;
       west.transform.position = new Vector3(s2, 0, -s2);
@@ -37,7 +40,8 @@ namespace Unibas.DBIS.VREP.Puzzle {
       GameObject floorAnchor = new GameObject("BottomAnchor");
       floorAnchor.transform.parent = cube.transform;
 
-      GameObject floor = CreatePlane(size, size);
+      GameObject floor = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      // GameObject floor = CreatePlane(size, size);
       floor.name = "Bottom";
       floor.transform.parent = floorAnchor.transform;
       floor.transform.Rotate(Vector3.right, -90);
@@ -48,7 +52,8 @@ namespace Unibas.DBIS.VREP.Puzzle {
       GameObject ceilingAnchor = new GameObject("TopAnchor");
       ceilingAnchor.transform.parent = cube.transform;
 
-      GameObject ceiling = CreatePlane(size, size);
+      GameObject ceiling = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      //GameObject ceiling = CreatePlane(size, size);
       ceiling.name = "Top";
       ceiling.transform.parent = ceilingAnchor.transform;
 
@@ -59,17 +64,25 @@ namespace Unibas.DBIS.VREP.Puzzle {
       return cube;
     }
 
-    public static Vector2[] ExtractTileUVMap(int id, Vector2[] uvmap, int k = 3) {
+    public static Vector2[] CalculateUV(int id, int nbXCubes, int nbYcubes) {
       return new[] {
-        uvmap[id + 1], uvmap[id + 2],
-        uvmap[id + 2 * k - 1], uvmap[id + 2 * k]
+        new Vector2((id % nbXCubes) /(float) nbXCubes, ((id / nbXCubes))/(float)nbYcubes),//0
+        new Vector2(((id % nbXCubes)+1) /(float) nbXCubes, ((id / nbXCubes))/(float)nbYcubes),//1
+        new Vector2((id % nbXCubes) / (float)nbXCubes, (id / nbXCubes +1) / (float)nbYcubes),//2
+        new Vector2(((id % nbXCubes)+1) /(float)nbXCubes, (id / nbXCubes +1)/(float)nbYcubes)//3
       };
     }
 
-    public static Vector2[] CreateTiledMasterUVMap(float width, float height, int nbXcubes, int nbYcubes) {
-      float r = width / height;
-      float u = width / r;
-      float v = height / r;
+    public static Vector2[] ExtractTileUVMap(int id, Vector2[] uvmap, int nbXCubes, int nbYCubes) {
+      return new[] {
+        uvmap[id], uvmap[id + 1],
+        uvmap[id + nbXCubes+1], uvmap[id+nbXCubes+2]
+      };
+    }
+
+    public static Vector2[] CreateTiledMasterUVMap(int nbXcubes, int nbYcubes) {
+      float u = 1f / nbXcubes;
+      float v = 1f / nbYcubes;
 
       Vector2[] arr = new Vector2[(nbXcubes + 1) * (nbYcubes + 1)];
 

@@ -28,10 +28,11 @@ public class Lobby : MonoBehaviour
                                   TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), hasPedestal:false),
                               "Wall");
 
-        var cube = Utils.getNumberOfCubes(523, 345);
-        var uvmap = PuzzleCubeFactory.CreateTiledMasterUVMap(523, 345, (int)cube.x, (int)cube.y);
-        
-        var test = PuzzleCubeFactory.createPuzzleCube(0, 1, uvmap, TexturingUtility.LoadMaterialByName("LimeBricks"));
+        var cube = Utils.getNumberOfCubes(tex.width, tex.height);
+        var mat = new Material(Shader.Find("Standard"));
+        mat.mainTexture = tex;
+
+        var test = PuzzleCubeFactory.createPuzzleCube(10, 1, mat, (int)cube.x, (int)cube.y);
         test.transform.parent = transform;
         test.transform.position = Vector3.zero;
 
