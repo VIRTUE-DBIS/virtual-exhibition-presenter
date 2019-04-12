@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DefaultNamespace;
-using DefaultNamespace.ObjImport;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
 using World;
 
 [Obsolete("Got replaced by CuboidExhibitionRoom")]
@@ -242,10 +238,8 @@ public class Room : MonoBehaviour {
 		GameObject model = new GameObject("Model");
 		model.transform.SetParent(parent.transform);
 		parent.transform.position = pos;
-		ObjLoader objLoader = model.AddComponent<ObjLoader>();
 		model.transform.Rotate(-90,0,0);
 		model.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-		objLoader.Load(url);
 	}
 
 	private void PopulateWalls(DefaultNamespace.VREM.Model.Wall[] walls) {
