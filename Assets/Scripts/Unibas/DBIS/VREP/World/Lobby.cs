@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.VREP.Puzzle;
 using UnityEngine;
 using UnityEngine.UI;
 using Valve.VR.InteractionSystem;
@@ -26,6 +27,10 @@ public class Lobby : MonoBehaviour
                               new SteamVRTeleportButton.TeleportButtonModel(0.2f, .02f, 2f, TexturingUtility.LoadMaterialByName("none"),
                                   TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), hasPedestal:false),
                               "Wall");
+
+        var uvmap = PuzzleCubeFactory.CreateTiledMasterUVMap(100, 100);
+        var test = PuzzleCubeFactory.createPuzzleCube(0, 1, uvmap, TexturingUtility.LoadMaterialByName("LimeBricks"));
+        
     }
     
     
