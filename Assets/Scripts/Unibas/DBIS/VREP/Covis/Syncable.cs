@@ -13,9 +13,10 @@ namespace Unibas.DBIS.VREP.Covis
         private Rigidbody rb;
         private bool isRbNotNull;
 
-        private void Start()
+        private void Awake()
         {
             uuid = Guid.NewGuid().ToString();
+            Debug.Log("Uuid: " + uuid);
             lastPosition = transform.position;
             lastRotation = transform.rotation;
             rb = GetComponent<Rigidbody>();
