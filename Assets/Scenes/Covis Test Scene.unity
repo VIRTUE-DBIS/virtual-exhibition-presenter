@@ -214,9 +214,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a383f1f9b20407f9dfe4d667bd5409d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncableKeys: []
-  syncableValues: []
-  uuid: dsfjbhfgougrwhu
+  syncableKeys:
+  - Tracker
+  syncableValues:
+  - {fileID: 1303414960}
+  uuid: container
   name: Cake
   type: 3
 --- !u!114 &1303414960
@@ -231,7 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25138e8bca1e46cb880ba466dd36d0f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uuid: wehvgiyef
+  uuid: syncable
 --- !u!65 &1303414961
 BoxCollider:
   m_ObjectHideFlags: 0

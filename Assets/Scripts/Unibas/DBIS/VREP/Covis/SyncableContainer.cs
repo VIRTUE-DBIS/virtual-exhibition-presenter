@@ -20,11 +20,11 @@ namespace Unibas.DBIS.VREP.Covis
 
         public void Initialize()
         {
-            if (!string.IsNullOrEmpty(uuid))
+            if (string.IsNullOrEmpty(uuid))
             {
-                Debug.LogError("Uuid already initialized at syncable container initialize!");
+                uuid = Guid.NewGuid().ToString();
             }
-            uuid = Guid.NewGuid().ToString();
+            
             if (syncableKeys.Length != syncableValues.Length)
             {
                 Debug.LogError("Number of syncable keys not equal to number of syncable values!");

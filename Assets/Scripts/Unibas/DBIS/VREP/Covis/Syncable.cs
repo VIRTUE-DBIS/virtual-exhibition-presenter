@@ -18,12 +18,10 @@ namespace Unibas.DBIS.VREP.Covis
         {
             if (!initialized)
             {
-                if (!string.IsNullOrEmpty(uuid))
+                if (string.IsNullOrEmpty(uuid))
                 {
-                    Debug.LogError("Uuid already initialized at syncable initialize!");
+                    uuid = Guid.NewGuid().ToString();
                 }
-                uuid = Guid.NewGuid().ToString();
-                Debug.Log("Uuid: " + uuid);
                 lastPosition = transform.position;
                 lastRotation = transform.rotation;
                 rb = GetComponent<Rigidbody>();
