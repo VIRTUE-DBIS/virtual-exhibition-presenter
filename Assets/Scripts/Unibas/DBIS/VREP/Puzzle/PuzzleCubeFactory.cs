@@ -1,8 +1,24 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Puzzle {
   public class PuzzleCubeFactory {
+
+    public static IEnumerator AttachThrowables(GameObject[] cubes)
+    {
+      yield return new WaitForSeconds(1);
+
+      foreach (var cube in cubes)
+      {
+        cube.GetComponent<PuzzleCube>().SetupThrowable();
+      }
+
+      yield return cubes;
+
+    }
+    
+    
     public static GameObject[] createPuzzle(Texture2D texture, float size, Vector3 position) {
       var nbCubes = getNumberOfCubes(texture.width, texture.height);
       GameObject[] cubes = new GameObject[(int) (nbCubes.x * nbCubes.y)];

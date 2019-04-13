@@ -197,8 +197,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c68d093f404f82a3a4e01368162c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 0
+  Enabled: 1
   tex: {fileID: 2800000, guid: db2c3176e2dafd044bea8db8384bb57b, type: 3}
+  cubes: []
 --- !u!1 &169713636
 GameObject:
   m_ObjectHideFlags: 0

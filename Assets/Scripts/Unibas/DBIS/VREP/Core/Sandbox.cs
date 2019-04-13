@@ -9,18 +9,23 @@ namespace DefaultNamespace {
     public bool Enabled;
 
     public Texture2D tex;
+
+    public GameObject[] cubes;
     
     void Start() {
       if (Enabled) {
         TestObjectFactory();
-        PuzzleStuff();
       }
+      
+      PuzzleStuff();
       
     }
 
-    private void PuzzleStuff()
+    public GameObject[] PuzzleStuff()
     {
-      GameObject[] cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, new Vector3(1,0,0));
+      Debug.Log("SANDBOX: PUZZLE");
+      cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, new Vector3(-2.5f,0,2.5f));
+      return cubes;
     }
 
     private void TestObjectFactory() {

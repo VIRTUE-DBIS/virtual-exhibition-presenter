@@ -3,6 +3,7 @@ using DefaultNamespace;
 using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.Puzzle;
 using UnityEngine;
 using World;
 
@@ -90,6 +91,9 @@ namespace Unibas.DBIS.VREP
             _buildingManager = GetComponent<BuildingManager>();
 
             LoadAndCreateExhibition();
+            var sandbox = GetComponent<Sandbox>();
+            var cubes = sandbox.PuzzleStuff();
+            StartCoroutine(PuzzleCubeFactory.AttachThrowables(cubes));
         }
 
         public void LoadAndCreateExhibition()
