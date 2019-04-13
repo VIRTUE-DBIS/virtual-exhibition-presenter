@@ -36,7 +36,7 @@ namespace Unibas.DBIS.VREP.Covis
 
             instance = new SynchronizationManager();
             // TODO: Configure
-            CovisClientImpl.Initialize("localhost", 9734);
+            CovisClientImpl.Initialize("10.192.5.35", 9734);
 
             CovisClientImpl.Instance.Subscribe(new StreamObserver());
 
@@ -72,8 +72,8 @@ namespace Unibas.DBIS.VREP.Covis
             {
                 instance.ContainerUpdateQueue[uuid] = new ConcurrentQueue<UpdateMessage>();
                 var container = message.Container;
-                container.Syncables.Keys.ForEach(key =>
-                    instance.SyncableUpdateQueue.Add(key, new ConcurrentQueue<UpdateMessage>()));
+                container.Syncables.Values.ForEach(syncable =>
+                    instance.SyncableUpdateQueue.Add(syncable.Uuid, new ConcurrentQueue<UpdateMessage>()));
                 instance.NewContainerQueue.Enqueue(message);
             }
         }
