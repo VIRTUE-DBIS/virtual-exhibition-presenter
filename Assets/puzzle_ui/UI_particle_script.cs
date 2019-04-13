@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 [RequireComponent(typeof(CanvasRenderer))]
 [RequireComponent(typeof(ParticleSystem))]
-public class UIParticleSystem : MaskableGraphic {
+public class UIParticleSystem : MonoBehaviour{
  
     public Texture particleTexture;
     public Sprite particleSprite;
