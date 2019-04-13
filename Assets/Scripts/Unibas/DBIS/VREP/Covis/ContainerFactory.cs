@@ -8,6 +8,7 @@ namespace Unibas.DBIS.VREP.Covis
     public class ContainerFactory : MonoBehaviour
     {
         public GameObject prefab;
+        public GameObject body;
 
         private void Awake()
         {
@@ -37,20 +38,44 @@ namespace Unibas.DBIS.VREP.Covis
                 case SyncableContainerType.Tracker:
                 {
                     var instance = Instantiate(prefab);
-                    var syncableList = new List<Syncable>();
-                    var syncable = instance.AddComponent<Syncable>();
-                    syncable.uuid = container.Syncables.Values.First().Uuid;
-                    syncableList.Add(syncable);
+                    var syncables = new Dictionary<string, Syncable>();
+                    var syncable = container.Syncables["Tracker"];
+                    var syncableComponent = instance.AddComponent<Syncable>();
+                    syncableComponent.uuid = syncable.Uuid;
+                    syncables.Add("Tracker", syncableComponent);
 
                     var containerComp = instance.AddComponent<SyncableContainer>();
                     containerComp.name = container.Name;
                     containerComp.type = container.Type;
                     containerComp.uuid = container.Uuid;
-                    containerComp.syncables = syncableList;
+                    containerComp.syncables = syncables;
                     break;
                 }
                 case SyncableContainerType.VirtualPerson:
                 {
+                    var instance = Instantiate(body);
+                    var syncables = new Dictionary<string, Syncable>();
+                    var head = instance.transform.Find("Head").gameObject;
+                    var rightHand = instance.transform.Find("RightHand").gameObject;
+                    var leftHand = instance.transform.Find("LeftHand").gameObject;
+                    
+                    var headSyncable = head.AddComponent<Syncable>();
+                    var rightHandSyncable = rightHand.AddComponent<Syncable>();
+                    var leftHandSyncable = leftHand.AddComponent<Syncable>();
+
+                    headSyncable.uuid = container.Syncables["Head"].Uuid;
+                    rightHandSyncable.uuid = container.Syncables["RightHand"].Uuid;
+                    leftHandSyncable.uuid = container.Syncables["LeftHand"].Uuid;
+                    
+                    syncables.Add("Head", headSyncable);
+                    syncables.Add("RightHand", rightHandSyncable);
+                    syncables.Add("LeftHand", leftHandSyncable);
+
+                    var containerComp = instance.AddComponent<SyncableContainer>();
+                    containerComp.name = container.Name;
+                    containerComp.type = container.Type;
+                    containerComp.uuid = container.Uuid;
+                    containerComp.syncables = syncables;
                     break;
                 }
                 case SyncableContainerType.RealPerson:

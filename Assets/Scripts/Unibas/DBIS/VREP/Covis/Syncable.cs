@@ -15,6 +15,7 @@ namespace Unibas.DBIS.VREP.Covis
 
         private void Start()
         {
+            uuid = Guid.NewGuid().ToString();
             lastPosition = transform.position;
             lastRotation = transform.rotation;
             rb = GetComponent<Rigidbody>();

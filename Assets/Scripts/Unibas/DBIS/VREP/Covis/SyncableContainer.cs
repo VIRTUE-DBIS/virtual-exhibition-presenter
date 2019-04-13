@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf.Collections;
 using Unibas.DBIS.VREP.Network;
 using UnityEngine;
@@ -9,36 +10,36 @@ namespace Unibas.DBIS.VREP.Covis
 {
     public class SyncableContainer : MonoBehaviour
     {
-        public List<Syncable> syncables = new List<Syncable>();
-        public String uuid;
-        public String name;
+        public string[] syncableKeys;
+        public Syncable[] syncableValues;
+        
+        public Dictionary<string, Syncable> syncables = new Dictionary<string, Syncable>();
+        public string uuid;
+        public string name;
         public SyncableContainerType type;
-
-        private void FindSyncables(GameObject gobj, List<Syncable> list)
-        {
-            var localSyncable = gobj.GetComponent<Syncable>();
-            if (localSyncable != null && !list.Contains(localSyncable))
-            {
-                list.Add(localSyncable);
-            }
-
-            foreach (Transform child in gobj.transform)
-            {
-                FindSyncables(child.gameObject, list);
-            }
-        }
 
         private void Start()
         {
-            FindSyncables(gameObject, syncables);
+            uuid = Guid.NewGuid().ToString();
+            if (syncableKeys.Length != syncableValues.Length)
+            {
+                Debug.LogError("Number of syncable keys not equal to number of syncable values!");
+            }
+
+            for (int i = 0; i < syncableKeys.Length; i++)
+            {
+                syncables.Add(syncableKeys[i], syncableValues[i]);
+            }
             
+            FindSyncables(gameObject, syncables);
+
             SynchronizationManager.Register(this);
 
             UpdateMessage message = new UpdateMessage();
             global::SyncableContainer container = new global::SyncableContainer();
 
             MapField<string, global::Syncable> syncablesMap = new MapField<string, global::Syncable>();
-            syncables.ForEach(syncable => syncablesMap[syncable.uuid] = syncable.toProtoSyncable());
+            syncables.ForEach(keyValue => syncablesMap[keyValue.Key] = keyValue.Value.toProtoSyncable());
             container.Syncables.Add(syncablesMap);
             container.Uuid = uuid;
             container.Name = name;
@@ -49,6 +50,20 @@ namespace Unibas.DBIS.VREP.Covis
             // TODO: Set timestamp
 
             CovisClientImpl.Instance.Update(message);
+        }
+
+        private void FindSyncables(GameObject gobj, Dictionary<string, Syncable> dictionary)
+        {
+            var localSyncable = gobj.GetComponent<Syncable>();
+            if (localSyncable != null && !dictionary.Values.Contains(localSyncable))
+            {
+                dictionary.Add(gobj.name, localSyncable);
+            }
+
+            foreach (Transform child in gobj.transform)
+            {
+                FindSyncables(child.gameObject, dictionary);
+            }
         }
 
         private void Update()

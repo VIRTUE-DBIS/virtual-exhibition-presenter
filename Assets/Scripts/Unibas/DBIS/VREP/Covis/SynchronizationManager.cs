@@ -85,7 +85,7 @@ namespace Unibas.DBIS.VREP.Covis
             if (!containerQueue.ContainsKey(container.uuid))
             {
                 containerQueue.Add(container.uuid, new ConcurrentQueue<UpdateMessage>());
-                container.syncables.ForEach(syncable =>
+                container.syncables.Values.ForEach(syncable =>
                 {
                     if (!syncablesQueue.ContainsKey(syncable.uuid))
                     {
