@@ -11,6 +11,8 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         public Throwable Throwable;
 
+        private GameObject _parentThrowable;
+
         private void Awake()
         {
             
@@ -18,8 +20,15 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         public void Start()
         {
-            gameObject.AddComponent<Throwable>();
-            Throwable = gameObject.GetComponent<Throwable>();
+            _parentThrowable = new GameObject("Throwable of "+this.name);
+            Throwable = _parentThrowable.AddComponent<Throwable>();
+            _parentThrowable.transform.SetParent(transform.parent, false);
+            _parentThrowable.transform.position = transform.position;
+            transform.SetParent(_parentThrowable.transform, false);
+            transform.transform.position = Vector3.zero;
+            Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
+                                        Hand.AttachmentFlags.VelocityMovement /*| Hand.AttachmentFlags.TurnOffGravity*/;
+            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
         }
 
         private void Update()
@@ -30,10 +39,10 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         public void SetupThrowable()
         {
-            Debug.Log("Setup Throwable");
+            /*Debug.Log("Setup Throwable");
             Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
                                         Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
-            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
+            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;*/
             
             /*
              // Throwable properties from displayal
