@@ -38,11 +38,6 @@ public class UIParticleSystem : MaskableGraphic {
         if (_transform == null) {
             _transform = transform;
         }
- 
-        // prepare particle system
-        ParticleSystemRenderer renderer = GetComponent<ParticleSystemRenderer>();
-        bool setParticleSystemMaterial = false;
- 
         if (_particleSystem == null) {
             _particleSystem = GetComponent<ParticleSystem>();
  
@@ -50,7 +45,8 @@ public class UIParticleSystem : MaskableGraphic {
                 return false;
             }
  
-            // get current particle texture
+            // automatically set material to UI/Particles/Hidden shader, and get previous texture
+            ParticleSystemRenderer renderer = _particleSystem.GetComponent<ParticleSystemRenderer>();
             if (renderer == null) {
                 renderer = _particleSystem.gameObject.AddComponent<ParticleSystemRenderer>();
             }
@@ -58,26 +54,7 @@ public class UIParticleSystem : MaskableGraphic {
             if (currentMaterial && currentMaterial.HasProperty("_MainTex")) {
                 particleTexture = currentMaterial.mainTexture;
             }
- 
-            // automatically set scaling
-            _particleSystem.scalingMode = ParticleSystemScalingMode.Local;
- 
-            _particles = null;
-            setParticleSystemMaterial = true;
-        } else {
-            if (Application.isPlaying) {
-                setParticleSystemMaterial = (renderer.material == null);
-            }
-            #if UNITY_EDITOR
-            else {
-                setParticleSystemMaterial = (renderer.sharedMaterial == null);
-            }
-            #endif
-        }
- 
-        // automatically set material to UI/Particles/Hidden shader, and get previous texture
-        if (setParticleSystemMaterial) {
-            Material material = new Material(Shader.Find("UI/Particles/Hidden"));
+            Material material = new Material(Shader.Find("UI/Particles/Hidden")); // TODO - You should create this discard shader
             if (Application.isPlaying) {
                 renderer.material = material;
             }
@@ -87,9 +64,12 @@ public class UIParticleSystem : MaskableGraphic {
                 renderer.sharedMaterial = material;
             }
             #endif
-        }
  
-        // prepare particles array
+            // automatically set scaling
+            _particleSystem.scalingMode = ParticleSystemScalingMode.Hierarchy;
+ 
+            _particles = null;
+        }
         if (_particles == null) {
             _particles = new ParticleSystem.Particle[_particleSystem.maxParticles];
         }
