@@ -42,6 +42,7 @@ namespace Unibas.DBIS.VREP.Covis
                     var syncables = new Dictionary<string, Syncable>();
                     var syncable = container.Syncables["Tracker"];
                     var syncableComponent = instance.AddComponent<Syncable>();
+                    syncableComponent.Initialize();
                     syncableComponent.uuid = syncable.Uuid;
                     syncables.Add("Tracker", syncableComponent);
 
@@ -63,6 +64,10 @@ namespace Unibas.DBIS.VREP.Covis
                     var headSyncable = head.AddComponent<Syncable>();
                     var rightHandSyncable = rightHand.AddComponent<Syncable>();
                     var leftHandSyncable = leftHand.AddComponent<Syncable>();
+                    
+                    headSyncable.Initialize();
+                    rightHandSyncable.Initialize();
+                    leftHandSyncable.Initialize();
 
                     headSyncable.uuid = container.Syncables["Head"].Uuid;
                     rightHandSyncable.uuid = container.Syncables["RightHand"].Uuid;
@@ -72,7 +77,9 @@ namespace Unibas.DBIS.VREP.Covis
                     syncables.Add("RightHand", rightHandSyncable);
                     syncables.Add("LeftHand", leftHandSyncable);
 
+                    Debug.Log("Before adding SyncableContainer.");
                     var containerComp = instance.AddComponent<SyncableContainer>();
+                    Debug.Log("After adding SyncableContainer.");
                     containerComp.name = container.Name;
                     containerComp.type = container.Type;
                     containerComp.uuid = container.Uuid;

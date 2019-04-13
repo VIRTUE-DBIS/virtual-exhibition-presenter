@@ -12,19 +12,25 @@ namespace Unibas.DBIS.VREP.Covis
         private Quaternion lastRotation;
         private Rigidbody rb;
         private bool isRbNotNull;
+        private bool initialized = false;
 
         public void Initialize()
         {
-            if (!string.IsNullOrEmpty(uuid))
+            if (!initialized)
             {
-                Debug.LogError("Uuid already initialized at syncable initialize!");
+                if (!string.IsNullOrEmpty(uuid))
+                {
+                    Debug.LogError("Uuid already initialized at syncable initialize!");
+                }
+                uuid = Guid.NewGuid().ToString();
+                Debug.Log("Uuid: " + uuid);
+                lastPosition = transform.position;
+                lastRotation = transform.rotation;
+                rb = GetComponent<Rigidbody>();
+                isRbNotNull = rb != null;
             }
-            uuid = Guid.NewGuid().ToString();
-            Debug.Log("Uuid: " + uuid);
-            lastPosition = transform.position;
-            lastRotation = transform.rotation;
-            rb = GetComponent<Rigidbody>();
-            isRbNotNull = rb != null;
+
+            initialized = true;
         }
 
         private Vec3 ToVec3(Vector3 vector)
