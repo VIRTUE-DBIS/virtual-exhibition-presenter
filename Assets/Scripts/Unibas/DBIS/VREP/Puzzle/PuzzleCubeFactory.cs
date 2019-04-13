@@ -86,6 +86,10 @@ namespace Unibas.DBIS.VREP.Puzzle {
       ceilingAnchor.transform.position = new Vector3(-s2, size, -s2);
       ceilingAnchor.transform.Rotate(Vector3.right, 90);
 
+      var boxCollider = cube.AddComponent<BoxCollider>();
+      boxCollider.center = new Vector3(0,s2,0);
+      boxCollider.size = new Vector3(size,size,size);
+      
       return cube;
     }
 
@@ -98,27 +102,6 @@ namespace Unibas.DBIS.VREP.Puzzle {
       };
     }
 
-    public static Vector2[] ExtractTileUVMap(int id, Vector2[] uvmap, int nbXCubes, int nbYCubes) {
-      return new[] {
-        uvmap[id], uvmap[id + 1],
-        uvmap[id + nbXCubes + 1], uvmap[id + nbXCubes + 2]
-      };
-    }
-
-    public static Vector2[] CreateTiledMasterUVMap(int nbXcubes, int nbYcubes) {
-      float u = 1f / nbXcubes;
-      float v = 1f / nbYcubes;
-
-      Vector2[] arr = new Vector2[(nbXcubes + 1) * (nbYcubes + 1)];
-
-      for (int y = 0; y <= nbYcubes; y++) {
-        for (int x = 0; x <= nbXcubes; x++) {
-          arr[nbYcubes * y + x] = new Vector2(x * u, y * v);
-        }
-      }
-
-      return arr;
-    }
 
     /// <summary>
     ///
@@ -181,10 +164,10 @@ namespace Unibas.DBIS.VREP.Puzzle {
       }
 
       // TODO Highly experimental!
-
+/*
       var boxCollider = go.AddComponent<BoxCollider>();
       boxCollider.size = new Vector3(size, size, 0.0001f);
-
+*/
       return go;
     }
 
