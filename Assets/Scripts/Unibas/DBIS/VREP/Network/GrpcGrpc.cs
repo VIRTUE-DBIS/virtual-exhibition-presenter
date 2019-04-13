@@ -12,8 +12,6 @@ public static partial class CovisService
   static readonly string __ServiceName = "CovisService";
 
   static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.Empty.Parser.ParseFrom);
-  static readonly grpc::Marshaller<global::LoginMessage> __Marshaller_LoginMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LoginMessage.Parser.ParseFrom);
-  static readonly grpc::Marshaller<global::LoginReplyMessage> __Marshaller_LoginReplyMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::LoginReplyMessage.Parser.ParseFrom);
   static readonly grpc::Marshaller<global::UpdateMessage> __Marshaller_UpdateMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::UpdateMessage.Parser.ParseFrom);
 
   static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.Empty> __Method_Ping = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.Empty>(
@@ -22,13 +20,6 @@ public static partial class CovisService
       "Ping",
       __Marshaller_google_protobuf_Empty,
       __Marshaller_google_protobuf_Empty);
-
-  static readonly grpc::Method<global::LoginMessage, global::LoginReplyMessage> __Method_Login = new grpc::Method<global::LoginMessage, global::LoginReplyMessage>(
-      grpc::MethodType.Unary,
-      __ServiceName,
-      "Login",
-      __Marshaller_LoginMessage,
-      __Marshaller_LoginReplyMessage);
 
   static readonly grpc::Method<global::UpdateMessage, global::UpdateMessage> __Method_Sync = new grpc::Method<global::UpdateMessage, global::UpdateMessage>(
       grpc::MethodType.DuplexStreaming,
@@ -47,11 +38,6 @@ public static partial class CovisService
   public abstract partial class CovisServiceBase
   {
     public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> Ping(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
-    {
-      throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-    }
-
-    public virtual global::System.Threading.Tasks.Task<global::LoginReplyMessage> Login(global::LoginMessage request, grpc::ServerCallContext context)
     {
       throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
     }
@@ -102,22 +88,6 @@ public static partial class CovisService
     {
       return CallInvoker.AsyncUnaryCall(__Method_Ping, null, options, request);
     }
-    public virtual global::LoginReplyMessage Login(global::LoginMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-    {
-      return Login(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-    }
-    public virtual global::LoginReplyMessage Login(global::LoginMessage request, grpc::CallOptions options)
-    {
-      return CallInvoker.BlockingUnaryCall(__Method_Login, null, options, request);
-    }
-    public virtual grpc::AsyncUnaryCall<global::LoginReplyMessage> LoginAsync(global::LoginMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-    {
-      return LoginAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-    }
-    public virtual grpc::AsyncUnaryCall<global::LoginReplyMessage> LoginAsync(global::LoginMessage request, grpc::CallOptions options)
-    {
-      return CallInvoker.AsyncUnaryCall(__Method_Login, null, options, request);
-    }
     public virtual grpc::AsyncDuplexStreamingCall<global::UpdateMessage, global::UpdateMessage> Sync(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
     {
       return Sync(new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -139,7 +109,6 @@ public static partial class CovisService
   {
     return grpc::ServerServiceDefinition.CreateBuilder()
         .AddMethod(__Method_Ping, serviceImpl.Ping)
-        .AddMethod(__Method_Login, serviceImpl.Login)
         .AddMethod(__Method_Sync, serviceImpl.Sync).Build();
   }
 
@@ -150,7 +119,6 @@ public static partial class CovisService
   public static void BindService(grpc::ServiceBinderBase serviceBinder, CovisServiceBase serviceImpl)
   {
     serviceBinder.AddMethod(__Method_Ping, serviceImpl.Ping);
-    serviceBinder.AddMethod(__Method_Login, serviceImpl.Login);
     serviceBinder.AddMethod(__Method_Sync, serviceImpl.Sync);
   }
 
