@@ -37,13 +37,17 @@ namespace Unibas.DBIS.VREP.Covis
             
             FindSyncables(gameObject, syncables);
 
+            syncables.Values.ForEach(syncable => syncable.Initialize());
+            
             SynchronizationManager.Register(this);
+        }
 
+        public void SendUpdate()
+        {
             UpdateMessage message = new UpdateMessage();
             global::SyncableContainer container = new global::SyncableContainer();
 
             MapField<string, global::Syncable> syncablesMap = new MapField<string, global::Syncable>();
-            syncables.Values.ForEach(syncable => syncable.Initialize());
             syncables.ForEach(keyValue => syncablesMap[keyValue.Key] = keyValue.Value.toProtoSyncable());
             container.Syncables.Add(syncablesMap);
             container.Uuid = uuid;

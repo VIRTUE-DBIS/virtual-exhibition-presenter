@@ -21,6 +21,8 @@ namespace Unibas.DBIS.VREP.Covis
         public readonly Dictionary<SyncableUUID, ConcurrentQueue<UpdateMessage>> SyncableUpdateQueue;
         public readonly Dictionary<SyncableContainerUUID, ConcurrentQueue<UpdateMessage>> ContainerUpdateQueue;
         public readonly ConcurrentQueue<UpdateMessage> NewContainerQueue;
+        
+        private static Queue<SyncableContainer> toRegister = new Queue<SyncableContainer>();
 
         private SynchronizationManager()
         {
@@ -39,8 +41,10 @@ namespace Unibas.DBIS.VREP.Covis
             CovisClientImpl.Initialize("localhost", 9734);
 
             CovisClientImpl.Instance.Subscribe(new StreamObserver());
-
+            
             initialized = true;
+            
+            toRegister.ForEach(container => PostAwakeRegister(container));
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -78,7 +82,7 @@ namespace Unibas.DBIS.VREP.Covis
             }
         }
 
-        public static void Register(SyncableContainer container)
+        public static void PostAwakeRegister(SyncableContainer container)
         {
             var containerQueue = instance.ContainerUpdateQueue;
             var syncablesQueue = instance.SyncableUpdateQueue;
@@ -92,6 +96,19 @@ namespace Unibas.DBIS.VREP.Covis
                         syncablesQueue.Add(syncable.uuid, new ConcurrentQueue<UpdateMessage>());
                     }
                 });
+            }
+            container.SendUpdate();
+        }
+
+        public static void Register(SyncableContainer container)
+        {
+            if (initialized)
+            {
+                PostAwakeRegister(container);
+            }
+            else
+            {
+                toRegister.Enqueue(container);
             }
         }
     }
