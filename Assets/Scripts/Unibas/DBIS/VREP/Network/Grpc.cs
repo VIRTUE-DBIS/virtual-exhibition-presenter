@@ -22,28 +22,38 @@ public static partial class GrpcReflection {
   static GrpcReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "CgpncnBjLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHkucHJvdG8idAoN",
-          "VXBkYXRlTWVzc2FnZRIRCgl0aW1lc3RhbXAYASABKAMSHQoIc3luY2FibGUY",
-          "FCABKAsyCS5TeW5jYWJsZUgAEicKCWNvbnRhaW5lchgVIAEoCzISLlN5bmNh",
-          "YmxlQ29udGFpbmVySABCCAoGdXBkYXRlIicKBFZlYzMSCQoBeBgBIAEoARIJ",
-          "CgF5GAIgASgBEgkKAXoYAyABKAEiMgoEVmVjNBIJCgF3GAEgASgBEgkKAXgY",
-          "AiABKAESCQoBeRgDIAEoARIJCgF6GAQgASgBIkoKCFN5bmNhYmxlEgwKBHV1",
-          "aWQYASABKAkSFwoIcG9zaXRpb24YAiABKAsyBS5WZWMzEhcKCHJvdGF0aW9u",
-          "GAMgASgLMgUuVmVjNCLXAQoRU3luY2FibGVDb250YWluZXISDAoEdXVpZBgB",
-          "IAEoCRINCgVtb2RlbBgCIAEoCRI0CglzeW5jYWJsZXMYAyADKAsyIS5TeW5j",
-          "YWJsZUNvbnRhaW5lci5TeW5jYWJsZXNFbnRyeRIkCgR0eXBlGAQgASgOMhYu",
-          "U3luY2FibGVDb250YWluZXJUeXBlEgwKBG5hbWUYBSABKAkaOwoOU3luY2Fi",
-          "bGVzRW50cnkSCwoDa2V5GAEgASgJEhgKBXZhbHVlGAIgASgLMgkuU3luY2Fi",
-          "bGU6AjgBKlYKFVN5bmNhYmxlQ29udGFpbmVyVHlwZRILCgdVTktOT1dOEAAS",
-          "EgoOVklSVFVBTF9QRVJTT04QARIPCgtSRUFMX1BFUlNPThACEgsKB1RSQUNL",
-          "RVIQAzJ2CgxDb3Zpc1NlcnZpY2USOAoEUGluZxIWLmdvb2dsZS5wcm90b2J1",
-          "Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAEiwKBFN5bmMSDi5V",
-          "cGRhdGVNZXNzYWdlGg4uVXBkYXRlTWVzc2FnZSIAKAEwAUIqCh1jaC51bmli",
-          "YXMuZG1pLmRiaXMuY292aXMuZ3JwY0IJQ292aXNHcnBjYgZwcm90bzM="));
+          "CgpncnBjLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHkucHJvdG8ihAIK",
+          "DVVwZGF0ZU1lc3NhZ2USEQoJdGltZXN0YW1wGAEgASgDEh0KCHN5bmNhYmxl",
+          "GBQgASgLMgkuU3luY2FibGVIABInCgljb250YWluZXIYFSABKAsyEi5TeW5j",
+          "YWJsZUNvbnRhaW5lckgAEigKCmRpc2Nvbm5lY3QYFiABKAsyEi5EaXNjb25u",
+          "ZWN0TWVzc2FnZUgAEjIKD2RlbGV0ZUNvbnRhaW5lchgXIAEoCzIXLkRlbGV0",
+          "ZUNvbnRhaW5lck1lc3NhZ2VIABIwCg5kZWxldGVTeW5jYWJsZRgYIAEoCzIW",
+          "LkRlbGV0ZVN5bmNhYmxlTWVzc2FnZUgAQggKBnVwZGF0ZSIvChZEZWxldGVD",
+          "b250YWluZXJNZXNzYWdlEhUKDWNvbnRhaW5lclVVSUQYASABKAkiLQoVRGVs",
+          "ZXRlU3luY2FibGVNZXNzYWdlEhQKDHN5bmNhYmxlVVVJRBgBIAEoCSI7ChFE",
+          "aXNjb25uZWN0TWVzc2FnZRImCgpjb250YWluZXJzGAEgAygLMhIuU3luY2Fi",
+          "bGVDb250YWluZXIiJwoEVmVjMxIJCgF4GAEgASgBEgkKAXkYAiABKAESCQoB",
+          "ehgDIAEoASIyCgRWZWM0EgkKAXcYASABKAESCQoBeBgCIAEoARIJCgF5GAMg",
+          "ASgBEgkKAXoYBCABKAEiSgoIU3luY2FibGUSDAoEdXVpZBgBIAEoCRIXCghw",
+          "b3NpdGlvbhgCIAEoCzIFLlZlYzMSFwoIcm90YXRpb24YAyABKAsyBS5WZWM0",
+          "ItcBChFTeW5jYWJsZUNvbnRhaW5lchIMCgR1dWlkGAEgASgJEg0KBW1vZGVs",
+          "GAIgASgJEjQKCXN5bmNhYmxlcxgDIAMoCzIhLlN5bmNhYmxlQ29udGFpbmVy",
+          "LlN5bmNhYmxlc0VudHJ5EiQKBHR5cGUYBCABKA4yFi5TeW5jYWJsZUNvbnRh",
+          "aW5lclR5cGUSDAoEbmFtZRgFIAEoCRo7Cg5TeW5jYWJsZXNFbnRyeRILCgNr",
+          "ZXkYASABKAkSGAoFdmFsdWUYAiABKAsyCS5TeW5jYWJsZToCOAEqVgoVU3lu",
+          "Y2FibGVDb250YWluZXJUeXBlEgsKB1VOS05PV04QABISCg5WSVJUVUFMX1BF",
+          "UlNPThABEg8KC1JFQUxfUEVSU09OEAISCwoHVFJBQ0tFUhADMnYKDENvdmlz",
+          "U2VydmljZRI4CgRQaW5nEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29v",
+          "Z2xlLnByb3RvYnVmLkVtcHR5IgASLAoEU3luYxIOLlVwZGF0ZU1lc3NhZ2Ua",
+          "Di5VcGRhdGVNZXNzYWdlIgAoATABQioKHWNoLnVuaWJhcy5kbWkuZGJpcy5j",
+          "b3Zpcy5ncnBjQglDb3Zpc0dycGNiBnByb3RvMw=="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
         new pbr::GeneratedClrTypeInfo(new[] {typeof(global::SyncableContainerType), }, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateMessage), global::UpdateMessage.Parser, new[]{ "Timestamp", "Syncable", "Container" }, new[]{ "Update" }, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateMessage), global::UpdateMessage.Parser, new[]{ "Timestamp", "Syncable", "Container", "Disconnect", "DeleteContainer", "DeleteSyncable" }, new[]{ "Update" }, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::DeleteContainerMessage), global::DeleteContainerMessage.Parser, new[]{ "ContainerUUID" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::DeleteSyncableMessage), global::DeleteSyncableMessage.Parser, new[]{ "SyncableUUID" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::DisconnectMessage), global::DisconnectMessage.Parser, new[]{ "Containers" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Vec3), global::Vec3.Parser, new[]{ "X", "Y", "Z" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Vec4), global::Vec4.Parser, new[]{ "W", "X", "Y", "Z" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Syncable), global::Syncable.Parser, new[]{ "Uuid", "Position", "Rotation" }, null, null, null),
@@ -97,6 +107,15 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
       case UpdateOneofCase.Container:
         Container = other.Container.Clone();
         break;
+      case UpdateOneofCase.Disconnect:
+        Disconnect = other.Disconnect.Clone();
+        break;
+      case UpdateOneofCase.DeleteContainer:
+        DeleteContainer = other.DeleteContainer.Clone();
+        break;
+      case UpdateOneofCase.DeleteSyncable:
+        DeleteSyncable = other.DeleteSyncable.Clone();
+        break;
     }
 
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -140,12 +159,48 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     }
   }
 
+  /// <summary>Field number for the "disconnect" field.</summary>
+  public const int DisconnectFieldNumber = 22;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::DisconnectMessage Disconnect {
+    get { return updateCase_ == UpdateOneofCase.Disconnect ? (global::DisconnectMessage) update_ : null; }
+    set {
+      update_ = value;
+      updateCase_ = value == null ? UpdateOneofCase.None : UpdateOneofCase.Disconnect;
+    }
+  }
+
+  /// <summary>Field number for the "deleteContainer" field.</summary>
+  public const int DeleteContainerFieldNumber = 23;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::DeleteContainerMessage DeleteContainer {
+    get { return updateCase_ == UpdateOneofCase.DeleteContainer ? (global::DeleteContainerMessage) update_ : null; }
+    set {
+      update_ = value;
+      updateCase_ = value == null ? UpdateOneofCase.None : UpdateOneofCase.DeleteContainer;
+    }
+  }
+
+  /// <summary>Field number for the "deleteSyncable" field.</summary>
+  public const int DeleteSyncableFieldNumber = 24;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::DeleteSyncableMessage DeleteSyncable {
+    get { return updateCase_ == UpdateOneofCase.DeleteSyncable ? (global::DeleteSyncableMessage) update_ : null; }
+    set {
+      update_ = value;
+      updateCase_ = value == null ? UpdateOneofCase.None : UpdateOneofCase.DeleteSyncable;
+    }
+  }
+
   private object update_;
   /// <summary>Enum of possible cases for the "update" oneof.</summary>
   public enum UpdateOneofCase {
     None = 0,
     Syncable = 20,
     Container = 21,
+    Disconnect = 22,
+    DeleteContainer = 23,
+    DeleteSyncable = 24,
   }
   private UpdateOneofCase updateCase_ = UpdateOneofCase.None;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -175,6 +230,9 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     if (Timestamp != other.Timestamp) return false;
     if (!object.Equals(Syncable, other.Syncable)) return false;
     if (!object.Equals(Container, other.Container)) return false;
+    if (!object.Equals(Disconnect, other.Disconnect)) return false;
+    if (!object.Equals(DeleteContainer, other.DeleteContainer)) return false;
+    if (!object.Equals(DeleteSyncable, other.DeleteSyncable)) return false;
     if (UpdateCase != other.UpdateCase) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
@@ -185,6 +243,9 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     if (Timestamp != 0L) hash ^= Timestamp.GetHashCode();
     if (updateCase_ == UpdateOneofCase.Syncable) hash ^= Syncable.GetHashCode();
     if (updateCase_ == UpdateOneofCase.Container) hash ^= Container.GetHashCode();
+    if (updateCase_ == UpdateOneofCase.Disconnect) hash ^= Disconnect.GetHashCode();
+    if (updateCase_ == UpdateOneofCase.DeleteContainer) hash ^= DeleteContainer.GetHashCode();
+    if (updateCase_ == UpdateOneofCase.DeleteSyncable) hash ^= DeleteSyncable.GetHashCode();
     hash ^= (int) updateCase_;
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
@@ -211,6 +272,18 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
       output.WriteRawTag(170, 1);
       output.WriteMessage(Container);
     }
+    if (updateCase_ == UpdateOneofCase.Disconnect) {
+      output.WriteRawTag(178, 1);
+      output.WriteMessage(Disconnect);
+    }
+    if (updateCase_ == UpdateOneofCase.DeleteContainer) {
+      output.WriteRawTag(186, 1);
+      output.WriteMessage(DeleteContainer);
+    }
+    if (updateCase_ == UpdateOneofCase.DeleteSyncable) {
+      output.WriteRawTag(194, 1);
+      output.WriteMessage(DeleteSyncable);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -227,6 +300,15 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     }
     if (updateCase_ == UpdateOneofCase.Container) {
       size += 2 + pb::CodedOutputStream.ComputeMessageSize(Container);
+    }
+    if (updateCase_ == UpdateOneofCase.Disconnect) {
+      size += 2 + pb::CodedOutputStream.ComputeMessageSize(Disconnect);
+    }
+    if (updateCase_ == UpdateOneofCase.DeleteContainer) {
+      size += 2 + pb::CodedOutputStream.ComputeMessageSize(DeleteContainer);
+    }
+    if (updateCase_ == UpdateOneofCase.DeleteSyncable) {
+      size += 2 + pb::CodedOutputStream.ComputeMessageSize(DeleteSyncable);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -254,6 +336,24 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
           Container = new global::SyncableContainer();
         }
         Container.MergeFrom(other.Container);
+        break;
+      case UpdateOneofCase.Disconnect:
+        if (Disconnect == null) {
+          Disconnect = new global::DisconnectMessage();
+        }
+        Disconnect.MergeFrom(other.Disconnect);
+        break;
+      case UpdateOneofCase.DeleteContainer:
+        if (DeleteContainer == null) {
+          DeleteContainer = new global::DeleteContainerMessage();
+        }
+        DeleteContainer.MergeFrom(other.DeleteContainer);
+        break;
+      case UpdateOneofCase.DeleteSyncable:
+        if (DeleteSyncable == null) {
+          DeleteSyncable = new global::DeleteSyncableMessage();
+        }
+        DeleteSyncable.MergeFrom(other.DeleteSyncable);
         break;
     }
 
@@ -290,6 +390,412 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
           Container = subBuilder;
           break;
         }
+        case 178: {
+          global::DisconnectMessage subBuilder = new global::DisconnectMessage();
+          if (updateCase_ == UpdateOneofCase.Disconnect) {
+            subBuilder.MergeFrom(Disconnect);
+          }
+          input.ReadMessage(subBuilder);
+          Disconnect = subBuilder;
+          break;
+        }
+        case 186: {
+          global::DeleteContainerMessage subBuilder = new global::DeleteContainerMessage();
+          if (updateCase_ == UpdateOneofCase.DeleteContainer) {
+            subBuilder.MergeFrom(DeleteContainer);
+          }
+          input.ReadMessage(subBuilder);
+          DeleteContainer = subBuilder;
+          break;
+        }
+        case 194: {
+          global::DeleteSyncableMessage subBuilder = new global::DeleteSyncableMessage();
+          if (updateCase_ == UpdateOneofCase.DeleteSyncable) {
+            subBuilder.MergeFrom(DeleteSyncable);
+          }
+          input.ReadMessage(subBuilder);
+          DeleteSyncable = subBuilder;
+          break;
+        }
+      }
+    }
+  }
+
+}
+
+public sealed partial class DeleteContainerMessage : pb::IMessage<DeleteContainerMessage> {
+  private static readonly pb::MessageParser<DeleteContainerMessage> _parser = new pb::MessageParser<DeleteContainerMessage>(() => new DeleteContainerMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pb::MessageParser<DeleteContainerMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::GrpcReflection.Descriptor.MessageTypes[1]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DeleteContainerMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DeleteContainerMessage(DeleteContainerMessage other) : this() {
+    containerUUID_ = other.containerUUID_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DeleteContainerMessage Clone() {
+    return new DeleteContainerMessage(this);
+  }
+
+  /// <summary>Field number for the "containerUUID" field.</summary>
+  public const int ContainerUUIDFieldNumber = 1;
+  private string containerUUID_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public string ContainerUUID {
+    get { return containerUUID_; }
+    set {
+      containerUUID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override bool Equals(object other) {
+    return Equals(other as DeleteContainerMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool Equals(DeleteContainerMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (ContainerUUID != other.ContainerUUID) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (ContainerUUID.Length != 0) hash ^= ContainerUUID.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void WriteTo(pb::CodedOutputStream output) {
+    if (ContainerUUID.Length != 0) {
+      output.WriteRawTag(10);
+      output.WriteString(ContainerUUID);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public int CalculateSize() {
+    int size = 0;
+    if (ContainerUUID.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(ContainerUUID);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(DeleteContainerMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.ContainerUUID.Length != 0) {
+      ContainerUUID = other.ContainerUUID;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(pb::CodedInputStream input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 10: {
+          ContainerUUID = input.ReadString();
+          break;
+        }
+      }
+    }
+  }
+
+}
+
+public sealed partial class DeleteSyncableMessage : pb::IMessage<DeleteSyncableMessage> {
+  private static readonly pb::MessageParser<DeleteSyncableMessage> _parser = new pb::MessageParser<DeleteSyncableMessage>(() => new DeleteSyncableMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pb::MessageParser<DeleteSyncableMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::GrpcReflection.Descriptor.MessageTypes[2]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DeleteSyncableMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DeleteSyncableMessage(DeleteSyncableMessage other) : this() {
+    syncableUUID_ = other.syncableUUID_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DeleteSyncableMessage Clone() {
+    return new DeleteSyncableMessage(this);
+  }
+
+  /// <summary>Field number for the "syncableUUID" field.</summary>
+  public const int SyncableUUIDFieldNumber = 1;
+  private string syncableUUID_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public string SyncableUUID {
+    get { return syncableUUID_; }
+    set {
+      syncableUUID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override bool Equals(object other) {
+    return Equals(other as DeleteSyncableMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool Equals(DeleteSyncableMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (SyncableUUID != other.SyncableUUID) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (SyncableUUID.Length != 0) hash ^= SyncableUUID.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void WriteTo(pb::CodedOutputStream output) {
+    if (SyncableUUID.Length != 0) {
+      output.WriteRawTag(10);
+      output.WriteString(SyncableUUID);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public int CalculateSize() {
+    int size = 0;
+    if (SyncableUUID.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(SyncableUUID);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(DeleteSyncableMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.SyncableUUID.Length != 0) {
+      SyncableUUID = other.SyncableUUID;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(pb::CodedInputStream input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 10: {
+          SyncableUUID = input.ReadString();
+          break;
+        }
+      }
+    }
+  }
+
+}
+
+public sealed partial class DisconnectMessage : pb::IMessage<DisconnectMessage> {
+  private static readonly pb::MessageParser<DisconnectMessage> _parser = new pb::MessageParser<DisconnectMessage>(() => new DisconnectMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pb::MessageParser<DisconnectMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::GrpcReflection.Descriptor.MessageTypes[3]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DisconnectMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DisconnectMessage(DisconnectMessage other) : this() {
+    containers_ = other.containers_.Clone();
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public DisconnectMessage Clone() {
+    return new DisconnectMessage(this);
+  }
+
+  /// <summary>Field number for the "containers" field.</summary>
+  public const int ContainersFieldNumber = 1;
+  private static readonly pb::FieldCodec<global::SyncableContainer> _repeated_containers_codec
+      = pb::FieldCodec.ForMessage(10, global::SyncableContainer.Parser);
+  private readonly pbc::RepeatedField<global::SyncableContainer> containers_ = new pbc::RepeatedField<global::SyncableContainer>();
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public pbc::RepeatedField<global::SyncableContainer> Containers {
+    get { return containers_; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override bool Equals(object other) {
+    return Equals(other as DisconnectMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool Equals(DisconnectMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if(!containers_.Equals(other.containers_)) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override int GetHashCode() {
+    int hash = 1;
+    hash ^= containers_.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void WriteTo(pb::CodedOutputStream output) {
+    containers_.WriteTo(output, _repeated_containers_codec);
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public int CalculateSize() {
+    int size = 0;
+    size += containers_.CalculateSize(_repeated_containers_codec);
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(DisconnectMessage other) {
+    if (other == null) {
+      return;
+    }
+    containers_.Add(other.containers_);
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(pb::CodedInputStream input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 10: {
+          containers_.AddEntriesFrom(input, _repeated_containers_codec);
+          break;
+        }
       }
     }
   }
@@ -304,7 +810,7 @@ public sealed partial class Vec3 : pb::IMessage<Vec3> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[1]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[4]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -489,7 +995,7 @@ public sealed partial class Vec4 : pb::IMessage<Vec4> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[2]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[5]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -702,7 +1208,7 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[3]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[6]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -899,7 +1405,7 @@ public sealed partial class SyncableContainer : pb::IMessage<SyncableContainer> 
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[4]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[7]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
