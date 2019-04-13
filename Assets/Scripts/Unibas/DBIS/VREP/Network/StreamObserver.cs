@@ -2,15 +2,23 @@ using System;
 
 namespace Unibas.DBIS.VREP.Network
 {
-    public interface StreamObserver<T>
+    public class StreamObserver
     {
-        void onNext(T message);
-
-        /**
-         * Can be called multiple times. After onComplete(), you can ignore all onNext() calls.
-         */
-        void onComplete();
-
-        void onError(Exception e);
+        public void onNext(UpdateMessage message)
+        {
+            switch (message.UpdateCase)
+            {
+                case UpdateMessage.UpdateOneofCase.Syncable:
+                {
+                    // TODO: Add to queue
+                    break;
+                }
+                case UpdateMessage.UpdateOneofCase.Container:
+                {
+                    // TODO: Add to queue
+                    break;
+                }
+            }
+        }
     }
 }

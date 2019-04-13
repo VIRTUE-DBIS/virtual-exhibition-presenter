@@ -16,7 +16,7 @@ namespace Unibas.DBIS.VREP.Network
          * Subscribe to updates from the server.
          * All information the client receives will be forwarded to the appropriate method of the StreamObserver.
          */
-        void Subscribe(StreamObserver<UpdateMessage> observer);
+        void Subscribe(StreamObserver observer);
 
         /**
          * Send a simple ping and wait for a reply from the server.
