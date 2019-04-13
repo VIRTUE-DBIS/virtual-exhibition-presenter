@@ -10,8 +10,8 @@ namespace Unibas.DBIS.VREP.Covis
 {
     public class SyncableContainer : MonoBehaviour
     {
-        public string[] syncableKeys;
-        public Syncable[] syncableValues;
+        public string[] syncableKeys = {};
+        public Syncable[] syncableValues = {};
         
         public Dictionary<string, Syncable> syncables = new Dictionary<string, Syncable>();
         public string uuid;
