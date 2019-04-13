@@ -17,7 +17,7 @@ public class Displayal : MonoBehaviour
     public Vector3 OriginalPosition;
     public Quaternion OriginalRotation;
     
-    private CuboidModel _anchor = new CuboidModel(1,0.01f,.1f);
+    private CuboidModel _anchor = new CuboidModel(1,0.01f,.2f);
     
 
     public void RestorePosition() {
@@ -73,6 +73,13 @@ public class Displayal : MonoBehaviour
             t.attachmentFlags = Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
                 //Hand.AttachmentFlags.VelocityMovement  Hand.AttachmentFlags.TurnOffGravity;
             t.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
+            
+            // Fix non-convex meshcollider since unity5 not allowed...
+            var plane = transform.Find("Plane");
+            plane.GetComponent<MeshCollider>().convex = true;
+            var back = transform.Find("Back");
+            back.GetComponent<MeshCollider>().convex = true;
+            
             var anch = ModelFactory.CreateCuboid(_anchor);
             var col = anch.AddComponent<BoxCollider>();
             col.center = new Vector3(_anchor.Width / 2, _anchor.Height / 2, _anchor.Depth/2);

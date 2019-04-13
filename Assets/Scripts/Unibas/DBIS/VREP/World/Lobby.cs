@@ -28,7 +28,7 @@ public class Lobby : MonoBehaviour
                                   TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), hasPedestal:false),
                               "Wall");
 
-        GameObject[] cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, Vector3.zero);
+        GameObject[] cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, new Vector3(1,0,0));
     }
 
     public Texture2D tex;

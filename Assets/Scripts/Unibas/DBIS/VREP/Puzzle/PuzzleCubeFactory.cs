@@ -89,6 +89,10 @@ namespace Unibas.DBIS.VREP.Puzzle {
       var boxCollider = cube.AddComponent<BoxCollider>();
       boxCollider.center = new Vector3(0,s2,0);
       boxCollider.size = new Vector3(size,size,size);
+
+      var puzzleCube = cube.AddComponent<PuzzleCube>();
+      puzzleCube.Id = id;
+      puzzleCube.NbCubes = new Vector2Int(nbXcubes, nbYcubes);
       
       return cube;
     }
