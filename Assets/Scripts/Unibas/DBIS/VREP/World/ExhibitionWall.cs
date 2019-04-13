@@ -64,6 +64,10 @@ namespace World {
         image.ReloadImage(e.GetURLEncodedPath());
         displayal.transform.localScale = ScalingUtility.convertMeters2PlaneScaleSize(e.size.x, e.size.y);
 
+        if (VREPController.Instance.Settings.PlaygroundEnabled) {
+          StartCoroutine(VREPController.Instance.PuzzleManager.PreparePuzzleForDisplayal(disp));
+        }
+        
         if (e.audio != null)
         {
           Debug.Log("added audio to display object");

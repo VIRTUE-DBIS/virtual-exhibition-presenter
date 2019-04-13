@@ -96,6 +96,11 @@ public class Displayal : MonoBehaviour
         return _exhibitModel;
     }
 
+    public MeshRenderer GetDisplayalRenderer() {
+        var plane = transform.Find("Plane");
+
+        return plane.GetComponent<MeshRenderer>();
+    }
 
     Renderer m_Renderer;
 

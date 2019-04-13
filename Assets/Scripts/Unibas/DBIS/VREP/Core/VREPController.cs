@@ -24,6 +24,8 @@ namespace Unibas.DBIS.VREP
         public static VREPController Instance;
         private ExhibitionManager _exhibitionManager;
 
+        public PuzzleManager PuzzleManager;
+
         private void Awake()
         {
             if (Application.isEditor)
@@ -89,11 +91,9 @@ namespace Unibas.DBIS.VREP
             Debug.Log("Starting ExMan");
             _vremClient = gameObject.AddComponent<VREMClient>();
             _buildingManager = GetComponent<BuildingManager>();
+            PuzzleManager = gameObject.AddComponent<PuzzleManager>();
 
             LoadAndCreateExhibition();
-            var sandbox = GetComponent<Sandbox>();
-            var cubes = sandbox.PuzzleStuff();
-            StartCoroutine(PuzzleCubeFactory.AttachThrowables(cubes));
         }
 
         public void LoadAndCreateExhibition()
