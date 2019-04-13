@@ -97,7 +97,6 @@ namespace Unibas.DBIS.VREP.Covis
                     // TODO: Timestamp
 
                     CovisClientImpl.Instance.Update(message);
-                    Debug.Log("State changed in syncable!");
                 }
 
                 lastPosition = transform.position;

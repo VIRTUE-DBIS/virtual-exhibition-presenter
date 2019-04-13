@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unibas.DBIS.VREP.Network;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP.Covis
 {
@@ -34,7 +35,7 @@ namespace Unibas.DBIS.VREP.Covis
             
             instance = new SynchronizationManager();
             // TODO: Configure
-            CovisClientImpl.Initialize("localhost", 9734);
+            CovisClientImpl.Initialize("10.192.5.32", 9734);
             
             CovisClientImpl.Instance.Subscribe(new StreamObserver());
 
@@ -69,6 +70,8 @@ namespace Unibas.DBIS.VREP.Covis
             else
             {
                 instance.ContainerUpdateQueue[uuid] = new ConcurrentQueue<UpdateMessage>();
+                var container = message.Container;
+                container.Syncables.Keys.ForEach(key => instance.SyncableUpdateQueue.Add(key, new ConcurrentQueue<UpdateMessage>()));
                 instance.NewContainerQueue.Enqueue(message);
             }
         }
