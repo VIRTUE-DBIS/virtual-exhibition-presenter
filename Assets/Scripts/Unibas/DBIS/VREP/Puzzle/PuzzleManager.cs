@@ -48,17 +48,17 @@ namespace Unibas.DBIS.VREP.Puzzle {
       yield return new WaitForSeconds(1);
 
       Transform displayalParent = displayal.transform.parent;
-      var offset = displayal.GetExhibit().size.y / 2;
+      var offset = displayal.GetExhibit().size.x / 2;
       var model = new SteamVRPuzzleButton.ButtonModel(0.2f, .02f, 2f, TexturingUtility.LoadMaterialByName("none"),
         TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"),
         hasPedestal: false);
       var postiion =
-        displayal.GetExhibit().position - new Vector3(0, (offset + 0.5f), 0.2f); // why y and z other than expected?
+        displayal.GetExhibit().position + new Vector3(offset + 0.5f, 0, -0.1f); // why y and z other than expected?
 
-      /*var button = SteamVRPuzzleButton.Create(displayalParent.gameObject, postiion,
-        displayal, model, "Puzzle");*/
       var button = SteamVRPuzzleButton.Create(displayalParent.gameObject, postiion,
-        displayal, model);
+        displayal, model, "Puzzle");
+      /*var button = SteamVRPuzzleButton.Create(displayalParent.gameObject, postiion,
+        displayal, model);*/
       button.name = "Puzzle Button (" + displayal.id + ")";
     }
   }

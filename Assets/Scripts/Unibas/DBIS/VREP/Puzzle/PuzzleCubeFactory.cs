@@ -30,6 +30,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
           var cube = createPuzzleCube(y * nbCubes.x + x, size, material, nbCubes.x, nbCubes.y);
           cubes[y * nbCubes.x + x] = cube;
           cube.transform.position = new Vector3(position.x+x * size, position.y+y * size, position.z);
+          cube.GetComponent<PuzzleCube>().PuzzlePos = new Vector2Int(x,y);
         }
       }
 
@@ -109,6 +110,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
       var puzzleCube = cube.AddComponent<PuzzleCube>();
       puzzleCube.Id = id;
       puzzleCube.NbCubes = new Vector2Int(nbXcubes, nbYcubes);
+      puzzleCube.Size = size;
       
       return cube;
     }

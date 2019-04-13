@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP.Puzzle
@@ -12,6 +13,10 @@ namespace Unibas.DBIS.VREP.Puzzle
         public Throwable Throwable;
 
         private GameObject _parentThrowable;
+        
+        public Vector2Int PuzzlePos { get; set; }
+        public float Size { get; set; }
+
 
         private void Awake()
         {
@@ -27,28 +32,40 @@ namespace Unibas.DBIS.VREP.Puzzle
             transform.SetParent(_parentThrowable.transform, false);
             transform.transform.position = Vector3.zero;
             Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
-                                        Hand.AttachmentFlags.VelocityMovement /*| Hand.AttachmentFlags.TurnOffGravity*/;
+                                        Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
+            
             Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
         }
 
         private void Update()
         {
-            
-            
+            var neighbors = Physics.OverlapSphere(transform.position, Size + (Size / 4f));
+            foreach (var neighbor in neighbors)
+            {
+                var puzzleCube = neighbor.GetComponent<PuzzleCube>();
+                if (puzzleCube.Id == Id)
+                {
+                    break;
+                }
+                if (puzzleCube != null)
+                {
+                    var otherPos = puzzleCube.PuzzlePos;
+                    if (Math.Abs(Math.Abs(Vector2.Distance(PuzzlePos, otherPos)) - 1) < 0.01f)
+                    {
+                        Debug.Log("My neighbor ("+puzzleCube.Id+") and I ("+Id+") are correctly set");
+                    }
+                    else
+                    {
+                        Debug.Log("My neighbor ("+puzzleCube.Id+") and I ("+Id+") shall not be neighbors!");
+                    }
+                }
+            }
         }
 
         public void SetupThrowable()
         {
-            /*Debug.Log("Setup Throwable");
-            Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
-                                        Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
-            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;*/
-            
-            /*
-             // Throwable properties from displayal
-            Throwable.attachmentFlags = Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
-            //Hand.AttachmentFlags.VelocityMovement  Hand.AttachmentFlags.TurnOffGravity;
-            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;*/
+           
         }
+        
     }
 }
