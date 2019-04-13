@@ -1,6 +1,7 @@
 ﻿using System;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.VREP;
 using Unibas.DBIS.VREP.Puzzle;
 using UnityEngine;
 using UnityEngine.UI;
@@ -72,6 +73,19 @@ namespace World {
       tp.Model = model;
       tp.Image = image;
 
+
+      return tp;
+    }
+
+    public static SteamVRPuzzleButton Create(GameObject parent, Vector3 position, Displayal displayal,
+      ButtonModel model)
+    {
+      var go = new GameObject("TeleportButton");
+      SteamVRPuzzleButton tp = go.AddComponent<SteamVRPuzzleButton>();
+      tp.transform.SetParent(parent.transform, false);
+      tp.transform.localPosition = position;
+      tp.Displayal = displayal;
+      tp.Model = model;
 
       return tp;
     }
@@ -165,8 +179,9 @@ namespace World {
     }
 
     private void SetupUIElement() {
-      if (string.IsNullOrEmpty(Text) && Image == null) {
-        return;
+      if (string.IsNullOrEmpty(Text) && Image == null)
+      {
+        SetupFromPrefab();
       }
 
       if (!string.IsNullOrEmpty(Text)) {
@@ -212,6 +227,15 @@ namespace World {
       var io = new GameObject("Image");
       var image = io.AddComponent<Image>();
       image.sprite = img;
+      io.transform.SetParent(canvas.transform, false);
+      UIElement = io;
+    }
+
+    private void SetupFromPrefab()
+    {
+      var pref = VREPController.Instance.GetBuildingManager().FancyButtonPrefab;
+      var canvas = CreateAndPositionCanvas();
+      var io = Instantiate(pref);
       io.transform.SetParent(canvas.transform, false);
       UIElement = io;
     }

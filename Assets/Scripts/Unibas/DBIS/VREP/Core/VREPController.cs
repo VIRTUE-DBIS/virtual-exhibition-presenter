@@ -125,6 +125,11 @@ namespace Unibas.DBIS.VREP
             }
         }
 
+        public BuildingManager GetBuildingManager()
+        {
+            return _buildingManager;
+        }
+        
         private void ParseExhibition(string json)
         {
             if (json == null)
