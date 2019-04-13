@@ -50,7 +50,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
         displayal.GetExhibit().position - new Vector3(0, (offset + 0.5f), 0.2f); // why y and z other than expected?
 
       var button = SteamVRPuzzleButton.Create(displayalParent.gameObject, postiion,
-        (Texture2D) displayal.GetDisplayalRenderer().material.mainTexture, model, "Puzzle");
+        displayal, model, "Puzzle");
       button.name = "Puzzle Button (" + displayal.id + ")";
     }
   }

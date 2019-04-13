@@ -19,7 +19,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
     }
     
     
-    public static GameObject[] createPuzzle(Texture2D texture, float size, Vector3 position) {
+    public static GameObject[] createPuzzle(Texture texture, float size, Vector3 position) {
       var nbCubes = getNumberOfCubes(texture.width, texture.height);
       GameObject[] cubes = new GameObject[(int) (nbCubes.x * nbCubes.y)];
 

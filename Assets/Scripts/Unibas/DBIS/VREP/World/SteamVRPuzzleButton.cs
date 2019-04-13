@@ -30,7 +30,7 @@ namespace World {
       }
     }
 
-    public Texture2D texture;
+    public Displayal Displayal;
     private bool pressed = false;
 
     [SerializeField] public ButtonModel Model;
@@ -48,13 +48,13 @@ namespace World {
     public Action OnTeleportEnd;
 
 
-    public static SteamVRPuzzleButton Create(GameObject parent, Vector3 position, Texture2D texture,
+    public static SteamVRPuzzleButton Create(GameObject parent, Vector3 position, Displayal displayal,
       ButtonModel model, string text) {
       var go = new GameObject("TeleportButton");
       SteamVRPuzzleButton tp = go.AddComponent<SteamVRPuzzleButton>();
       tp.transform.SetParent(parent.transform, false);
       tp.transform.localPosition = position;
-      tp.texture = texture;
+      tp.Displayal = displayal;
       tp.Model = model;
       tp.Text = text;
 
@@ -62,13 +62,13 @@ namespace World {
       return tp;
     }
 
-    public static SteamVRPuzzleButton Create(GameObject parent, Vector3 position, Texture2D texture,
+    public static SteamVRPuzzleButton Create(GameObject parent, Vector3 position, Displayal displayal,
       ButtonModel model, Sprite image) {
       var go = new GameObject("TeleportButton");
       SteamVRPuzzleButton tp = go.AddComponent<SteamVRPuzzleButton>();
       tp.transform.SetParent(parent.transform, false);
       tp.transform.localPosition = position;
-      tp.texture = texture;
+      tp.Displayal = displayal;
       tp.Model = model;
       tp.Image = image;
 
@@ -152,13 +152,19 @@ namespace World {
     }
 
     public void ButtonPress() {
+      Debug.Log("Puzzle Press");
       if (!pressed) {
         if (!PuzzleManager.GetInstance().IsPuzzleActive()) {
           // TODO This code belongs to PuzzleManager
-          var cubes = PuzzleCubeFactory.createPuzzle(texture, 0.5f, Vector3.zero); // TODO Magic size, Magic position
+          var cubes = PuzzleCubeFactory.createPuzzle(Displayal.GetDisplayalRenderer().material.mainTexture, 0.5f, Vector3.zero); // TODO Magic size, Magic position
           PuzzleManager.GetInstance().SetPuzzle(cubes);
+          Debug.Log("Cubes there?!");
+          pressed = true;
         }
-      } else {
+      } else
+      {
+        pressed = false;
+        Debug.Log("Puzzle removed");
         PuzzleManager.GetInstance().RemovePuzzle();
       }
     }
