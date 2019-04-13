@@ -3,31 +3,32 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Puzzle {
   public class PuzzleCubeFactory {
-
-
-    public static GameObject[] createPuzzle(Texture2D texture, int size, Vector3 position) {
+    public static GameObject[] createPuzzle(Texture2D texture, float size, Vector3 position) {
       var nbCubes = getNumberOfCubes(texture.width, texture.height);
       GameObject[] cubes = new GameObject[(int) (nbCubes.x * nbCubes.y)];
 
       var material = new Material(Shader.Find("Standard"));
       material.mainTexture = texture;
-      for (int i=0; i<cubes.Length; i++) {
-        cubes[i] = createPuzzleCube(i, size, material, nbCubes.x, nbCubes.y);
-        // TODO cubes[i].transform.position = new Vector3();
+      for (int y = 0; y < nbCubes.y; y++) {
+        for (int x = 0; x < nbCubes.x; x++) {
+          var cube = createPuzzleCube(y * nbCubes.x + x, size, material, nbCubes.x, nbCubes.y);
+          cubes[y * nbCubes.x + x] = cube;
+          cube.transform.position = new Vector3(position.x+x * size, position.y+y * size, position.z);
+        }
       }
-      
+
       return cubes;
     }
-    
+
     public static Vector2Int getNumberOfCubes(int width, int height) {
       float asp_ratio = (float) width / (float) height;
       float w_prime = 3;
       int h_prime = (int) (w_prime * asp_ratio);
-      return new Vector2Int(h_prime,(int) w_prime);
+      return new Vector2Int(h_prime, (int) w_prime);
     }
-    
-    
-    public static GameObject createPuzzleCube(int id, int size, Material mat, int nbXcubes, int nbYcubes) {
+
+
+    public static GameObject createPuzzleCube(int id, float size, Material mat, int nbXcubes, int nbYcubes) {
       GameObject cube = new GameObject("PuzzleCube");
       var s2 = size / 2f;
 
@@ -44,7 +45,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
       east.transform.parent = cube.transform;
       east.transform.position = new Vector3(-s2, 0, s2);
       east.transform.Rotate(Vector3.up, 90);
-      
+
       // Back
       GameObject south = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
       // GameObject south = CreatePlane(size, size);
@@ -71,7 +72,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
       floor.transform.Rotate(Vector3.right, -90);
 
       floorAnchor.transform.position = new Vector3(-s2, 0, s2);
-      
+
       // Top
       GameObject ceilingAnchor = new GameObject("TopAnchor");
       ceilingAnchor.transform.parent = cube.transform;
@@ -90,17 +91,17 @@ namespace Unibas.DBIS.VREP.Puzzle {
 
     public static Vector2[] CalculateUV(int id, int nbXCubes, int nbYcubes) {
       return new[] {
-        new Vector2((id % nbXCubes) /(float) nbXCubes, ((id / nbXCubes))/(float)nbYcubes),//0
-        new Vector2(((id % nbXCubes)+1) /(float) nbXCubes, ((id / nbXCubes))/(float)nbYcubes),//1
-        new Vector2((id % nbXCubes) / (float)nbXCubes, (id / nbXCubes +1) / (float)nbYcubes),//2
-        new Vector2(((id % nbXCubes)+1) /(float)nbXCubes, (id / nbXCubes +1)/(float)nbYcubes)//3
+        new Vector2((id % nbXCubes) / (float) nbXCubes, ((id / nbXCubes)) / (float) nbYcubes), //0
+        new Vector2(((id % nbXCubes) + 1) / (float) nbXCubes, ((id / nbXCubes)) / (float) nbYcubes), //1
+        new Vector2((id % nbXCubes) / (float) nbXCubes, (id / nbXCubes + 1) / (float) nbYcubes), //2
+        new Vector2(((id % nbXCubes) + 1) / (float) nbXCubes, (id / nbXCubes + 1) / (float) nbYcubes) //3
       };
     }
 
     public static Vector2[] ExtractTileUVMap(int id, Vector2[] uvmap, int nbXCubes, int nbYCubes) {
       return new[] {
         uvmap[id], uvmap[id + 1],
-        uvmap[id + nbXCubes+1], uvmap[id+nbXCubes+2]
+        uvmap[id + nbXCubes + 1], uvmap[id + nbXCubes + 2]
       };
     }
 

@@ -28,16 +28,7 @@ public class Lobby : MonoBehaviour
                                   TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), hasPedestal:false),
                               "Wall");
 
-        var cube = Utils.getNumberOfCubes(tex.width, tex.height);
-        var mat = new Material(Shader.Find("Standard"));
-        mat.mainTexture = tex;
-
-        var test = PuzzleCubeFactory.createPuzzleCube(10, 1, mat, (int)cube.x, (int)cube.y);
-        test.transform.parent = transform;
-        test.transform.position = Vector3.zero;
-
-        Debug.Log("cube");
-        Debug.Log(cube);
+        GameObject[] cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, Vector3.zero);
     }
 
     public Texture2D tex;
