@@ -3,6 +3,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using Unibas.DBIS.VREP.Network;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP.Covis
 {
@@ -14,6 +15,14 @@ namespace Unibas.DBIS.VREP.Covis
         private void Awake()
         {
             SynchronizationManager.Initialize();
+            
+            var syncableContainers = FindObjectsOfType<SyncableContainer>();
+            syncableContainers.ForEach(syncableContainer =>
+            {
+                syncableContainer.Initialize();
+                SynchronizationManager.Register(syncableContainer);
+                syncableContainer.SendUpdate();
+            });
         }
 
         void Update()
@@ -42,11 +51,11 @@ namespace Unibas.DBIS.VREP.Covis
                     var syncables = new Dictionary<string, Syncable>();
                     var syncable = container.Syncables["Tracker"];
                     var syncableComponent = instance.AddComponent<Syncable>();
-                    syncableComponent.Initialize();
+                    var containerComp = instance.AddComponent<SyncableContainer>();
+                    containerComp.Initialize();
                     syncableComponent.uuid = syncable.Uuid;
                     syncables.Add("Tracker", syncableComponent);
 
-                    var containerComp = instance.AddComponent<SyncableContainer>();
                     containerComp.name = container.Name;
                     containerComp.type = container.Type;
                     containerComp.uuid = container.Uuid;
@@ -64,10 +73,9 @@ namespace Unibas.DBIS.VREP.Covis
                     var headSyncable = head.AddComponent<Syncable>();
                     var rightHandSyncable = rightHand.AddComponent<Syncable>();
                     var leftHandSyncable = leftHand.AddComponent<Syncable>();
+                    var containerComp = instance.AddComponent<SyncableContainer>();
                     
-                    headSyncable.Initialize();
-                    rightHandSyncable.Initialize();
-                    leftHandSyncable.Initialize();
+                    containerComp.Initialize();
 
                     headSyncable.uuid = container.Syncables["Head"].Uuid;
                     rightHandSyncable.uuid = container.Syncables["RightHand"].Uuid;
@@ -77,9 +85,6 @@ namespace Unibas.DBIS.VREP.Covis
                     syncables.Add("RightHand", rightHandSyncable);
                     syncables.Add("LeftHand", leftHandSyncable);
 
-                    Debug.Log("Before adding SyncableContainer.");
-                    var containerComp = instance.AddComponent<SyncableContainer>();
-                    Debug.Log("After adding SyncableContainer.");
                     containerComp.name = container.Name;
                     containerComp.type = container.Type;
                     containerComp.uuid = container.Uuid;

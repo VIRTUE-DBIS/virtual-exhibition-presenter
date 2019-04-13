@@ -18,7 +18,7 @@ namespace Unibas.DBIS.VREP.Covis
         public string name;
         public SyncableContainerType type;
 
-        void Awake()
+        public void Initialize()
         {
             if (!string.IsNullOrEmpty(uuid))
             {
@@ -38,8 +38,6 @@ namespace Unibas.DBIS.VREP.Covis
             FindSyncables(gameObject, syncables);
 
             syncables.Values.ForEach(syncable => syncable.Initialize());
-            
-            SynchronizationManager.Register(this);
         }
 
         public void SendUpdate()

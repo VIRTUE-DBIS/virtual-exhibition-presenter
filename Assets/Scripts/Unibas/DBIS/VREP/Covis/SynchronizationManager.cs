@@ -74,7 +74,7 @@ namespace Unibas.DBIS.VREP.Covis
             }
             else
             {
-                instance.ContainerUpdateQueue[uuid] = new ConcurrentQueue<UpdateMessage>();
+                instance.ContainerUpdateQueue.Add(uuid, new ConcurrentQueue<UpdateMessage>());
                 var container = message.Container;
                 container.Syncables.Values.ForEach(syncable =>
                     instance.SyncableUpdateQueue.Add(syncable.Uuid, new ConcurrentQueue<UpdateMessage>()));
@@ -97,7 +97,6 @@ namespace Unibas.DBIS.VREP.Covis
                     }
                 });
             }
-            container.SendUpdate();
         }
 
         public static void Register(SyncableContainer container)
