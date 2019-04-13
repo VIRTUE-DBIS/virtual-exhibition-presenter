@@ -34,19 +34,20 @@ public static partial class GrpcReflection {
           "aXNjb25uZWN0TWVzc2FnZRImCgpjb250YWluZXJzGAEgAygLMhIuU3luY2Fi",
           "bGVDb250YWluZXIiJwoEVmVjMxIJCgF4GAEgASgBEgkKAXkYAiABKAESCQoB",
           "ehgDIAEoASIyCgRWZWM0EgkKAXcYASABKAESCQoBeBgCIAEoARIJCgF5GAMg",
-          "ASgBEgkKAXoYBCABKAEiSgoIU3luY2FibGUSDAoEdXVpZBgBIAEoCRIXCghw",
-          "b3NpdGlvbhgCIAEoCzIFLlZlYzMSFwoIcm90YXRpb24YAyABKAsyBS5WZWM0",
-          "ItcBChFTeW5jYWJsZUNvbnRhaW5lchIMCgR1dWlkGAEgASgJEg0KBW1vZGVs",
-          "GAIgASgJEjQKCXN5bmNhYmxlcxgDIAMoCzIhLlN5bmNhYmxlQ29udGFpbmVy",
-          "LlN5bmNhYmxlc0VudHJ5EiQKBHR5cGUYBCABKA4yFi5TeW5jYWJsZUNvbnRh",
-          "aW5lclR5cGUSDAoEbmFtZRgFIAEoCRo7Cg5TeW5jYWJsZXNFbnRyeRILCgNr",
-          "ZXkYASABKAkSGAoFdmFsdWUYAiABKAsyCS5TeW5jYWJsZToCOAEqVgoVU3lu",
-          "Y2FibGVDb250YWluZXJUeXBlEgsKB1VOS05PV04QABISCg5WSVJUVUFMX1BF",
-          "UlNPThABEg8KC1JFQUxfUEVSU09OEAISCwoHVFJBQ0tFUhADMnYKDENvdmlz",
-          "U2VydmljZRI4CgRQaW5nEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29v",
-          "Z2xlLnByb3RvYnVmLkVtcHR5IgASLAoEU3luYxIOLlVwZGF0ZU1lc3NhZ2Ua",
-          "Di5VcGRhdGVNZXNzYWdlIgAoATABQioKHWNoLnVuaWJhcy5kbWkuZGJpcy5j",
-          "b3Zpcy5ncnBjQglDb3Zpc0dycGNiBnByb3RvMw=="));
+          "ASgBEgkKAXoYBCABKAEigwEKCFN5bmNhYmxlEgwKBHV1aWQYASABKAkSFwoI",
+          "cG9zaXRpb24YAiABKAsyBS5WZWMzEhcKCHJvdGF0aW9uGAMgASgLMgUuVmVj",
+          "NBIXCgh2ZWxvY2l0eRgEIAEoCzIFLlZlYzMSHgoPYW5ndWxhclZlbG9jaXR5",
+          "GAUgASgLMgUuVmVjMyLXAQoRU3luY2FibGVDb250YWluZXISDAoEdXVpZBgB",
+          "IAEoCRINCgVtb2RlbBgCIAEoCRI0CglzeW5jYWJsZXMYAyADKAsyIS5TeW5j",
+          "YWJsZUNvbnRhaW5lci5TeW5jYWJsZXNFbnRyeRIkCgR0eXBlGAQgASgOMhYu",
+          "U3luY2FibGVDb250YWluZXJUeXBlEgwKBG5hbWUYBSABKAkaOwoOU3luY2Fi",
+          "bGVzRW50cnkSCwoDa2V5GAEgASgJEhgKBXZhbHVlGAIgASgLMgkuU3luY2Fi",
+          "bGU6AjgBKlYKFVN5bmNhYmxlQ29udGFpbmVyVHlwZRILCgdVTktOT1dOEAAS",
+          "EgoOVklSVFVBTF9QRVJTT04QARIPCgtSRUFMX1BFUlNPThACEgsKB1RSQUNL",
+          "RVIQAzJ2CgxDb3Zpc1NlcnZpY2USOAoEUGluZxIWLmdvb2dsZS5wcm90b2J1",
+          "Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAEiwKBFN5bmMSDi5V",
+          "cGRhdGVNZXNzYWdlGg4uVXBkYXRlTWVzc2FnZSIAKAEwAUIqCh1jaC51bmli",
+          "YXMuZG1pLmRiaXMuY292aXMuZ3JwY0IJQ292aXNHcnBjYgZwcm90bzM="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
         new pbr::GeneratedClrTypeInfo(new[] {typeof(global::SyncableContainerType), }, new pbr::GeneratedClrTypeInfo[] {
@@ -56,7 +57,7 @@ public static partial class GrpcReflection {
           new pbr::GeneratedClrTypeInfo(typeof(global::DisconnectMessage), global::DisconnectMessage.Parser, new[]{ "Containers" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Vec3), global::Vec3.Parser, new[]{ "X", "Y", "Z" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Vec4), global::Vec4.Parser, new[]{ "W", "X", "Y", "Z" }, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::Syncable), global::Syncable.Parser, new[]{ "Uuid", "Position", "Rotation" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::Syncable), global::Syncable.Parser, new[]{ "Uuid", "Position", "Rotation", "Velocity", "AngularVelocity" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::SyncableContainer), global::SyncableContainer.Parser, new[]{ "Uuid", "Model", "Syncables", "Type", "Name" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, })
         }));
   }
@@ -1228,6 +1229,8 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
     uuid_ = other.uuid_;
     position_ = other.position_ != null ? other.position_.Clone() : null;
     rotation_ = other.rotation_ != null ? other.rotation_.Clone() : null;
+    velocity_ = other.velocity_ != null ? other.velocity_.Clone() : null;
+    angularVelocity_ = other.angularVelocity_ != null ? other.angularVelocity_.Clone() : null;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -1269,6 +1272,28 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
     }
   }
 
+  /// <summary>Field number for the "velocity" field.</summary>
+  public const int VelocityFieldNumber = 4;
+  private global::Vec3 velocity_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::Vec3 Velocity {
+    get { return velocity_; }
+    set {
+      velocity_ = value;
+    }
+  }
+
+  /// <summary>Field number for the "angularVelocity" field.</summary>
+  public const int AngularVelocityFieldNumber = 5;
+  private global::Vec3 angularVelocity_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::Vec3 AngularVelocity {
+    get { return angularVelocity_; }
+    set {
+      angularVelocity_ = value;
+    }
+  }
+
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public override bool Equals(object other) {
     return Equals(other as Syncable);
@@ -1285,6 +1310,8 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
     if (Uuid != other.Uuid) return false;
     if (!object.Equals(Position, other.Position)) return false;
     if (!object.Equals(Rotation, other.Rotation)) return false;
+    if (!object.Equals(Velocity, other.Velocity)) return false;
+    if (!object.Equals(AngularVelocity, other.AngularVelocity)) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -1294,6 +1321,8 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
     if (Uuid.Length != 0) hash ^= Uuid.GetHashCode();
     if (position_ != null) hash ^= Position.GetHashCode();
     if (rotation_ != null) hash ^= Rotation.GetHashCode();
+    if (velocity_ != null) hash ^= Velocity.GetHashCode();
+    if (angularVelocity_ != null) hash ^= AngularVelocity.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -1319,6 +1348,14 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
       output.WriteRawTag(26);
       output.WriteMessage(Rotation);
     }
+    if (velocity_ != null) {
+      output.WriteRawTag(34);
+      output.WriteMessage(Velocity);
+    }
+    if (angularVelocity_ != null) {
+      output.WriteRawTag(42);
+      output.WriteMessage(AngularVelocity);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -1335,6 +1372,12 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
     }
     if (rotation_ != null) {
       size += 1 + pb::CodedOutputStream.ComputeMessageSize(Rotation);
+    }
+    if (velocity_ != null) {
+      size += 1 + pb::CodedOutputStream.ComputeMessageSize(Velocity);
+    }
+    if (angularVelocity_ != null) {
+      size += 1 + pb::CodedOutputStream.ComputeMessageSize(AngularVelocity);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -1361,6 +1404,18 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
         rotation_ = new global::Vec4();
       }
       Rotation.MergeFrom(other.Rotation);
+    }
+    if (other.velocity_ != null) {
+      if (velocity_ == null) {
+        velocity_ = new global::Vec3();
+      }
+      Velocity.MergeFrom(other.Velocity);
+    }
+    if (other.angularVelocity_ != null) {
+      if (angularVelocity_ == null) {
+        angularVelocity_ = new global::Vec3();
+      }
+      AngularVelocity.MergeFrom(other.AngularVelocity);
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -1389,6 +1444,20 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
             rotation_ = new global::Vec4();
           }
           input.ReadMessage(rotation_);
+          break;
+        }
+        case 34: {
+          if (velocity_ == null) {
+            velocity_ = new global::Vec3();
+          }
+          input.ReadMessage(velocity_);
+          break;
+        }
+        case 42: {
+          if (angularVelocity_ == null) {
+            angularVelocity_ = new global::Vec3();
+          }
+          input.ReadMessage(angularVelocity_);
           break;
         }
       }

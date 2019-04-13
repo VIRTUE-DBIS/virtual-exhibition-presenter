@@ -7,7 +7,6 @@ namespace Unibas.DBIS.VREP.Covis
     public class Syncable : MonoBehaviour
     {
         public String uuid;
-        public bool original;
 
         private Vector3 lastPosition;
         private Quaternion lastRotation;
@@ -67,7 +66,15 @@ namespace Unibas.DBIS.VREP.Covis
 
             if (isRbNotNull)
             {
-                // TODO: Add rb data to message
+                if (usePosition)
+                {
+                    syncable.Velocity = ToVec3(rb.velocity);
+                }
+                
+                if (useRotation)
+                {
+                    syncable.AngularVelocity = ToVec3(rb.angularVelocity);
+                }
             }
 
             return syncable;
@@ -81,6 +88,16 @@ namespace Unibas.DBIS.VREP.Covis
         private void UpdateRotation(Vec4 rotation)
         {
             transform.rotation = FromVec4(rotation);
+        }
+
+        private void UpdateVelocity(Vec3 velocity)
+        {
+            rb.velocity = FromVec3(velocity);
+        }
+
+        private void UpdateAngluarVelocity(Vec3 angularVelocity)
+        {
+            rb.angularVelocity = FromVec3(angularVelocity);
         }
 
         void Update()
@@ -102,7 +119,18 @@ namespace Unibas.DBIS.VREP.Covis
                         UpdateRotation(syncable.Rotation);
                     }
 
-                    // TODO: Update rigidbody
+                    if (isRbNotNull)
+                    {
+                        if (syncable.Velocity != null)
+                        {
+                            UpdateVelocity(syncable.Velocity);
+                        }
+
+                        if (syncable.AngularVelocity != null)
+                        {
+                            UpdateAngluarVelocity(syncable.AngularVelocity);
+                        }
+                    }
                 }
             }
             else

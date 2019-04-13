@@ -39,7 +39,6 @@ namespace Unibas.DBIS.VREP.Covis
                     var instance = Instantiate(prefab);
                     var syncableList = new List<Syncable>();
                     var syncable = instance.AddComponent<Syncable>();
-                    syncable.original = false;
                     syncable.uuid = container.Syncables.Values.First().Uuid;
                     syncableList.Add(syncable);
 
