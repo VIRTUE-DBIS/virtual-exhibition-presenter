@@ -31,13 +31,15 @@ namespace Unibas.DBIS.VREP.Puzzle
         public void SetupThrowable()
         {
             Debug.Log("Setup Throwable");
-            /*Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
+            Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
                                         Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
-            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;*/
+            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
             
+            /*
+             // Throwable properties from displayal
             Throwable.attachmentFlags = Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
             //Hand.AttachmentFlags.VelocityMovement  Hand.AttachmentFlags.TurnOffGravity;
-            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
+            Throwable.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;*/
         }
     }
 }
