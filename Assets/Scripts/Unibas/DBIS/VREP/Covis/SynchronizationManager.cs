@@ -69,8 +69,7 @@ namespace Unibas.DBIS.VREP.Covis
             else
             {
                 instance.ContainerUpdateQueue[uuid] = new ConcurrentQueue<UpdateMessage>();
-                
-                // TODO: Create new instance
+                instance.NewContainerQueue.Enqueue(message);
             }
         }
     }

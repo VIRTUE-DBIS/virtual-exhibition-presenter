@@ -10,7 +10,7 @@ namespace Unibas.DBIS.VREP.Covis
 
         private void Awake()
         {
-            // TODO: initialize
+            SynchronizationManager.Initialize();
         }
 
         void Update()

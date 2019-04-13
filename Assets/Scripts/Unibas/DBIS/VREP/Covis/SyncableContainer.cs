@@ -33,7 +33,6 @@ namespace Unibas.DBIS.VREP.Covis
         {
             FindSyncables(gameObject, syncables);
 
-            SynchronizationManager.Initialize();
             UpdateMessage message = new UpdateMessage();
             global::SyncableContainer container = new global::SyncableContainer();
             
