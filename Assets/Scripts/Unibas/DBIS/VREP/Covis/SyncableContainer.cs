@@ -13,7 +13,6 @@ namespace Unibas.DBIS.VREP.Covis
         public String uuid;
         public String name;
         public SyncableContainerType type;
-        public bool original;
 
         private void FindSyncables(GameObject gobj, List<Syncable> list)
         {
@@ -32,10 +31,12 @@ namespace Unibas.DBIS.VREP.Covis
         private void Start()
         {
             FindSyncables(gameObject, syncables);
+            
+            SynchronizationManager.Register(this);
 
             UpdateMessage message = new UpdateMessage();
             global::SyncableContainer container = new global::SyncableContainer();
-            
+
             MapField<string, global::Syncable> syncablesMap = new MapField<string, global::Syncable>();
             syncables.ForEach(syncable => syncablesMap[syncable.uuid] = syncable.toProtoSyncable());
             container.Syncables.Add(syncablesMap);
@@ -52,14 +53,8 @@ namespace Unibas.DBIS.VREP.Covis
 
         private void Update()
         {
-            if (original)
-            {
-                // TODO: Send update if something changes
-            }
-            else
-            {
-                // TODO: Check for updates
-            }
+            // TODO: Send update if something changes
+            // TODO: Check for updates
         }
     }
 }

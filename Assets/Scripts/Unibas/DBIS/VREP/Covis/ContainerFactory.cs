@@ -41,7 +41,6 @@ namespace Unibas.DBIS.VREP.Covis
                     containerComp.name = container.Name;
                     containerComp.type = container.Type;
                     containerComp.uuid = container.Uuid;
-                    containerComp.original = false;
                     containerComp.syncables = syncableList;
                     break;
                 }

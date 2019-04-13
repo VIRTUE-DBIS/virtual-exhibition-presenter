@@ -64,7 +64,7 @@ namespace Unibas.DBIS.VREP.Covis
             {
                 syncable.Rotation = ToVec4(transform.rotation);
             }
-            
+
             if (isRbNotNull)
             {
                 // TODO: Add rb data to message
@@ -85,26 +85,9 @@ namespace Unibas.DBIS.VREP.Covis
 
         void Update()
         {
-            if (original)
+            var queue = SynchronizationManager.Instance.SyncableUpdateQueue[uuid];
+            if (!queue.IsEmpty)
             {
-                var positionChanged = transform.position != lastPosition;
-                var rotationChanged = transform.rotation != lastRotation;
-                if (positionChanged || rotationChanged)
-                {
-                    UpdateMessage message = new UpdateMessage();
-
-                    message.Syncable = toProtoSyncable(positionChanged, rotationChanged);
-                    // TODO: Timestamp
-
-                    CovisClientImpl.Instance.Update(message);
-                }
-
-                lastPosition = transform.position;
-                lastRotation = transform.rotation;
-            }
-            else
-            {
-                var queue = SynchronizationManager.Instance.SyncableUpdateQueue[uuid];
                 UpdateMessage message;
                 while (!queue.IsEmpty && queue.TryDequeue(out message))
                 {
@@ -118,10 +101,27 @@ namespace Unibas.DBIS.VREP.Covis
                     {
                         UpdateRotation(syncable.Rotation);
                     }
-                    
+
                     // TODO: Update rigidbody
                 }
             }
+            else
+            {
+                var positionChanged = transform.position != lastPosition;
+                var rotationChanged = transform.rotation != lastRotation;
+                if (positionChanged || rotationChanged)
+                {
+                    UpdateMessage message = new UpdateMessage();
+
+                    message.Syncable = toProtoSyncable(positionChanged, rotationChanged);
+                    // TODO: Timestamp
+
+                    CovisClientImpl.Instance.Update(message);
+                }
+            }
+
+            lastPosition = transform.position;
+            lastRotation = transform.rotation;
         }
     }
 }

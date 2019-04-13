@@ -10,6 +10,7 @@ namespace Unibas.DBIS.VREP.Covis
 {
     using SyncableUUID = String;
     using SyncableContainerUUID = String;
+
     public class SynchronizationManager
     {
         public static SynchronizationManager Instance => instance;
@@ -32,11 +33,11 @@ namespace Unibas.DBIS.VREP.Covis
         public static void Initialize()
         {
             if (initialized) return;
-            
+
             instance = new SynchronizationManager();
             // TODO: Configure
-            CovisClientImpl.Initialize("10.192.5.32", 9734);
-            
+            CovisClientImpl.Initialize("10.192.4.126", 9734);
+
             CovisClientImpl.Instance.Subscribe(new StreamObserver());
 
             initialized = true;
@@ -57,7 +58,7 @@ namespace Unibas.DBIS.VREP.Covis
                 Debug.LogError("Received syncable update of unknown syncable!");
             }
         }
-        
+
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static void AddContainerMessageToQueue(UpdateMessage message)
         {
@@ -71,8 +72,26 @@ namespace Unibas.DBIS.VREP.Covis
             {
                 instance.ContainerUpdateQueue[uuid] = new ConcurrentQueue<UpdateMessage>();
                 var container = message.Container;
-                container.Syncables.Keys.ForEach(key => instance.SyncableUpdateQueue.Add(key, new ConcurrentQueue<UpdateMessage>()));
+                container.Syncables.Keys.ForEach(key =>
+                    instance.SyncableUpdateQueue.Add(key, new ConcurrentQueue<UpdateMessage>()));
                 instance.NewContainerQueue.Enqueue(message);
+            }
+        }
+
+        public static void Register(SyncableContainer container)
+        {
+            var containerQueue = instance.ContainerUpdateQueue;
+            var syncablesQueue = instance.SyncableUpdateQueue;
+            if (!containerQueue.ContainsKey(container.uuid))
+            {
+                containerQueue.Add(container.uuid, new ConcurrentQueue<UpdateMessage>());
+                container.syncables.ForEach(syncable =>
+                {
+                    if (!syncablesQueue.ContainsKey(syncable.uuid))
+                    {
+                        syncablesQueue.Add(syncable.uuid, new ConcurrentQueue<UpdateMessage>());
+                    }
+                });
             }
         }
     }
