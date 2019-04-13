@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unibas.DBIS.VREP.Network;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Covis
@@ -23,6 +24,11 @@ namespace Unibas.DBIS.VREP.Covis
             }
         }
 
+        private void OnApplicationQuit()
+        {
+            Debug.Log("Quitting.");
+            CovisClientImpl.Instance.CloseBlocking();
+        }
 
         private void instantiate(global::SyncableContainer container)
         {

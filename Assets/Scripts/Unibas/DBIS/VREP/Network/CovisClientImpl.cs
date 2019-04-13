@@ -13,7 +13,7 @@ namespace Unibas.DBIS.VREP.Network
      */
     public class CovisClientImpl : CovisClient
     {
-        public static CovisClient Instance => instance;
+        public static CovisClientImpl Instance => instance;
 
         private static CovisClientImpl instance;
         
@@ -71,9 +71,10 @@ namespace Unibas.DBIS.VREP.Network
         {
             client.Ping(new Empty());
         }
-
+        
         public void CloseBlocking()
         {
+            duplexStreamingCall.RequestStream.CompleteAsync().Wait();
             channel.ShutdownAsync().Wait();
         }
     }
