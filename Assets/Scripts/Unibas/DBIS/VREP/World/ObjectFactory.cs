@@ -102,6 +102,7 @@ namespace World
             wall.Anchor = anchor;
             wall.WallModel = null;
             wall.WallData = room.GetWall(orientation);
+            wall.RoomPosition = CalculateRoomPosition(room);
             return wall;
         }
 

@@ -16,6 +16,8 @@ public class Displayal : MonoBehaviour
 
     public Vector3 OriginalPosition;
     public Quaternion OriginalRotation;
+
+    public Vector3 RoomPosition;
     
     private CuboidModel _anchor = new CuboidModel(1,0.01f,.2f);
     

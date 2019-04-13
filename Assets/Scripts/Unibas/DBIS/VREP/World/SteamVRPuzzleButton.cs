@@ -154,13 +154,8 @@ namespace World {
     public void ButtonPress() {
       Debug.Log("Puzzle Press");
       if (!pressed) {
-        if (!PuzzleManager.GetInstance().IsPuzzleActive()) {
-          // TODO This code belongs to PuzzleManager
-          var cubes = PuzzleCubeFactory.createPuzzle(Displayal.GetDisplayalRenderer().material.mainTexture, 0.5f, Vector3.zero); // TODO Magic size, Magic position
-          PuzzleManager.GetInstance().SetPuzzle(cubes);
-          Debug.Log("Cubes there?!");
-          pressed = true;
-        }
+        PuzzleManager.GetInstance().SetPuzzle(Displayal);
+        pressed = true;
       } else
       {
         pressed = false;

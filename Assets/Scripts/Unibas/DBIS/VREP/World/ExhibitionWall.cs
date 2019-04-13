@@ -26,6 +26,8 @@ namespace World {
     /// </summary>
     public GameObject Anchor{ get; set; }
 
+    public Vector3 RoomPosition;
+
     public List<Displayal> Displayals = new List<Displayal>();
 
     public void RestoreDisplayals() {
@@ -57,6 +59,7 @@ namespace World {
         disp.SetExhibitModel(e);
         disp.OriginalPosition = pos;
         disp.OriginalRotation = rot;
+        disp.RoomPosition = RoomPosition;
         Displayals.Add(disp);
 		
         ImageLoader image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>(); // Displayal

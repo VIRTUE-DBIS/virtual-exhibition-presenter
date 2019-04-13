@@ -23,8 +23,16 @@ namespace Unibas.DBIS.VREP.Puzzle {
       return _cubes != null;
     }
 
-    public void SetPuzzle(GameObject[] cubes) {
+    private void SetPuzzle(GameObject[] cubes) {
       _cubes = cubes;
+    }
+
+    public void SetPuzzle(Displayal displayal) {
+      if (!GetInstance().IsPuzzleActive()) {
+        var cubes = PuzzleCubeFactory.createPuzzle(displayal.GetDisplayalRenderer().material.mainTexture, 0.5f, displayal.RoomPosition); // TODO Magic size
+        GetInstance().SetPuzzle(cubes);
+        Debug.Log("Cubes there?!");
+      }
     }
 
     public void RemovePuzzle() {
@@ -32,9 +40,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
         foreach (var cube in _cubes) {
           DestroyImmediate(cube);
         }
-
         _cubes = null;
-        
       }
     }
 
