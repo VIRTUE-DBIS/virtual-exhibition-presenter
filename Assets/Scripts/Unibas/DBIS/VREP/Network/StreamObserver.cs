@@ -1,4 +1,5 @@
 using System;
+using Unibas.DBIS.VREP.Covis;
 
 namespace Unibas.DBIS.VREP.Network
 {
@@ -10,12 +11,12 @@ namespace Unibas.DBIS.VREP.Network
             {
                 case UpdateMessage.UpdateOneofCase.Syncable:
                 {
-                    // TODO: Add to queue
+                    SynchronizationManager.AddSyncableMessageToQueue(message);
                     break;
                 }
                 case UpdateMessage.UpdateOneofCase.Container:
                 {
-                    // TODO: Add to queue
+                    SynchronizationManager.AddContainerMessageToQueue(message);
                     break;
                 }
             }
