@@ -18,8 +18,12 @@ namespace Unibas.DBIS.VREP.Covis
         public string name;
         public SyncableContainerType type;
 
-        private void Start()
+        void Awake()
         {
+            if (!string.IsNullOrEmpty(uuid))
+            {
+                Debug.LogError("Uuid already initialized at syncable container initialize!");
+            }
             uuid = Guid.NewGuid().ToString();
             if (syncableKeys.Length != syncableValues.Length)
             {
@@ -39,6 +43,7 @@ namespace Unibas.DBIS.VREP.Covis
             global::SyncableContainer container = new global::SyncableContainer();
 
             MapField<string, global::Syncable> syncablesMap = new MapField<string, global::Syncable>();
+            syncables.Values.ForEach(syncable => syncable.Initialize());
             syncables.ForEach(keyValue => syncablesMap[keyValue.Key] = keyValue.Value.toProtoSyncable());
             container.Syncables.Add(syncablesMap);
             container.Uuid = uuid;

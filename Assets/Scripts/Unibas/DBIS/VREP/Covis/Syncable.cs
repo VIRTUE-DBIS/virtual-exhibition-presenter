@@ -13,8 +13,12 @@ namespace Unibas.DBIS.VREP.Covis
         private Rigidbody rb;
         private bool isRbNotNull;
 
-        private void Awake()
+        public void Initialize()
         {
+            if (!string.IsNullOrEmpty(uuid))
+            {
+                Debug.LogError("Uuid already initialized at syncable initialize!");
+            }
             uuid = Guid.NewGuid().ToString();
             Debug.Log("Uuid: " + uuid);
             lastPosition = transform.position;
