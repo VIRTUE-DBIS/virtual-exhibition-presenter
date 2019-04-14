@@ -25,6 +25,7 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         private GameObject[] _cubes;
         public Vector2Int nbCubes;
+        private Displayal Displayal;
 
         public bool IsPuzzleActive()
         {
@@ -87,6 +88,7 @@ namespace Unibas.DBIS.VREP.Puzzle
                 GetInstance().SetPuzzle(cubes);
                 Debug.Log("Cubes there?!");
                 _positionCheckMatrix = new bool[nbCubes.y, nbCubes.x];
+                this.Displayal = displayal;
                 StartCoroutine(RestorePositionChecks());
             }
         }
@@ -139,6 +141,8 @@ namespace Unibas.DBIS.VREP.Puzzle
             }
         }
 
+        private bool _finish = false;
+        
         private void Update()
         {
             if (IsPuzzleActive())
@@ -152,18 +156,54 @@ namespace Unibas.DBIS.VREP.Puzzle
                     }
                 }
 
-                if (correct == _cubes.Length)
+                if (correct == _cubes.Length && CheckPuzzleDistances())
                 {
                     PuzzleComplete();
                 }
             }
         }
 
+        private GameObject fireworks;
+        
         public void PuzzleComplete()
         {
+            if (_finish)
+            {
+                return;
+            }
             Debug.Log("Puzzle Complete");
+            var prefab = VREPController.Instance.GetBuildingManager().FireworksPrefab;
+            fireworks = Instantiate(prefab);
+            fireworks.transform.position = Displayal.RoomPosition;
+            StartCoroutine(StopFireWorks());
+            _finish = true;
+        }
+
+        public IEnumerator StopFireWorks()
+        {
+            yield return new WaitForSecondsRealtime(30);
+            Destroy(fireworks);
             RemovePuzzle();
-            
+        }
+
+        public bool CheckPuzzleDistances()
+        {
+            var counter = 0;
+            var cube = _cubes[0].GetComponent<PuzzleCube>();
+            for (int i = 0; i < _cubes.Length-1; i++)
+            {
+                // TODO FIX DISTANCE CHECK
+                var c1 = _cubes[i].GetComponent<PuzzleCube>();
+                var c2 = _cubes[i + 1].GetComponent<PuzzleCube>();
+                var dist = Vector3.Distance(_cubes[i].transform.position, _cubes[i + 1].transform.position);
+                Debug.Log("Dist "+c1.Id+"-"+c2.Id+": "+dist);
+                if (dist < cube.Size+(cube.Size / 2f))
+                {
+                    counter++;
+                }
+            }
+            Debug.Log("Puzzle Distances: "+counter);
+            return counter == _cubes.Length-1;
         }
 
         public IEnumerator PreparePuzzleForDisplayal(Displayal displayal)

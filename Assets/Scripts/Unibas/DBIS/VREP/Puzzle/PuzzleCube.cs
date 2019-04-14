@@ -13,7 +13,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
     private GameObject _parentThrowable;
 
     private Vector2Int PuzzlePos { get; set; }
-    private float Size { get; set; }
+    public float Size { get; set; }
 
     public bool topNeighbor = false;
     public bool bottomNeighbor = false;
@@ -121,44 +121,40 @@ namespace Unibas.DBIS.VREP.Puzzle {
                 collidedWith.Side + " side");
       switch (side)
       {
-        case PuzzleSide.FRONT:
-          return;
-        case PuzzleSide.BACK:
-          return;
         case PuzzleSide.LEFT:
           if (doTestLeft)
           {
-            leftNeighbor = side == PuzzleSide.LEFT && collidedWith.Side == PuzzleSide.RIGHT;
-            return;
+            leftNeighbor = side == PuzzleSide.LEFT && collidedWith.Side == PuzzleSide.RIGHT && expectedLeft == collidedWith.PuzzleCube.PuzzlePos;
+            Debug.Log("Left: "+leftNeighbor);
           }
           break;
         case PuzzleSide.RIGHT:
           if (doTestRight)
           {
-            rightNeighbor = side == PuzzleSide.RIGHT && collidedWith.Side == PuzzleSide.LEFT;
-            return;
+            rightNeighbor = side == PuzzleSide.RIGHT && collidedWith.Side == PuzzleSide.LEFT && expectedRight == collidedWith.PuzzleCube.PuzzlePos;
+            Debug.Log("Right: "+rightNeighbor);
           }
           break;
         case PuzzleSide.TOP:
           if (doTestTop)
           {
-            topNeighbor = side == PuzzleSide.TOP && collidedWith.Side == PuzzleSide.BOTTOM;
-            return;
+            topNeighbor = side == PuzzleSide.TOP && collidedWith.Side == PuzzleSide.BOTTOM && expectedTop == collidedWith.PuzzleCube.PuzzlePos;
+            Debug.Log("Top: "+topNeighbor);
           }
           break;
         case PuzzleSide.BOTTOM:
           if (doTestBottom)
           {
-            bottomNeighbor = side == PuzzleSide.BOTTOM && collidedWith.Side == PuzzleSide.TOP;
-            return;
+            bottomNeighbor = side == PuzzleSide.BOTTOM && collidedWith.Side == PuzzleSide.TOP && expectedBottom == collidedWith.PuzzleCube.PuzzlePos;
+            Debug.Log("Bottom: "+bottomNeighbor);
           }
           break;
         default:
           // Ignore;
           break;
       }
-      Debug.Log("My nb correct neighbors: "+Id+"("+PuzzlePos.x+","+PuzzlePos.y+") : "+correctNeighbors());
-      PuzzleManager.GetInstance().SetPositionCheck(PuzzlePos.x, PuzzlePos.y, correctNeighbors() == 4);
+      Debug.Log("My nb correct neighbors: "+Id+"("+PuzzlePos.x+","+PuzzlePos.y+") : "+correctNeighbors()+" of "+neighborsToCheck());
+      PuzzleManager.GetInstance().SetPositionCheck(PuzzlePos.x, PuzzlePos.y, correctNeighbors() >= neighborsToCheck());
     }
     
     
@@ -168,41 +164,38 @@ namespace Unibas.DBIS.VREP.Puzzle {
       {
         return;
       }
-      Debug.Log("ENTER: " + Id + " collide on " + side + " with " + collidedWith.PuzzleCube.Id + "'s " +
+      Debug.Log("EXIT: " + Id + " collide on " + side + " with " + collidedWith.PuzzleCube.Id + "'s " +
                 collidedWith.Side + " side");
+
       
       switch (side)
       {
-        case PuzzleSide.FRONT:
-          return;
-        case PuzzleSide.BACK:
-          return;
         case PuzzleSide.LEFT:
           if (doTestLeft)
           {
-            leftNeighbor = false;
-            return;
+            leftNeighbor = !(side == PuzzleSide.LEFT && collidedWith.Side == PuzzleSide.RIGHT && expectedLeft == collidedWith.PuzzleCube.PuzzlePos);
+            Debug.Log("Left: "+leftNeighbor);
           }
           break;
         case PuzzleSide.RIGHT:
           if (doTestRight)
           {
-            rightNeighbor = false;
-            return;
+            rightNeighbor = !(side == PuzzleSide.RIGHT && collidedWith.Side == PuzzleSide.LEFT && expectedRight == collidedWith.PuzzleCube.PuzzlePos);
+            Debug.Log("Right: "+rightNeighbor);
           }
           break;
         case PuzzleSide.TOP:
           if (doTestTop)
           {
-            topNeighbor = false;
-            return;
+            topNeighbor = !(side == PuzzleSide.TOP && collidedWith.Side == PuzzleSide.BOTTOM && expectedTop == collidedWith.PuzzleCube.PuzzlePos);
+            Debug.Log("Top: "+topNeighbor);
           }
           break;
         case PuzzleSide.BOTTOM:
           if (doTestBottom)
           {
-            bottomNeighbor = false;
-            return;
+            bottomNeighbor = !(side == PuzzleSide.BOTTOM && collidedWith.Side == PuzzleSide.TOP && expectedBottom == collidedWith.PuzzleCube.PuzzlePos);
+            Debug.Log("Bottom: "+bottomNeighbor);
           }
           break;
         default:
@@ -210,7 +203,8 @@ namespace Unibas.DBIS.VREP.Puzzle {
           break;
       }
       
-      PuzzleManager.GetInstance().SetPositionCheck(PuzzlePos.x, PuzzlePos.y, correctNeighbors() == 4);
+      
+      PuzzleManager.GetInstance().SetPositionCheck(PuzzlePos.x, PuzzlePos.y, correctNeighbors() >= neighborsToCheck()); // TODO more sophistcated?
     }
 
     private int correctNeighbors() {
@@ -228,6 +222,32 @@ namespace Unibas.DBIS.VREP.Puzzle {
       }
 
       if (leftNeighbor) {
+        c++;
+      }
+
+      return c;
+    }
+
+    private int neighborsToCheck()
+    {
+      int c = 0;
+      if (doTestBottom)
+      {
+        c++;
+      }
+
+      if (doTestRight)
+      {
+        c++;
+      }
+
+      if (doTestTop)
+      {
+        c++;
+      }
+
+      if (doTestLeft)
+      {
         c++;
       }
 
