@@ -121,6 +121,7 @@ namespace Unibas.DBIS.VREP.Puzzle
             {
                 foreach (var cube in _cubes)
                 {
+                    DestroyImmediate(cube.transform.parent.gameObject);
                     DestroyImmediate(cube);
                 }
 
