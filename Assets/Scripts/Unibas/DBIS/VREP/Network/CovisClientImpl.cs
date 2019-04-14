@@ -64,7 +64,7 @@ namespace Unibas.DBIS.VREP.Network
                 throw new Exception();
             }
             duplexStreamingCall = client.Sync(new CallOptions());
-            duplexStreamingCall.ResponseStream.ForEachAsync(message => Task.Run(() => observer.onNext(message)));
+            duplexStreamingCall.ResponseStream.ForEachAsync(message => new Task(() => observer.onNext(message)));
         }
 
         /**
