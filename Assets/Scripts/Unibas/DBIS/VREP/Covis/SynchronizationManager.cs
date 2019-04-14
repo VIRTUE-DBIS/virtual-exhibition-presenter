@@ -86,6 +86,7 @@ namespace Unibas.DBIS.VREP.Covis
                 {
                     if (instance.SyncableUpdateQueue.ContainsKey(syncable.Uuid))
                     {
+                        // TODO: Why does this sometimes happen?
                         Debug.Log("Syncable queue already exists: " + syncable.Uuid);
                     }
                     else
