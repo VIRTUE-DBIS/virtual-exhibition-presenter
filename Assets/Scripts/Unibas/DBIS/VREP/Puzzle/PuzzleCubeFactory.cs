@@ -29,7 +29,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
       var otherMaterial = new Material(Shader.Find("Standard"));
       otherMaterial.mainTexture = otherTex;
 
-      float cubeGap = 0.05f;
+      float cubeGap = 0.001f;
       
       for (int y = 0; y < nbCubes.y; y++) {
         for (int x = 0; x < nbCubes.x; x++) {
