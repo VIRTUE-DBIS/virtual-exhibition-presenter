@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1932750139969296222, guid: 0abef73e646e240f2ac5929f3004c501, type: 3}
-  body: {fileID: 0}
+  body: {fileID: 3779368417270780264, guid: be558a4433ab84ed88f8a6d53dde7534, type: 3}
 --- !u!4 &1574854678
 Transform:
   m_ObjectHideFlags: 0

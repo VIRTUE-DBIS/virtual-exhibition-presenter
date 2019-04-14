@@ -63,7 +63,6 @@ namespace Unibas.DBIS.VREP.Covis
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public static void AddContainerMessageToQueue(UpdateMessage message)
         {
             string uuid = message.Container.Uuid;
@@ -74,10 +73,26 @@ namespace Unibas.DBIS.VREP.Covis
             }
             else
             {
-                instance.ContainerUpdateQueue.Add(uuid, new ConcurrentQueue<UpdateMessage>());
+                if (instance.ContainerUpdateQueue.ContainsKey(uuid))
+                {
+                    Debug.Log("Container queue already exists: " + uuid);
+                }
+                else
+                {
+                    instance.ContainerUpdateQueue.Add(uuid, new ConcurrentQueue<UpdateMessage>());
+                }
                 var container = message.Container;
                 container.Syncables.Values.ForEach(syncable =>
-                    instance.SyncableUpdateQueue.Add(syncable.Uuid, new ConcurrentQueue<UpdateMessage>()));
+                {
+                    if (instance.SyncableUpdateQueue.ContainsKey(syncable.Uuid))
+                    {
+                        Debug.Log("Syncable queue already exists: " + syncable.Uuid);
+                    }
+                    else
+                    {
+                        instance.SyncableUpdateQueue.Add(syncable.Uuid, new ConcurrentQueue<UpdateMessage>());
+                    }
+                });
                 instance.NewContainerQueue.Enqueue(message);
             }
         }

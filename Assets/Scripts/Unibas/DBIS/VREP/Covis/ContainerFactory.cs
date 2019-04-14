@@ -47,6 +47,7 @@ namespace Unibas.DBIS.VREP.Covis
             {
                 case SyncableContainerType.Tracker:
                 {
+                    Debug.Log("Instantiating tracker...");
                     var instance = Instantiate(prefab);
                     var syncables = new Dictionary<string, Syncable>();
                     var syncable = container.Syncables["Tracker"];
@@ -60,6 +61,7 @@ namespace Unibas.DBIS.VREP.Covis
                 }
                 case SyncableContainerType.VirtualPerson:
                 {
+                    Debug.Log("Instantiating virtual person...");
                     var instance = Instantiate(body);
                     var syncables = new Dictionary<string, Syncable>();
                     var head = instance.transform.Find("Head").gameObject;
@@ -82,8 +84,9 @@ namespace Unibas.DBIS.VREP.Covis
                     containerComp.InitializeFromMessage(container, syncables);
                     break;
                 }
-                case SyncableContainerType.RealPerson:
+                default:
                 {
+                    Debug.LogError("Received unhandled syncable container type: " + container.Type + "\nContainer: " + container);
                     break;
                 }
             }
