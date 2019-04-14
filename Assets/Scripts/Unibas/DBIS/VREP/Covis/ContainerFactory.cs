@@ -16,7 +16,7 @@ namespace Unibas.DBIS.VREP.Covis
         {
             SynchronizationManager.Initialize();
             
-            var syncableContainers = FindObjectsOfType<SyncableContainer>();
+            var syncableContainers = Resources.FindObjectsOfTypeAll<SyncableContainer>();
             syncableContainers.ForEach(syncableContainer =>
             {
                 syncableContainer.Initialize();
