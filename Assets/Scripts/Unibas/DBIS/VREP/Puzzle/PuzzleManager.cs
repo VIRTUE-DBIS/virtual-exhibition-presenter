@@ -18,6 +18,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
 
 
     private GameObject[] _cubes;
+    public Vector2Int nbCubes;
 
     public bool IsPuzzleActive() {
       return _cubes != null;
@@ -29,15 +30,30 @@ namespace Unibas.DBIS.VREP.Puzzle {
 
     private bool[,] _positionCheckMatrix;
 
+    public Vector2Int GetPosForId(int id) {
+      if (IsPuzzleActive()) {
+        return new Vector2Int(id / nbCubes.x, id % nbCubes.x);
+      } else {
+        return new Vector2Int(-1, -1);
+      }
+    }
+
+    public int GetIdForPos(int x, int y) {
+      if (IsPuzzleActive()) {
+        return x * nbCubes.x + y;
+      } else {
+        return -1;
+      }
+    }
+
     public void SetPuzzle(Displayal displayal) {
-      if (!GetInstance().IsPuzzleActive())
-      {
+      if (!GetInstance().IsPuzzleActive()) {
         var tex = displayal.GetDisplayalRenderer().material.mainTexture;
-        var nbCubes = PuzzleCubeFactory.getNumberOfCubes(tex.width, tex.height);
+        nbCubes = PuzzleCubeFactory.getNumberOfCubes(tex.width, tex.height);
         var cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, displayal.RoomPosition); // TODO Magic size
         GetInstance().SetPuzzle(cubes);
         Debug.Log("Cubes there?!");
-        _positionCheckMatrix = new bool[nbCubes.y,nbCubes.x];
+        _positionCheckMatrix = new bool[nbCubes.y, nbCubes.x];
       }
     }
 
@@ -46,40 +62,33 @@ namespace Unibas.DBIS.VREP.Puzzle {
         foreach (var cube in _cubes) {
           DestroyImmediate(cube);
         }
+
         _cubes = null;
       }
     }
 
-    public void SetPositionCheck(int x, int y, bool check)
-    {
-      if (IsPuzzleActive())
-      {
+    public void SetPositionCheck(int x, int y, bool check) {
+      if (IsPuzzleActive()) {
         _positionCheckMatrix[y, x] = check;
       }
     }
 
-    private void Update()
-    {
-      if (IsPuzzleActive())
-      {
+    private void Update() {
+      if (IsPuzzleActive()) {
         int correct = 0;
-        foreach (bool check in _positionCheckMatrix)
-        {
-          if (check)
-          {
+        foreach (bool check in _positionCheckMatrix) {
+          if (check) {
             correct++;
           }
         }
 
-        if (correct == _cubes.Length)
-        {
+        if (correct == _cubes.Length) {
           PuzzleComplete();
         }
       }
     }
 
-    public void PuzzleComplete()
-    {
+    public void PuzzleComplete() {
       Debug.Log("Puzzle Complete");
       RemovePuzzle();
     }
