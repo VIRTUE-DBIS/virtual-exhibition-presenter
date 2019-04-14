@@ -16,8 +16,7 @@ namespace Unibas.DBIS.VREP.Puzzle
         
         public Vector2Int PuzzlePos { get; set; }
         public float Size { get; set; }
-
-
+        
         private void Awake()
         {
             
@@ -39,10 +38,14 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         private void Update()
         {
-            var neighbors = Physics.OverlapSphere(transform.position, Size + (Size / 4f));
+            var neighbors = Physics.OverlapSphere(transform.position+new Vector3(Size/2f, Size/2f, Size/2f), Size + .05f);
             foreach (var neighbor in neighbors)
             {
                 var puzzleCube = neighbor.GetComponent<PuzzleCube>();
+                if (puzzleCube == null)
+                {
+                    break;
+                }
                 if (puzzleCube.Id == Id)
                 {
                     break;
@@ -50,17 +53,21 @@ namespace Unibas.DBIS.VREP.Puzzle
                 if (puzzleCube != null)
                 {
                     var otherPos = puzzleCube.PuzzlePos;
-                    if (Math.Abs(Math.Abs(Vector2.Distance(PuzzlePos, otherPos)) - 1) < 0.01f)
+                    var dis = Math.Abs(Vector2.Distance(PuzzlePos, otherPos)); 
+                    if (Math.Abs(dis-1) < 0.01f)
                     {
                         Debug.Log("My neighbor ("+puzzleCube.Id+") and I ("+Id+") are correctly set");
+                        PuzzleManager.GetInstance().SetPositionCheck(PuzzlePos.x, PuzzlePos.y, true);
                     }
                     else
                     {
-                        Debug.Log("My neighbor ("+puzzleCube.Id+") and I ("+Id+") shall not be neighbors!");
+                        Debug.Log("Incorrect: this("+Id+"), other("+puzzleCube.Id+") dist="+ dis);
                     }
                 }
             }
         }
+        
+        
 
         public void SetupThrowable()
         {

@@ -27,11 +27,17 @@ namespace Unibas.DBIS.VREP.Puzzle {
       _cubes = cubes;
     }
 
+    private bool[,] _positionCheckMatrix;
+
     public void SetPuzzle(Displayal displayal) {
-      if (!GetInstance().IsPuzzleActive()) {
-        var cubes = PuzzleCubeFactory.createPuzzle(displayal.GetDisplayalRenderer().material.mainTexture, 0.5f, displayal.RoomPosition); // TODO Magic size
+      if (!GetInstance().IsPuzzleActive())
+      {
+        var tex = displayal.GetDisplayalRenderer().material.mainTexture;
+        var nbCubes = PuzzleCubeFactory.getNumberOfCubes(tex.width, tex.height);
+        var cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, displayal.RoomPosition); // TODO Magic size
         GetInstance().SetPuzzle(cubes);
         Debug.Log("Cubes there?!");
+        _positionCheckMatrix = new bool[nbCubes.y,nbCubes.x];
       }
     }
 
@@ -42,6 +48,40 @@ namespace Unibas.DBIS.VREP.Puzzle {
         }
         _cubes = null;
       }
+    }
+
+    public void SetPositionCheck(int x, int y, bool check)
+    {
+      if (IsPuzzleActive())
+      {
+        _positionCheckMatrix[y, x] = check;
+      }
+    }
+
+    private void Update()
+    {
+      if (IsPuzzleActive())
+      {
+        int correct = 0;
+        foreach (bool check in _positionCheckMatrix)
+        {
+          if (check)
+          {
+            correct++;
+          }
+        }
+
+        if (correct == _cubes.Length)
+        {
+          PuzzleComplete();
+        }
+      }
+    }
+
+    public void PuzzleComplete()
+    {
+      Debug.Log("Puzzle Complete");
+      RemovePuzzle();
     }
 
     public IEnumerator PreparePuzzleForDisplayal(Displayal displayal) {
