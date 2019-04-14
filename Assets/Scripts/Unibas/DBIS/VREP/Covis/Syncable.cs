@@ -110,7 +110,7 @@ namespace Unibas.DBIS.VREP.Covis
             rb.angularVelocity = FromVec3(angularVelocity);
         }
 
-        void Update()
+        void FixedUpdate()
         {
             var queue = SynchronizationManager.Instance.SyncableUpdateQueue[uuid];
             if (!queue.IsEmpty)

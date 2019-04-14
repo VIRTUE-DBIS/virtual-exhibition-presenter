@@ -37,7 +37,9 @@ namespace Unibas.DBIS.VREP.Network
          * It is expected that the first time you are sending a Syncable or SyncableContainer, you send the full information associated with it.
          * Call Subscribe() before you send Updates to the server since there is a bidirectional stream in the background.
          * Returns a task for which you can wait. or not.
+         * TODO: Synchronized can be optimized?
          */
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Task Update(UpdateMessage update)
         {
             if (duplexStreamingCall == null)
