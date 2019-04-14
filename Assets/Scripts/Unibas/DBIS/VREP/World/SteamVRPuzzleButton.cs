@@ -4,6 +4,7 @@ using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP;
 using Unibas.DBIS.VREP.Puzzle;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Valve.VR.InteractionSystem;
 
@@ -162,8 +163,11 @@ namespace World {
       Button.AddComponent<Button>();
       var hand = new CustomEvents.UnityEventHand();
       hand.AddListener(h => { ButtonPress(); });
+      var clickable = col.gameObject.AddComponent<Clickable>();
+      clickable.Action = b => ButtonPress();
       Button.AddComponent<UIElement>().onHandClick = hand;
     }
+
 
     public void ButtonPress() {
       Debug.Log("Puzzle Press");
@@ -238,6 +242,18 @@ namespace World {
       var io = Instantiate(pref);
       io.transform.SetParent(canvas.transform, false);
       UIElement = io;
+    }
+
+    private class Clickable : MonoBehaviour
+    {
+
+      public Action<bool> Action;
+      
+      private void OnMouseDown()
+      {
+        Debug.Log("Clickable: Down!");
+        Action.Invoke(true);
+      }
     }
   }
 }

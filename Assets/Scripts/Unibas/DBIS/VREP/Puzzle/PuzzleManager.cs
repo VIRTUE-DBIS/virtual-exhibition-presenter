@@ -63,11 +63,16 @@ namespace Unibas.DBIS.VREP.Puzzle
             }
         }
 
+        public int GetIdForPos(Vector2Int pos)
+        {
+            return GetIdForPos(pos.x, pos.y);
+        }
+
         public int GetIdForPos(int x, int y)
         {
             if (nbCubes != null)
             {
-                return x * nbCubes.x + y;
+                return y * nbCubes.x + x;
             }
             else
             {
@@ -186,24 +191,31 @@ namespace Unibas.DBIS.VREP.Puzzle
             RemovePuzzle();
         }
 
+        public bool WithinPuzzle(Vector2Int pos)
+        {
+            return (0 <= pos.x && pos.x < nbCubes.x) && (0 <= pos.y && pos.y < nbCubes.y);
+        }
+
         public bool CheckPuzzleDistances()
         {
             var counter = 0;
             var cube = _cubes[0].GetComponent<PuzzleCube>();
-            for (int i = 0; i < _cubes.Length-1; i++)
+            for (int i = 0; i < _cubes.Length; i++)
             {
-                // TODO FIX DISTANCE CHECK
                 var c1 = _cubes[i].GetComponent<PuzzleCube>();
-                var c2 = _cubes[i + 1].GetComponent<PuzzleCube>();
-                var dist = Vector3.Distance(_cubes[i].transform.position, _cubes[i + 1].transform.position);
-                Debug.Log("Dist "+c1.Id+"-"+c2.Id+": "+dist);
-                if (dist < cube.Size+(cube.Size / 2f))
+                Debug.Log("C("+c1.Id+") dist: "+c1.CheckDistances());
+                if (c1.CheckDistances())
                 {
                     counter++;
                 }
             }
             Debug.Log("Puzzle Distances: "+counter);
-            return counter == _cubes.Length-1;
+            return counter == _cubes.Length;
+        }
+
+        public GameObject GetForId(int id)
+        {
+            return _cubes[id];
         }
 
         public IEnumerator PreparePuzzleForDisplayal(Displayal displayal)
