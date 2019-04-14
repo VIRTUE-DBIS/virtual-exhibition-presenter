@@ -79,6 +79,10 @@ namespace Unibas.DBIS.VREP.Puzzle {
       east.transform.parent = cube.transform;
       east.transform.position = new Vector3(-s2, 0, s2);
       east.transform.Rotate(Vector3.up, 90);
+      CreateColliderFor(east, s2);
+      var rs = east.AddComponent<PuzzleCubeSide>();
+      rs.Side = PuzzleSide.RIGHT;
+      rs.PuzzleCube = puzzleCube;
 
       // Back
       GameObject south = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
@@ -87,6 +91,11 @@ namespace Unibas.DBIS.VREP.Puzzle {
       south.transform.parent = cube.transform;
       south.transform.position = new Vector3(s2, 0, s2);
       south.transform.Rotate(Vector3.up, 180);
+      CreateColliderFor(south, s2);
+      var bs = south.AddComponent<PuzzleCubeSide>();
+      bs.Side = PuzzleSide.BACK;
+      bs.PuzzleCube = puzzleCube;
+      
       // Left
       GameObject west = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
       //GameObject west = CreatePlane(size, size);
@@ -94,7 +103,11 @@ namespace Unibas.DBIS.VREP.Puzzle {
       west.transform.parent = cube.transform;
       west.transform.position = new Vector3(s2, 0, -s2);
       west.transform.Rotate(Vector3.up, -90);
-
+      CreateColliderFor(west, s2);
+      var ls = west.AddComponent<PuzzleCubeSide>();
+      ls.Side = PuzzleSide.LEFT;
+      ls.PuzzleCube = puzzleCube;
+      
       // Bottom
       GameObject floorAnchor = new GameObject("BottomAnchor");
       floorAnchor.transform.parent = cube.transform;
@@ -107,6 +120,11 @@ namespace Unibas.DBIS.VREP.Puzzle {
 
       floorAnchor.transform.position = new Vector3(-s2, 0, s2);
 
+      CreateColliderFor(floor, s2);
+      var botSide = floor.AddComponent<PuzzleCubeSide>();
+      botSide.Side = PuzzleSide.BOTTOM;
+      botSide.PuzzleCube = puzzleCube;
+      
       // Top
       GameObject ceilingAnchor = new GameObject("TopAnchor");
       ceilingAnchor.transform.parent = cube.transform;
@@ -116,6 +134,11 @@ namespace Unibas.DBIS.VREP.Puzzle {
       ceiling.name = "Top";
       ceiling.transform.parent = ceilingAnchor.transform;
 
+      CreateColliderFor(ceiling, s2);
+      var ts = ceiling.AddComponent<PuzzleCubeSide>();
+      ts.Side = PuzzleSide.TOP;
+      ts.PuzzleCube = puzzleCube;
+      
       // North Aligned
       ceilingAnchor.transform.position = new Vector3(-s2, size, -s2);
       ceilingAnchor.transform.Rotate(Vector3.right, 90);
