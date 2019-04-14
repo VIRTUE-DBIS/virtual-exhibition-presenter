@@ -44,17 +44,34 @@ namespace Unibas.DBIS.VREP.Puzzle {
       return new Vector2Int(h_prime, (int) w_prime);
     }
 
+    private static BoxCollider CreateColliderFor(GameObject target, float halfSize) {
+      var coll = target.AddComponent<BoxCollider>();
+      coll.isTrigger = true;
+      coll.center = new Vector3(halfSize,halfSize,0);
+      coll.size = new Vector3(halfSize,halfSize,halfSize/4f); // fourth of half = eighth
+      return coll;
+    }
 
     public static GameObject createPuzzleCube(int id, float size, Material mat, int nbXcubes, int nbYcubes) {
       GameObject cube = new GameObject("PuzzleCube");
       var s2 = size / 2f;
 
+      var puzzleCube = cube.AddComponent<PuzzleCube>();
+      puzzleCube.Id = id;
+      puzzleCube.NbCubes = new Vector2Int(nbXcubes, nbYcubes);
+      puzzleCube.Size = size;
+      
       // Front
       GameObject north = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
       //GameObject north = CreatePlane(size, size);
       north.name = "Front";
       north.transform.parent = cube.transform;
       north.transform.position = new Vector3(-s2, 0, -s2);
+      CreateColliderFor(north, s2);
+      var side = north.AddComponent<PuzzleCubeSide>();
+      side.Side = PuzzleSide.FRONT;
+      side.PuzzleCube = puzzleCube;
+      
       // Right
       GameObject east = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
       // GameObject east = CreatePlane(size, size);
@@ -107,10 +124,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
       boxCollider.center = new Vector3(0,s2,0);
       boxCollider.size = new Vector3(size,size,size);
 
-      var puzzleCube = cube.AddComponent<PuzzleCube>();
-      puzzleCube.Id = id;
-      puzzleCube.NbCubes = new Vector2Int(nbXcubes, nbYcubes);
-      puzzleCube.Size = size;
+      
       
       return cube;
     }

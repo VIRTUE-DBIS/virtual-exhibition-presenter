@@ -66,9 +66,18 @@ namespace Unibas.DBIS.VREP.Puzzle
                 }
             }
         }
-        
-        
 
+        public void OnSidedTriggerEnter(PuzzleSide side, PuzzleCubeSide collidedWith) {
+            Debug.Log("ENTER: "+Id+" collide on "+side+" with "+collidedWith.PuzzleCube.Id+"'s "+collidedWith.Side+" side");
+        }
+
+        public void OnSidedTriggerExit(PuzzleSide side, PuzzleCubeSide collidedWith) {
+            Debug.Log("ENTER: "+Id+" collide on "+side+" with "+collidedWith.PuzzleCube.Id+"'s "+collidedWith.Side+" side");
+        }
+        
+        
+        
+        [Obsolete]
         public void SetupThrowable()
         {
            
