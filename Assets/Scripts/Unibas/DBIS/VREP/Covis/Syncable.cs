@@ -14,7 +14,7 @@ namespace Unibas.DBIS.VREP.Covis
         private bool isRbNotNull;
         private bool initialized = false;
 
-        private float sendPositionMagnitude = 0.01f;
+        private float sendPositionMagnitude = 0.0001f;
         private float sendAngularMagnitude = 2f;
 
         public void Initialize()
