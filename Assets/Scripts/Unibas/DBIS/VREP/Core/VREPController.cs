@@ -125,9 +125,25 @@ namespace Unibas.DBIS.VREP
             }
         }
 
+        public ExhibitionManager GetExhibitionManager()
+        {
+            return _exhibitionManager;
+        }
+
         public BuildingManager GetBuildingManager()
         {
             return _buildingManager;
+        }
+
+        public Displayal GetDisplayalForId(string id)
+        {
+            var go = GameObject.Find("Displayal (" + id + ")");
+            if (go != null)
+            {
+                return go.GetComponent<Displayal>();
+            }
+
+            return null;
         }
         
         private void ParseExhibition(string json)

@@ -17,25 +17,51 @@ namespace Unibas.DBIS.VREP.Puzzle {
       yield return cubes;
 
     }
-    
-    
+
+    public static GameObject[] CreatePuzzle(Texture mainTexture, float size, Vector3 position, Texture otherTex)
+    {
+      var nbCubes = getNumberOfCubes(mainTexture.width, mainTexture.height);
+      GameObject[] cubes = new GameObject[(int) (nbCubes.x * nbCubes.y)];
+
+      var material = new Material(Shader.Find("Standard"));
+      material.mainTexture = mainTexture;
+      
+      var otherMaterial = new Material(Shader.Find("Standard"));
+      otherMaterial.mainTexture = otherTex;
+
+      float cubeGap = 0.05f;
+      
+      for (int y = 0; y < nbCubes.y; y++) {
+        for (int x = 0; x < nbCubes.x; x++) {
+          var cube = createPuzzleCube(y * nbCubes.x + x, size, material, nbCubes.x, nbCubes.y, otherMaterial);
+          cubes[y * nbCubes.x + x] = cube;
+          cube.transform.position = new Vector3(position.x+x * size + (x + 1) * cubeGap, position.y+y * size + (y + 1) * cubeGap, position.z);
+        }
+      }
+
+      return cubes;
+    }
+    /*
     public static GameObject[] createPuzzle(Texture texture, float size, Vector3 position) {
       var nbCubes = getNumberOfCubes(texture.width, texture.height);
       GameObject[] cubes = new GameObject[(int) (nbCubes.x * nbCubes.y)];
 
       var material = new Material(Shader.Find("Standard"));
       material.mainTexture = texture;
+      
+      float cubeGap = 0.2f;
+      
       for (int y = 0; y < nbCubes.y; y++) {
         for (int x = 0; x < nbCubes.x; x++) {
           var cube = createPuzzleCube(y * nbCubes.x + x, size, material, nbCubes.x, nbCubes.y);
           cubes[y * nbCubes.x + x] = cube;
-          cube.transform.position = new Vector3(position.x+x * size, position.y+y * size, position.z);
+          cube.transform.position = new Vector3(position.x+x * size + (x + 1) * cubeGap, position.y+y * size + (y + 1) * cubeGap, position.z);
         }
       }
 
       return cubes;
     }
-
+*/
     public static Vector2Int getNumberOfCubes(int width, int height) {
       float asp_ratio = (float) width / (float) height;
       float w_prime = 3;
@@ -49,6 +75,106 @@ namespace Unibas.DBIS.VREP.Puzzle {
       coll.center = new Vector3(halfSize,halfSize,0);
       coll.size = new Vector3(halfSize,halfSize,halfSize/4f); // fourth of half = eighth
       return coll;
+    }
+
+    public static GameObject createPuzzleCube(int id, float size, Material mat, int nbXcubes, int nbYcubes,
+      Material other)
+    {
+      GameObject cube = new GameObject("PuzzleCube");
+      var s2 = size / 2f;
+
+      var puzzleCube = cube.AddComponent<PuzzleCube>();
+      puzzleCube.Setup(id, size);
+      
+      // Front
+      GameObject north = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), mat);
+      //GameObject north = CreatePlane(size, size);
+      north.name = "Front";
+      north.transform.parent = cube.transform;
+      north.transform.position = new Vector3(-s2, 0, -s2);
+      CreateColliderFor(north, s2);
+      var side = north.AddComponent<PuzzleCubeSide>();
+      side.Side = PuzzleSide.FRONT;
+      side.PuzzleCube = puzzleCube;
+      
+      // Right
+      GameObject east = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
+      // GameObject east = CreatePlane(size, size);
+      east.name = "Right";
+      east.transform.parent = cube.transform;
+      east.transform.position = new Vector3(-s2, 0, s2);
+      east.transform.Rotate(Vector3.up, 90);
+      CreateColliderFor(east, s2);
+      var rs = east.AddComponent<PuzzleCubeSide>();
+      rs.Side = PuzzleSide.RIGHT;
+      rs.PuzzleCube = puzzleCube;
+
+      // Back
+      GameObject south = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
+      // GameObject south = CreatePlane(size, size);
+      south.name = "Back";
+      south.transform.parent = cube.transform;
+      south.transform.position = new Vector3(s2, 0, s2);
+      south.transform.Rotate(Vector3.up, 180);
+      CreateColliderFor(south, s2);
+      var bs = south.AddComponent<PuzzleCubeSide>();
+      bs.Side = PuzzleSide.BACK;
+      bs.PuzzleCube = puzzleCube;
+      
+      // Left
+      GameObject west = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
+      //GameObject west = CreatePlane(size, size);
+      west.name = "Left";
+      west.transform.parent = cube.transform;
+      west.transform.position = new Vector3(s2, 0, -s2);
+      west.transform.Rotate(Vector3.up, -90);
+      CreateColliderFor(west, s2);
+      var ls = west.AddComponent<PuzzleCubeSide>();
+      ls.Side = PuzzleSide.LEFT;
+      ls.PuzzleCube = puzzleCube;
+      
+      // Bottom
+      GameObject floorAnchor = new GameObject("BottomAnchor");
+      floorAnchor.transform.parent = cube.transform;
+
+      GameObject floor = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
+      // GameObject floor = CreatePlane(size, size);
+      floor.name = "Bottom";
+      floor.transform.parent = floorAnchor.transform;
+      floor.transform.Rotate(Vector3.right, -90);
+
+      floorAnchor.transform.position = new Vector3(-s2, 0, s2);
+
+      CreateColliderFor(floor, s2);
+      var botSide = floor.AddComponent<PuzzleCubeSide>();
+      botSide.Side = PuzzleSide.BOTTOM;
+      botSide.PuzzleCube = puzzleCube;
+      
+      // Top
+      GameObject ceilingAnchor = new GameObject("TopAnchor");
+      ceilingAnchor.transform.parent = cube.transform;
+
+      GameObject ceiling = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
+      //GameObject ceiling = CreatePlane(size, size);
+      ceiling.name = "Top";
+      ceiling.transform.parent = ceilingAnchor.transform;
+
+      CreateColliderFor(ceiling, s2);
+      var ts = ceiling.AddComponent<PuzzleCubeSide>();
+      ts.Side = PuzzleSide.TOP;
+      ts.PuzzleCube = puzzleCube;
+      
+      // North Aligned
+      ceilingAnchor.transform.position = new Vector3(-s2, size, -s2);
+      ceilingAnchor.transform.Rotate(Vector3.right, 90);
+
+      var boxCollider = cube.AddComponent<BoxCollider>();
+      boxCollider.center = new Vector3(0,s2,0);
+      boxCollider.size = new Vector3(size,size,size);
+
+      
+      
+      return cube;
     }
 
     public static GameObject createPuzzleCube(int id, float size, Material mat, int nbXcubes, int nbYcubes) {

@@ -33,6 +33,18 @@ namespace DefaultNamespace.VREM.Model {
       
     }
 
+    public Exhibit[] GetWallExhibits()
+    {
+      List<Exhibit> list = new List<Exhibit>();
+
+      foreach (var w in walls)
+      {
+        list.AddRange(w.GetExhibits());
+      }
+      
+      return list.ToArray();
+    }
+
     public Wall GetWall(WallOrientation orientation)
     {
       foreach (var wall in walls)

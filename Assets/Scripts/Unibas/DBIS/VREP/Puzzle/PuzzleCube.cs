@@ -6,7 +6,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
   public class PuzzleCube : MonoBehaviour {
     private Vector2Int NbCubes;
 
-    private int Id;
+    public int Id;
 
     private Throwable Throwable;
 
@@ -15,15 +15,15 @@ namespace Unibas.DBIS.VREP.Puzzle {
     private Vector2Int PuzzlePos { get; set; }
     private float Size { get; set; }
 
-    private bool topNeighbor = false;
-    private bool bottomNeighbor = false;
-    private bool leftNeighbor = false;
-    private bool rightNeighbor = false;
+    public bool topNeighbor = false;
+    public bool bottomNeighbor = false;
+    public bool leftNeighbor = false;
+    public bool rightNeighbor = false;
 
-    private Vector2Int expectedTop;
-    private Vector2Int expectedLeft;
-    private Vector2Int expectedBottom;
-    private Vector2Int expectedRight;
+    public Vector2Int expectedTop;
+    public Vector2Int expectedLeft;
+    public Vector2Int expectedBottom;
+    public Vector2Int expectedRight;
     
     private void Awake() { }
 
@@ -34,16 +34,24 @@ namespace Unibas.DBIS.VREP.Puzzle {
       NbCubes = PuzzleManager.GetInstance().nbCubes;
       PuzzlePos = PuzzleManager.GetInstance().GetPosForId(Id);
 
-      bottomNeighbor = PuzzlePos.y == 0;
-      leftNeighbor = PuzzlePos.x == 0;
-      topNeighbor = PuzzlePos.y == (NbCubes.y - 1);
-      rightNeighbor = PuzzlePos.x == NbCubes.x - 1;
+      RestoreInitialNeighborChecks();
 
       expectedTop = PuzzlePos + Vector2Int.up;
       expectedLeft = PuzzlePos + Vector2Int.left;
       expectedBottom = PuzzlePos + Vector2Int.down;
       expectedRight = PuzzlePos + Vector2Int.right;
+      
+      Debug.Log("Setup "+Id+"->"+PuzzlePos);
 
+    }
+
+    public void RestoreInitialNeighborChecks()
+    {
+      Debug.Log("PuzzleCube "+Id+" .. restoring neighbors b,l,t,r "+ (PuzzlePos.y == 0)+","+(PuzzlePos.x == 0)+","+(PuzzlePos.y == NbCubes.y-1)+","+(+PuzzlePos.x == NbCubes.x-1));
+      bottomNeighbor = PuzzlePos.y == 0;
+      leftNeighbor = PuzzlePos.x == 0;
+      topNeighbor = PuzzlePos.y == (NbCubes.y - 1);
+      rightNeighbor = PuzzlePos.x == NbCubes.x - 1;
     }
 
     public void Start() {
@@ -52,7 +60,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
       _parentThrowable.transform.SetParent(transform.parent, false);
       _parentThrowable.transform.position = transform.position;
       transform.SetParent(_parentThrowable.transform, false);
-      transform.transform.position = Vector3.zero;
+      transform.transform.localPosition = Vector3.zero;
       Throwable.attachmentFlags = Hand.AttachmentFlags.DetachFromOtherHand | Hand.AttachmentFlags.ParentToHand |
                                   Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
 
@@ -106,6 +114,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
         rightNeighbor = side == PuzzleSide.RIGHT && collidedWith.Side == PuzzleSide.LEFT;
       }
       
+      Debug.Log("My correct neighbors: "+Id+"("+PuzzlePos.x+","+PuzzlePos.y+") : "+correctNeighbors());
       PuzzleManager.GetInstance().SetPositionCheck(PuzzlePos.x, PuzzlePos.y, correctNeighbors() == 4);
     }
     

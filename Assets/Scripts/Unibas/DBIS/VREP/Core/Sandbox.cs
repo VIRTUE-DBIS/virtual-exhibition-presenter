@@ -24,7 +24,7 @@ namespace DefaultNamespace {
     public GameObject[] PuzzleStuff()
     {
       Debug.Log("SANDBOX: PUZZLE");
-      cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, new Vector3(-2.5f,0,2.5f));
+     // cubes = PuzzleCubeFactory.createPuzzle(tex, 0.5f, new Vector3(-2.5f,0,2.5f));
       return cubes;
     }
 

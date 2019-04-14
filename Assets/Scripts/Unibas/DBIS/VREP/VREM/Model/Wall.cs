@@ -18,6 +18,10 @@ namespace DefaultNamespace.VREM.Model {
     {
       return (WallOrientation) Enum.Parse(typeof(WallOrientation), direction, true);
     }
-    
+
+    public Exhibit[] GetExhibits()
+    {
+      return exhibits;
+    }
   }
 }

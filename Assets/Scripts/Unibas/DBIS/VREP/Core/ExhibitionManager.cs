@@ -18,6 +18,11 @@ namespace Unibas.DBIS.VREP.Core
 
         private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
 
+        public Exhibition GetExhibition()
+        {
+            return _exhibition;
+        }
+        
         public CuboidExhibitionRoom GetRoomByIndex(int index)
         {
             return _rooms[index];
