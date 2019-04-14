@@ -100,13 +100,13 @@ namespace Unibas.DBIS.VREP.Puzzle {
       // Right
       GameObject east = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
       // GameObject east = CreatePlane(size, size);
-      east.name = "Right";
+      east.name = "Left";
       east.transform.parent = cube.transform;
       east.transform.position = new Vector3(-s2, 0, s2);
       east.transform.Rotate(Vector3.up, 90);
       CreateColliderFor(east, s2);
       var rs = east.AddComponent<PuzzleCubeSide>();
-      rs.Side = PuzzleSide.RIGHT;
+      rs.Side = PuzzleSide.LEFT;
       rs.PuzzleCube = puzzleCube;
 
       // Back
@@ -124,13 +124,13 @@ namespace Unibas.DBIS.VREP.Puzzle {
       // Left
       GameObject west = CreatePlaneForCube(size, CalculateUV(id, nbXcubes, nbYcubes), other);
       //GameObject west = CreatePlane(size, size);
-      west.name = "Left";
+      west.name = "Right";
       west.transform.parent = cube.transform;
       west.transform.position = new Vector3(s2, 0, -s2);
       west.transform.Rotate(Vector3.up, -90);
       CreateColliderFor(west, s2);
       var ls = west.AddComponent<PuzzleCubeSide>();
-      ls.Side = PuzzleSide.LEFT;
+      ls.Side = PuzzleSide.RIGHT;
       ls.PuzzleCube = puzzleCube;
       
       // Bottom
