@@ -174,6 +174,8 @@ MonoBehaviour:
   RoomPrefab: {fileID: 1414472768723842, guid: f3ec7ae51b8e6124797fd84a359dc393, type: 3}
   FancyButtonPrefab: {fileID: 1427701158769450754, guid: afbf6e88b0e982d4e9905fa492de924c,
     type: 3}
+  FireworksPrefab: {fileID: 6983747934787301107, guid: ca4f838f22e7c1a40bb662f866dc82d2,
+    type: 3}
 --- !u!4 &123453532
 Transform:
   m_ObjectHideFlags: 0
@@ -804,7 +806,7 @@ Transform:
   - {fileID: 1913549275}
   - {fileID: 1717517717}
   - {fileID: 5252069868876354167}
-  - {fileID: 1691058563}
+  - {fileID: 1249518964}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1903,6 +1905,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1204909359}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1249518964 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6983747934787301106, guid: ca4f838f22e7c1a40bb662f866dc82d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 6344767884622504416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1289380961
 GameObject:
   m_ObjectHideFlags: 0
@@ -2791,12 +2799,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668980313}
   m_Mesh: {fileID: 4300000, guid: ce6402bc5c0679344a343b08fe9026d4, type: 3}
---- !u!4 &1691058563 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6344767883090894947, guid: ca4f838f22e7c1a40bb662f866dc82d2,
-    type: 3}
-  m_PrefabInstance: {fileID: 6344767884622504416}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1717517716
 GameObject:
   m_ObjectHideFlags: 0
@@ -3402,11 +3404,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 471107342}
     m_Modifications:
-    - target: {fileID: 6344767883090894946, guid: ca4f838f22e7c1a40bb662f866dc82d2,
-        type: 3}
-      propertyPath: m_Name
-      value: Fireworks
-      objectReference: {fileID: 0}
     - target: {fileID: 6344767883090894947, guid: ca4f838f22e7c1a40bb662f866dc82d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3461,6 +3458,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6344767883090894946, guid: ca4f838f22e7c1a40bb662f866dc82d2,
+        type: 3}
+      propertyPath: m_Name
+      value: Fireworks
       objectReference: {fileID: 0}
     - target: {fileID: 6344767883090894949, guid: ca4f838f22e7c1a40bb662f866dc82d2,
         type: 3}

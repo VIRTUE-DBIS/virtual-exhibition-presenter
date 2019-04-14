@@ -25,6 +25,7 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         private GameObject[] _cubes;
         public Vector2Int nbCubes;
+        private Displayal Displayal;
 
         public bool IsPuzzleActive()
         {
@@ -87,6 +88,7 @@ namespace Unibas.DBIS.VREP.Puzzle
                 GetInstance().SetPuzzle(cubes);
                 Debug.Log("Cubes there?!");
                 _positionCheckMatrix = new bool[nbCubes.y, nbCubes.x];
+                this.Displayal = displayal;
                 StartCoroutine(RestorePositionChecks());
             }
         }
@@ -159,11 +161,22 @@ namespace Unibas.DBIS.VREP.Puzzle
             }
         }
 
+        private GameObject fireworks;
+        
         public void PuzzleComplete()
         {
             Debug.Log("Puzzle Complete");
+            var prefab = VREPController.Instance.GetBuildingManager().FireworksPrefab;
+            fireworks = Instantiate(prefab);
+            fireworks.transform.position = Displayal.RoomPosition;
             RemovePuzzle();
-            
+            StartCoroutine(StopFireWorks());
+        }
+
+        public IEnumerator StopFireWorks()
+        {
+            yield return new WaitForSecondsRealtime(10);
+            Destroy(fireworks);
         }
 
         public IEnumerator PreparePuzzleForDisplayal(Displayal displayal)

@@ -13,6 +13,7 @@ public class BuildingManager : MonoBehaviour {
 
 	public GameObject RoomPrefab;
 	public GameObject FancyButtonPrefab;
+	public GameObject FireworksPrefab;
 
 	private Exhibition _exhibition;
 	private int currentPosition = 0;
