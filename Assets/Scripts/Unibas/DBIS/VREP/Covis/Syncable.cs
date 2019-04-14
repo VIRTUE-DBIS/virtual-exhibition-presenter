@@ -31,6 +31,14 @@ namespace Unibas.DBIS.VREP.Covis
             initialized = true;
         }
 
+        public void InitializeFromMessage(global::Syncable syncable)
+        {
+            uuid = syncable.Uuid;
+            rb = GetComponent<Rigidbody>();
+            isRbNotNull = rb != null;
+            UpdateFromMessage(syncable);
+        }
+
         private Vec3 ToVec3(Vector3 vector)
         {
             Vec3 vec = new Vec3();
@@ -110,6 +118,32 @@ namespace Unibas.DBIS.VREP.Covis
             rb.angularVelocity = FromVec3(angularVelocity);
         }
 
+        private void UpdateFromMessage(global::Syncable syncable)
+        {
+            if (syncable.Position != null)
+            {
+                UpdatePosition(syncable.Position);
+            }
+
+            if (syncable.Rotation != null)
+            {
+                UpdateRotation(syncable.Rotation);
+            }
+
+            if (isRbNotNull)
+            {
+                if (syncable.Velocity != null)
+                {
+                    UpdateVelocity(syncable.Velocity);
+                }
+
+                if (syncable.AngularVelocity != null)
+                {
+                    UpdateAngluarVelocity(syncable.AngularVelocity);
+                }
+            }
+        }
+
         //TODO Maybe fixedupdate?
         void Update()
         {
@@ -120,28 +154,7 @@ namespace Unibas.DBIS.VREP.Covis
                 while (!queue.IsEmpty && queue.TryDequeue(out message))
                 {
                     var syncable = message.Syncable;
-                    if (syncable.Position != null)
-                    {
-                        UpdatePosition(syncable.Position);
-                    }
-
-                    if (syncable.Rotation != null)
-                    {
-                        UpdateRotation(syncable.Rotation);
-                    }
-
-                    if (isRbNotNull)
-                    {
-                        if (syncable.Velocity != null)
-                        {
-                            UpdateVelocity(syncable.Velocity);
-                        }
-
-                        if (syncable.AngularVelocity != null)
-                        {
-                            UpdateAngluarVelocity(syncable.AngularVelocity);
-                        }
-                    }
+                    UpdateFromMessage(syncable);
                 }
                 
                 lastPosition = transform.position;

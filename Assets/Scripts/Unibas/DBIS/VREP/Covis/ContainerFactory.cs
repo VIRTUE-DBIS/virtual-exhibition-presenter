@@ -52,14 +52,10 @@ namespace Unibas.DBIS.VREP.Covis
                     var syncable = container.Syncables["Tracker"];
                     var syncableComponent = instance.AddComponent<Syncable>();
                     var containerComp = instance.AddComponent<SyncableContainer>();
-                    containerComp.Initialize();
-                    syncableComponent.uuid = syncable.Uuid;
                     syncables.Add("Tracker", syncableComponent);
-
-                    containerComp.name = container.Name;
-                    containerComp.type = container.Type;
-                    containerComp.uuid = container.Uuid;
-                    containerComp.syncables = syncables;
+                    
+                    syncableComponent.InitializeFromMessage(syncable);
+                    containerComp.InitializeFromMessage(container, syncables);
                     break;
                 }
                 case SyncableContainerType.VirtualPerson:
@@ -75,20 +71,15 @@ namespace Unibas.DBIS.VREP.Covis
                     var leftHandSyncable = leftHand.AddComponent<Syncable>();
                     var containerComp = instance.AddComponent<SyncableContainer>();
                     
-                    containerComp.Initialize();
-
-                    headSyncable.uuid = container.Syncables["Head"].Uuid;
-                    rightHandSyncable.uuid = container.Syncables["RightHand"].Uuid;
-                    leftHandSyncable.uuid = container.Syncables["LeftHand"].Uuid;
+                    headSyncable.InitializeFromMessage(container.Syncables["Head"]);
+                    rightHandSyncable.InitializeFromMessage(container.Syncables["RightHand"]);
+                    leftHandSyncable.InitializeFromMessage(container.Syncables["LeftHand"]);
                     
                     syncables.Add("Head", headSyncable);
                     syncables.Add("RightHand", rightHandSyncable);
                     syncables.Add("LeftHand", leftHandSyncable);
 
-                    containerComp.name = container.Name;
-                    containerComp.type = container.Type;
-                    containerComp.uuid = container.Uuid;
-                    containerComp.syncables = syncables;
+                    containerComp.InitializeFromMessage(container, syncables);
                     break;
                 }
                 case SyncableContainerType.RealPerson:

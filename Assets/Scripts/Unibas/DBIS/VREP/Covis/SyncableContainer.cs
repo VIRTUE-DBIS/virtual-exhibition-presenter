@@ -40,6 +40,13 @@ namespace Unibas.DBIS.VREP.Covis
             syncables.Values.ForEach(syncable => syncable.Initialize());
         }
 
+        public void InitializeFromMessage(global::SyncableContainer container, Dictionary<string, Syncable> messageSyncables)
+        {
+            uuid = container.Uuid;
+            name = container.Name;
+            syncables = messageSyncables;
+        }
+
         public void SendUpdate()
         {
             UpdateMessage message = new UpdateMessage();
