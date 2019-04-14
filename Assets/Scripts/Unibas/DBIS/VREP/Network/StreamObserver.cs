@@ -1,5 +1,6 @@
 using System;
 using Unibas.DBIS.VREP.Covis;
+using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Network
 {
@@ -7,6 +8,7 @@ namespace Unibas.DBIS.VREP.Network
     {
         public void onNext(UpdateMessage message)
         {
+            Debug.Log("Received Update: "+message);
             switch (message.UpdateCase)
             {
                 case UpdateMessage.UpdateOneofCase.Syncable:

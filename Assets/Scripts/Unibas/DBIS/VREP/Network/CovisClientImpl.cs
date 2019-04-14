@@ -11,7 +11,7 @@ namespace Unibas.DBIS.VREP.Network
     /**
      * The CovisClientImpl assumes that it's only used by one external instance responsible for handling syncables.
      */
-    public class CovisClientImpl : CovisClient
+    public class CovisClientImpl
     {
         public static CovisClientImpl Instance => instance;
 
@@ -40,15 +40,16 @@ namespace Unibas.DBIS.VREP.Network
          * TODO: Synchronized can be optimized?
          */
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public Task Update(UpdateMessage update)
+        public void Update(UpdateMessage update)
         {
             if (duplexStreamingCall == null)
             {
                 Debug.Log("Called update() before subscribe(). Don't do that.");
                 throw new Exception();
             }
+            Debug.Log("Sending update: "+update);
 
-            return duplexStreamingCall.RequestStream.WriteAsync(update);
+            duplexStreamingCall.RequestStream.WriteAsync(update).Wait();
         }
 
         /**

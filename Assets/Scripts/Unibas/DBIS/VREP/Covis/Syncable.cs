@@ -110,7 +110,8 @@ namespace Unibas.DBIS.VREP.Covis
             rb.angularVelocity = FromVec3(angularVelocity);
         }
 
-        void FixedUpdate()
+        //TODO Maybe fixedupdate?
+        void Update()
         {
             var queue = SynchronizationManager.Instance.SyncableUpdateQueue[uuid];
             if (!queue.IsEmpty)
@@ -142,11 +143,14 @@ namespace Unibas.DBIS.VREP.Covis
                         }
                     }
                 }
+                
+                lastPosition = transform.position;
+                lastRotation = transform.rotation;
             }
             else
             {
-                var positionChanged = transform.position != lastPosition;
-                var rotationChanged = transform.rotation != lastRotation;
+                var positionChanged = (transform.position - lastPosition).sqrMagnitude>1 ; //Delta
+                var rotationChanged = false; //(transform.rotation != lastRotation)
                 if (positionChanged || rotationChanged)
                 {
                     UpdateMessage message = new UpdateMessage();
@@ -155,11 +159,12 @@ namespace Unibas.DBIS.VREP.Covis
                     // TODO: Timestamp
 
                     CovisClientImpl.Instance.Update(message);
+                    
+                    
+                    lastPosition = transform.position;
+                    lastRotation = transform.rotation;
                 }
             }
-
-            lastPosition = transform.position;
-            lastRotation = transform.rotation;
         }
     }
 }
