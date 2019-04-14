@@ -22,39 +22,43 @@ public static partial class GrpcReflection {
   static GrpcReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "CgpncnBjLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHkucHJvdG8ihAIK",
+          "CgpncnBjLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHkucHJvdG8isAIK",
           "DVVwZGF0ZU1lc3NhZ2USEQoJdGltZXN0YW1wGAEgASgDEh0KCHN5bmNhYmxl",
           "GBQgASgLMgkuU3luY2FibGVIABInCgljb250YWluZXIYFSABKAsyEi5TeW5j",
           "YWJsZUNvbnRhaW5lckgAEigKCmRpc2Nvbm5lY3QYFiABKAsyEi5EaXNjb25u",
           "ZWN0TWVzc2FnZUgAEjIKD2RlbGV0ZUNvbnRhaW5lchgXIAEoCzIXLkRlbGV0",
           "ZUNvbnRhaW5lck1lc3NhZ2VIABIwCg5kZWxldGVTeW5jYWJsZRgYIAEoCzIW",
-          "LkRlbGV0ZVN5bmNhYmxlTWVzc2FnZUgAQggKBnVwZGF0ZSIvChZEZWxldGVD",
-          "b250YWluZXJNZXNzYWdlEhUKDWNvbnRhaW5lclVVSUQYASABKAkiLQoVRGVs",
-          "ZXRlU3luY2FibGVNZXNzYWdlEhQKDHN5bmNhYmxlVVVJRBgBIAEoCSI7ChFE",
-          "aXNjb25uZWN0TWVzc2FnZRImCgpjb250YWluZXJzGAEgAygLMhIuU3luY2Fi",
-          "bGVDb250YWluZXIiJwoEVmVjMxIJCgF4GAEgASgBEgkKAXkYAiABKAESCQoB",
-          "ehgDIAEoASIyCgRWZWM0EgkKAXcYASABKAESCQoBeBgCIAEoARIJCgF5GAMg",
-          "ASgBEgkKAXoYBCABKAEigwEKCFN5bmNhYmxlEgwKBHV1aWQYASABKAkSFwoI",
-          "cG9zaXRpb24YAiABKAsyBS5WZWMzEhcKCHJvdGF0aW9uGAMgASgLMgUuVmVj",
-          "NBIXCgh2ZWxvY2l0eRgEIAEoCzIFLlZlYzMSHgoPYW5ndWxhclZlbG9jaXR5",
-          "GAUgASgLMgUuVmVjMyLXAQoRU3luY2FibGVDb250YWluZXISDAoEdXVpZBgB",
-          "IAEoCRINCgVtb2RlbBgCIAEoCRI0CglzeW5jYWJsZXMYAyADKAsyIS5TeW5j",
-          "YWJsZUNvbnRhaW5lci5TeW5jYWJsZXNFbnRyeRIkCgR0eXBlGAQgASgOMhYu",
-          "U3luY2FibGVDb250YWluZXJUeXBlEgwKBG5hbWUYBSABKAkaOwoOU3luY2Fi",
-          "bGVzRW50cnkSCwoDa2V5GAEgASgJEhgKBXZhbHVlGAIgASgLMgkuU3luY2Fi",
-          "bGU6AjgBKlYKFVN5bmNhYmxlQ29udGFpbmVyVHlwZRILCgdVTktOT1dOEAAS",
-          "EgoOVklSVFVBTF9QRVJTT04QARIPCgtSRUFMX1BFUlNPThACEgsKB1RSQUNL",
-          "RVIQAzJ2CgxDb3Zpc1NlcnZpY2USOAoEUGluZxIWLmdvb2dsZS5wcm90b2J1",
-          "Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAEiwKBFN5bmMSDi5V",
-          "cGRhdGVNZXNzYWdlGg4uVXBkYXRlTWVzc2FnZSIAKAEwAUIqCh1jaC51bmli",
-          "YXMuZG1pLmRiaXMuY292aXMuZ3JwY0IJQ292aXNHcnBjYgZwcm90bzM="));
+          "LkRlbGV0ZVN5bmNhYmxlTWVzc2FnZUgAEioKC2F1ZGlvVXBkYXRlGBkgASgL",
+          "MhMuQXVkaW9VcGRhdGVNZXNzYWdlSABCCAoGdXBkYXRlIi8KFkRlbGV0ZUNv",
+          "bnRhaW5lck1lc3NhZ2USFQoNY29udGFpbmVyVVVJRBgBIAEoCSItChVEZWxl",
+          "dGVTeW5jYWJsZU1lc3NhZ2USFAoMc3luY2FibGVVVUlEGAEgASgJIjsKEURp",
+          "c2Nvbm5lY3RNZXNzYWdlEiYKCmNvbnRhaW5lcnMYASADKAsyEi5TeW5jYWJs",
+          "ZUNvbnRhaW5lciI/ChJBdWRpb1VwZGF0ZU1lc3NhZ2USFQoNY29udGFpbmVy",
+          "VVVJRBgBIAEoCRISCgphdWRpb0ZyYW1lGAIgASgMIicKBFZlYzMSCQoBeBgB",
+          "IAEoARIJCgF5GAIgASgBEgkKAXoYAyABKAEiMgoEVmVjNBIJCgF3GAEgASgB",
+          "EgkKAXgYAiABKAESCQoBeRgDIAEoARIJCgF6GAQgASgBIoMBCghTeW5jYWJs",
+          "ZRIMCgR1dWlkGAEgASgJEhcKCHBvc2l0aW9uGAIgASgLMgUuVmVjMxIXCghy",
+          "b3RhdGlvbhgDIAEoCzIFLlZlYzQSFwoIdmVsb2NpdHkYBCABKAsyBS5WZWMz",
+          "Eh4KD2FuZ3VsYXJWZWxvY2l0eRgFIAEoCzIFLlZlYzMi1wEKEVN5bmNhYmxl",
+          "Q29udGFpbmVyEgwKBHV1aWQYASABKAkSDQoFbW9kZWwYAiABKAkSNAoJc3lu",
+          "Y2FibGVzGAMgAygLMiEuU3luY2FibGVDb250YWluZXIuU3luY2FibGVzRW50",
+          "cnkSJAoEdHlwZRgEIAEoDjIWLlN5bmNhYmxlQ29udGFpbmVyVHlwZRIMCgRu",
+          "YW1lGAUgASgJGjsKDlN5bmNhYmxlc0VudHJ5EgsKA2tleRgBIAEoCRIYCgV2",
+          "YWx1ZRgCIAEoCzIJLlN5bmNhYmxlOgI4ASpsChVTeW5jYWJsZUNvbnRhaW5l",
+          "clR5cGUSCwoHVU5LTk9XThAAEhIKDlZJUlRVQUxfUEVSU09OEAESDwoLUkVB",
+          "TF9QRVJTT04QAhILCgdUUkFDS0VSEAMSFAoQVklSVUFMX0FTU0lTVEFOVBAE",
+          "MnYKDENvdmlzU2VydmljZRI4CgRQaW5nEhYuZ29vZ2xlLnByb3RvYnVmLkVt",
+          "cHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5IgASLAoEU3luYxIOLlVwZGF0",
+          "ZU1lc3NhZ2UaDi5VcGRhdGVNZXNzYWdlIgAoATABQioKHWNoLnVuaWJhcy5k",
+          "bWkuZGJpcy5jb3Zpcy5ncnBjQglDb3Zpc0dycGNiBnByb3RvMw=="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
         new pbr::GeneratedClrTypeInfo(new[] {typeof(global::SyncableContainerType), }, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateMessage), global::UpdateMessage.Parser, new[]{ "Timestamp", "Syncable", "Container", "Disconnect", "DeleteContainer", "DeleteSyncable" }, new[]{ "Update" }, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::UpdateMessage), global::UpdateMessage.Parser, new[]{ "Timestamp", "Syncable", "Container", "Disconnect", "DeleteContainer", "DeleteSyncable", "AudioUpdate" }, new[]{ "Update" }, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::DeleteContainerMessage), global::DeleteContainerMessage.Parser, new[]{ "ContainerUUID" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::DeleteSyncableMessage), global::DeleteSyncableMessage.Parser, new[]{ "SyncableUUID" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::DisconnectMessage), global::DisconnectMessage.Parser, new[]{ "Containers" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::AudioUpdateMessage), global::AudioUpdateMessage.Parser, new[]{ "ContainerUUID", "AudioFrame" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Vec3), global::Vec3.Parser, new[]{ "X", "Y", "Z" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Vec4), global::Vec4.Parser, new[]{ "W", "X", "Y", "Z" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Syncable), global::Syncable.Parser, new[]{ "Uuid", "Position", "Rotation", "Velocity", "AngularVelocity" }, null, null, null),
@@ -70,6 +74,7 @@ public enum SyncableContainerType {
   [pbr::OriginalName("VIRTUAL_PERSON")] VirtualPerson = 1,
   [pbr::OriginalName("REAL_PERSON")] RealPerson = 2,
   [pbr::OriginalName("TRACKER")] Tracker = 3,
+  [pbr::OriginalName("VIRUAL_ASSISTANT")] VirualAssistant = 4,
 }
 
 #endregion
@@ -116,6 +121,9 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
         break;
       case UpdateOneofCase.DeleteSyncable:
         DeleteSyncable = other.DeleteSyncable.Clone();
+        break;
+      case UpdateOneofCase.AudioUpdate:
+        AudioUpdate = other.AudioUpdate.Clone();
         break;
     }
 
@@ -193,6 +201,17 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     }
   }
 
+  /// <summary>Field number for the "audioUpdate" field.</summary>
+  public const int AudioUpdateFieldNumber = 25;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::AudioUpdateMessage AudioUpdate {
+    get { return updateCase_ == UpdateOneofCase.AudioUpdate ? (global::AudioUpdateMessage) update_ : null; }
+    set {
+      update_ = value;
+      updateCase_ = value == null ? UpdateOneofCase.None : UpdateOneofCase.AudioUpdate;
+    }
+  }
+
   private object update_;
   /// <summary>Enum of possible cases for the "update" oneof.</summary>
   public enum UpdateOneofCase {
@@ -202,6 +221,7 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     Disconnect = 22,
     DeleteContainer = 23,
     DeleteSyncable = 24,
+    AudioUpdate = 25,
   }
   private UpdateOneofCase updateCase_ = UpdateOneofCase.None;
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -234,6 +254,7 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     if (!object.Equals(Disconnect, other.Disconnect)) return false;
     if (!object.Equals(DeleteContainer, other.DeleteContainer)) return false;
     if (!object.Equals(DeleteSyncable, other.DeleteSyncable)) return false;
+    if (!object.Equals(AudioUpdate, other.AudioUpdate)) return false;
     if (UpdateCase != other.UpdateCase) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
@@ -247,6 +268,7 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     if (updateCase_ == UpdateOneofCase.Disconnect) hash ^= Disconnect.GetHashCode();
     if (updateCase_ == UpdateOneofCase.DeleteContainer) hash ^= DeleteContainer.GetHashCode();
     if (updateCase_ == UpdateOneofCase.DeleteSyncable) hash ^= DeleteSyncable.GetHashCode();
+    if (updateCase_ == UpdateOneofCase.AudioUpdate) hash ^= AudioUpdate.GetHashCode();
     hash ^= (int) updateCase_;
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
@@ -285,6 +307,10 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
       output.WriteRawTag(194, 1);
       output.WriteMessage(DeleteSyncable);
     }
+    if (updateCase_ == UpdateOneofCase.AudioUpdate) {
+      output.WriteRawTag(202, 1);
+      output.WriteMessage(AudioUpdate);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -310,6 +336,9 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
     }
     if (updateCase_ == UpdateOneofCase.DeleteSyncable) {
       size += 2 + pb::CodedOutputStream.ComputeMessageSize(DeleteSyncable);
+    }
+    if (updateCase_ == UpdateOneofCase.AudioUpdate) {
+      size += 2 + pb::CodedOutputStream.ComputeMessageSize(AudioUpdate);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -355,6 +384,12 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
           DeleteSyncable = new global::DeleteSyncableMessage();
         }
         DeleteSyncable.MergeFrom(other.DeleteSyncable);
+        break;
+      case UpdateOneofCase.AudioUpdate:
+        if (AudioUpdate == null) {
+          AudioUpdate = new global::AudioUpdateMessage();
+        }
+        AudioUpdate.MergeFrom(other.AudioUpdate);
         break;
     }
 
@@ -416,6 +451,15 @@ public sealed partial class UpdateMessage : pb::IMessage<UpdateMessage> {
           }
           input.ReadMessage(subBuilder);
           DeleteSyncable = subBuilder;
+          break;
+        }
+        case 202: {
+          global::AudioUpdateMessage subBuilder = new global::AudioUpdateMessage();
+          if (updateCase_ == UpdateOneofCase.AudioUpdate) {
+            subBuilder.MergeFrom(AudioUpdate);
+          }
+          input.ReadMessage(subBuilder);
+          AudioUpdate = subBuilder;
           break;
         }
       }
@@ -803,6 +847,163 @@ public sealed partial class DisconnectMessage : pb::IMessage<DisconnectMessage> 
 
 }
 
+public sealed partial class AudioUpdateMessage : pb::IMessage<AudioUpdateMessage> {
+  private static readonly pb::MessageParser<AudioUpdateMessage> _parser = new pb::MessageParser<AudioUpdateMessage>(() => new AudioUpdateMessage());
+  private pb::UnknownFieldSet _unknownFields;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pb::MessageParser<AudioUpdateMessage> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::GrpcReflection.Descriptor.MessageTypes[4]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public AudioUpdateMessage() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public AudioUpdateMessage(AudioUpdateMessage other) : this() {
+    containerUUID_ = other.containerUUID_;
+    audioFrame_ = other.audioFrame_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public AudioUpdateMessage Clone() {
+    return new AudioUpdateMessage(this);
+  }
+
+  /// <summary>Field number for the "containerUUID" field.</summary>
+  public const int ContainerUUIDFieldNumber = 1;
+  private string containerUUID_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public string ContainerUUID {
+    get { return containerUUID_; }
+    set {
+      containerUUID_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  /// <summary>Field number for the "audioFrame" field.</summary>
+  public const int AudioFrameFieldNumber = 2;
+  private pb::ByteString audioFrame_ = pb::ByteString.Empty;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public pb::ByteString AudioFrame {
+    get { return audioFrame_; }
+    set {
+      audioFrame_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override bool Equals(object other) {
+    return Equals(other as AudioUpdateMessage);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool Equals(AudioUpdateMessage other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (ContainerUUID != other.ContainerUUID) return false;
+    if (AudioFrame != other.AudioFrame) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (ContainerUUID.Length != 0) hash ^= ContainerUUID.GetHashCode();
+    if (AudioFrame.Length != 0) hash ^= AudioFrame.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void WriteTo(pb::CodedOutputStream output) {
+    if (ContainerUUID.Length != 0) {
+      output.WriteRawTag(10);
+      output.WriteString(ContainerUUID);
+    }
+    if (AudioFrame.Length != 0) {
+      output.WriteRawTag(18);
+      output.WriteBytes(AudioFrame);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public int CalculateSize() {
+    int size = 0;
+    if (ContainerUUID.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(ContainerUUID);
+    }
+    if (AudioFrame.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeBytesSize(AudioFrame);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(AudioUpdateMessage other) {
+    if (other == null) {
+      return;
+    }
+    if (other.ContainerUUID.Length != 0) {
+      ContainerUUID = other.ContainerUUID;
+    }
+    if (other.AudioFrame.Length != 0) {
+      AudioFrame = other.AudioFrame;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(pb::CodedInputStream input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 10: {
+          ContainerUUID = input.ReadString();
+          break;
+        }
+        case 18: {
+          AudioFrame = input.ReadBytes();
+          break;
+        }
+      }
+    }
+  }
+
+}
+
 public sealed partial class Vec3 : pb::IMessage<Vec3> {
   private static readonly pb::MessageParser<Vec3> _parser = new pb::MessageParser<Vec3>(() => new Vec3());
   private pb::UnknownFieldSet _unknownFields;
@@ -811,7 +1012,7 @@ public sealed partial class Vec3 : pb::IMessage<Vec3> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[4]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[5]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -996,7 +1197,7 @@ public sealed partial class Vec4 : pb::IMessage<Vec4> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[5]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[6]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1209,7 +1410,7 @@ public sealed partial class Syncable : pb::IMessage<Syncable> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[6]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[7]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1474,7 +1675,7 @@ public sealed partial class SyncableContainer : pb::IMessage<SyncableContainer> 
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::GrpcReflection.Descriptor.MessageTypes[7]; }
+    get { return global::GrpcReflection.Descriptor.MessageTypes[8]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
