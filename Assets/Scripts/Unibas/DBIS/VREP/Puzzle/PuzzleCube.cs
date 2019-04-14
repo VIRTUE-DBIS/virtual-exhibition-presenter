@@ -13,7 +13,7 @@ namespace Unibas.DBIS.VREP.Puzzle {
     private GameObject _parentThrowable;
 
     private Vector2Int PuzzlePos { get; set; }
-    private float Size { get; set; }
+    public float Size { get; set; }
 
     public bool topNeighbor = false;
     public bool bottomNeighbor = false;
