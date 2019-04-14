@@ -45,6 +45,7 @@ namespace Unibas.DBIS.VREP.Covis
             uuid = container.Uuid;
             name = container.Name;
             syncables = messageSyncables;
+            type = container.Type;
         }
 
         public void SendUpdate()

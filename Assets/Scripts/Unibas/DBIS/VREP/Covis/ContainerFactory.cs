@@ -11,6 +11,7 @@ namespace Unibas.DBIS.VREP.Covis
     {
         public GameObject prefab;
         public GameObject body;
+        public GameObject virtualAssistant;
 
         private void Awake()
         {
@@ -81,6 +82,20 @@ namespace Unibas.DBIS.VREP.Covis
                     syncables.Add("RightHand", rightHandSyncable);
                     syncables.Add("LeftHand", leftHandSyncable);
 
+                    containerComp.InitializeFromMessage(container, syncables);
+                    break;
+                }
+                case SyncableContainerType.VirualAssistant:
+                {
+                    Debug.Log("Instantiating virtual assistant...");
+                    var instance = Instantiate(virtualAssistant);
+                    var syncables = new Dictionary<string, Syncable>();
+                    var syncable = container.Syncables["Assistant"];
+                    var syncableComponent = instance.AddComponent<Syncable>();
+                    var containerComp = instance.AddComponent<SyncableContainer>();
+                    syncables.Add("Assistant", syncableComponent);
+                    
+                    syncableComponent.InitializeFromMessage(syncable);
                     containerComp.InitializeFromMessage(container, syncables);
                     break;
                 }
