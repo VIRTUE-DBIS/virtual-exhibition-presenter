@@ -24,6 +24,8 @@ namespace Unibas.DBIS.VREP.Puzzle {
     public Vector2Int expectedLeft;
     public Vector2Int expectedBottom;
     public Vector2Int expectedRight;
+
+    public bool DoTriggerChecks = false;
     
     private void Awake() { }
 
@@ -100,6 +102,10 @@ namespace Unibas.DBIS.VREP.Puzzle {
     }
 
     public void OnSidedTriggerEnter(PuzzleSide side, PuzzleCubeSide collidedWith) {
+      if (!DoTriggerChecks)
+      {
+        return;
+      }
       Debug.Log("ENTER: " + Id + " collide on " + side + " with " + collidedWith.PuzzleCube.Id + "'s " +
                 collidedWith.Side + " side");
 
@@ -121,6 +127,10 @@ namespace Unibas.DBIS.VREP.Puzzle {
     
 
     public void OnSidedTriggerExit(PuzzleSide side, PuzzleCubeSide collidedWith) {
+      if (!DoTriggerChecks)
+      {
+        return;
+      }
       Debug.Log("ENTER: " + Id + " collide on " + side + " with " + collidedWith.PuzzleCube.Id + "'s " +
                 collidedWith.Side + " side");
       

@@ -97,6 +97,7 @@ namespace Unibas.DBIS.VREP.Puzzle
             foreach (var go in _cubes)
             {
                 go.GetComponent<PuzzleCube>().RestoreInitialNeighborChecks();
+                go.GetComponent<PuzzleCube>().DoTriggerChecks = true;
             }
         }
 
