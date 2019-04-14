@@ -8,7 +8,6 @@ namespace Unibas.DBIS.VREP.Network
     {
         public void onNext(UpdateMessage message)
         {
-            Debug.Log("Received Update: "+message);
             switch (message.UpdateCase)
             {
                 case UpdateMessage.UpdateOneofCase.Syncable:

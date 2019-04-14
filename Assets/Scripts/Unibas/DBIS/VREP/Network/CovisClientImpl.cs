@@ -47,7 +47,6 @@ namespace Unibas.DBIS.VREP.Network
                 Debug.Log("Called update() before subscribe(). Don't do that.");
                 throw new Exception();
             }
-            Debug.Log("Sending update: "+update);
 
             duplexStreamingCall.RequestStream.WriteAsync(update).Wait();
         }

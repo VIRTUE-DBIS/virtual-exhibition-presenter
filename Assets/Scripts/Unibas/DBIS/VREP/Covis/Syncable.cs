@@ -14,6 +14,9 @@ namespace Unibas.DBIS.VREP.Covis
         private bool isRbNotNull;
         private bool initialized = false;
 
+        private float sendPositionMagnitude = 0.01f;
+        private float sendAngularMagnitude = 2f;
+
         public void Initialize()
         {
             if (!initialized)
@@ -162,8 +165,8 @@ namespace Unibas.DBIS.VREP.Covis
             }
             else
             {
-                var positionChanged = (transform.position - lastPosition).sqrMagnitude>1 ; //Delta
-                var rotationChanged = false; //(transform.rotation != lastRotation)
+                var positionChanged = (transform.position - lastPosition).sqrMagnitude > sendPositionMagnitude ; //Delta
+                var rotationChanged = Quaternion.Angle(transform.rotation, lastRotation) > sendAngularMagnitude; //(transform.rotation != lastRotation)
                 if (positionChanged || rotationChanged)
                 {
                     UpdateMessage message = new UpdateMessage();
