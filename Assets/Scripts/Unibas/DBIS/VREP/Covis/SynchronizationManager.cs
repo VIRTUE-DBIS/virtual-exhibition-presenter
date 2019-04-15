@@ -38,7 +38,7 @@ namespace Unibas.DBIS.VREP.Covis
 
             instance = new SynchronizationManager();
             // TODO: Configure
-            CovisClientImpl.Initialize("192.168.43.111", 9734);
+            CovisClientImpl.Initialize("localhost", 9734);
 
             CovisClientImpl.Instance.Subscribe(new StreamObserver());
             
