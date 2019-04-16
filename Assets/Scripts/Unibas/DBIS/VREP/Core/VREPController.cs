@@ -4,6 +4,7 @@ using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Puzzle;
+using Unibas.DBIS.VREP.UI;
 using UnityEngine;
 using World;
 
@@ -93,8 +94,12 @@ namespace Unibas.DBIS.VREP
             _buildingManager = GetComponent<BuildingManager>();
             PuzzleManager = gameObject.AddComponent<PuzzleManager>();
 
+            FadeController = gameObject.AddComponent<FadeController>();
+            
             LoadAndCreateExhibition();
         }
+
+        public FadeController FadeController;
 
         public void LoadAndCreateExhibition()
         {

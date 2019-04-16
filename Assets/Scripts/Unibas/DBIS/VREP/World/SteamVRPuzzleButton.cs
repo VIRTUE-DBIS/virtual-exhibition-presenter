@@ -3,6 +3,7 @@ using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP;
 using Unibas.DBIS.VREP.Puzzle;
+using Unibas.DBIS.VREP.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ using Valve.VR.InteractionSystem;
 
 namespace World {
   public class SteamVRPuzzleButton : MonoBehaviour {
+    
     [Serializable]
     public class ButtonModel {
       public float Size;
@@ -172,6 +174,7 @@ namespace World {
     public void ButtonPress() {
       Debug.Log("Puzzle Press");
       if (!pressed) {
+        FadeController.Instance.FadeInOut();
         PuzzleManager.GetInstance().SetPuzzle(Displayal);
         pressed = true;
       } else

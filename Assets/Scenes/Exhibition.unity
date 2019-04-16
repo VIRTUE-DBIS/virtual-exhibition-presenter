@@ -157,6 +157,7 @@ MonoBehaviour:
     exhibitionIds: []
   settingsPath: 
   PuzzleManager: {fileID: 0}
+  FadeController: {fileID: 0}
 --- !u!114 &123453531
 MonoBehaviour:
   m_ObjectHideFlags: 0
