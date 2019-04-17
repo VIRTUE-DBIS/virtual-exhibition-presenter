@@ -136,6 +136,11 @@ namespace Unibas.DBIS.VREP.Puzzle
                 _cubes = null;
                 nbCubes = new Vector2Int(-1,-1);
             }
+
+            if (fireworks != null)
+            {
+                Destroy(fireworks);
+            }
         }
 
         public void SetPositionCheck(int x, int y, bool check)
@@ -187,8 +192,8 @@ namespace Unibas.DBIS.VREP.Puzzle
 
         public IEnumerator StopFireWorks()
         {
-            yield return new WaitForSecondsRealtime(30);
-            Destroy(fireworks);
+            yield return new WaitForSecondsRealtime(15);
+            
             RemovePuzzle();
         }
 
