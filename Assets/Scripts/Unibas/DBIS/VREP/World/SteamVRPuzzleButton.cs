@@ -174,7 +174,7 @@ namespace World {
     public void ButtonPress() {
       Debug.Log("Puzzle Press");
       if (!pressed) {
-        FadeController.Instance.FadeInOut();
+        //FadeController.Instance.FadeInOut();
         PuzzleManager.GetInstance().SetPuzzle(Displayal);
         pressed = true;
       } else

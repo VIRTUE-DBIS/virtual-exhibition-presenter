@@ -89,7 +89,8 @@ namespace Unibas.DBIS.VREP.Puzzle
                 var tex = displayal.GetDisplayalRenderer().material.mainTexture;
                 nbCubes = PuzzleCubeFactory.getNumberOfCubes(tex.width, tex.height);
                 var other = otherDisp.GetDisplayalRenderer().material.mainTexture;
-                var cubes = PuzzleCubeFactory.CreatePuzzle(tex, 0.5f, displayal.RoomPosition+new Vector3(2.5f,0,2.5f), other); // TODO Magic size
+                var xoff = (nbCubes.x * 0.5f) / 2f; // TODO MAGIC NUMBER SIZE: 0.5f set somewhere else
+                var cubes = PuzzleCubeFactory.CreatePuzzle(tex, 0.5f, displayal.RoomPosition+new Vector3(-xoff,0,2f), other); // TODO Magic size
                 GetInstance().SetPuzzle(cubes);
                 Debug.Log("Cubes there?!");
                 _positionCheckMatrix = new bool[nbCubes.y, nbCubes.x];
