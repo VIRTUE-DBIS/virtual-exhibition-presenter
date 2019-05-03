@@ -173,16 +173,18 @@ namespace World {
 
     public void ButtonPress() {
       Debug.Log("Puzzle Press");
-      if (!pressed) {
-        //FadeController.Instance.FadeInOut();
-        PuzzleManager.GetInstance().SetPuzzle(Displayal);
-        pressed = true;
-      } else
-      {
-        pressed = false;
-        Debug.Log("Puzzle removed");
-        PuzzleManager.GetInstance().RemovePuzzle();
-      }
+      PuzzleManager.GetInstance().RemovePuzzle();
+      PuzzleManager.GetInstance().SetPuzzle(Displayal);
+//      if (!pressed) {
+//        //FadeController.Instance.FadeInOut();
+//        PuzzleManager.GetInstance().SetPuzzle(Displayal);
+//        pressed = true;
+//      } else
+//      {
+//        pressed = false;
+//        Debug.Log("Puzzle removed");
+//        PuzzleManager.GetInstance().RemovePuzzle();
+//      }
     }
 
     private void SetupUIElement() {

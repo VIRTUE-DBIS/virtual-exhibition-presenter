@@ -127,6 +127,7 @@ namespace Unibas.DBIS.VREP
 
             if (Input.GetKey(KeyCode.F12)) {
                 _exhibitionManager.RestoreExhibits();
+                PuzzleManager.GetInstance().RemovePuzzle();
             }
         }
 
