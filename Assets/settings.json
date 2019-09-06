@@ -7,7 +7,5 @@
   "CeilingLogoEnabled": true,
   "PlaygroundEnabled": true,
   "RequestExhibitions": false,
-  "exhibitionIds": [
-    "fantasybasel"
-  ]
+  "exhibitionIds": "fantasybasel"
 }

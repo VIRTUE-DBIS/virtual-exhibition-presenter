@@ -13,7 +13,7 @@ namespace DefaultNamespace.VREM
 
         private string response;
 
-        private const string LOAD_EXHIBITION_ACTION = "exhibitions/load/";
+        private const string LOAD_EXHIBITION_ACTION = "exhibitions/loadbykey/";
         private const string LIST_EXHIBITIONS_ACTION = "exhibitions/list";
 
         private Action<string> responseProcessor;
