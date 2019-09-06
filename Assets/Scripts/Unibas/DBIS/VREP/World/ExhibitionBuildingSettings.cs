@@ -9,7 +9,7 @@ namespace World
     public class ExhibitionBuildingSettings
     {
 
-        private float _wallOffset = 0.1f;
+        private float _wallOffset = 0.2f;
 
         /// <summary>
         /// Positive offset between the wall and the displayal.

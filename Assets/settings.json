@@ -1,6 +1,6 @@
 {
-  "StartInLobby": true,
-  "VREMAddress": "http://127.0.0.1:4567",
+  "StartInLobby": false,
+  "VREMAddress": "http://localhost:4567",
   "SpotsEnabled": false,
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
@@ -8,6 +8,6 @@
   "PlaygroundEnabled": true,
   "RequestExhibitions": false,
   "exhibitionIds": [
-    "5c2c65934d7ec8ccb89bef9e"
+    "fantasybasel"
   ]
 }

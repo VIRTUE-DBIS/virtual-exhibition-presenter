@@ -3,6 +3,8 @@ using DefaultNamespace;
 using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.Puzzle;
+using Unibas.DBIS.VREP.UI;
 using UnityEngine;
 using World;
 
@@ -22,6 +24,8 @@ namespace Unibas.DBIS.VREP
 
         public static VREPController Instance;
         private ExhibitionManager _exhibitionManager;
+
+        public PuzzleManager PuzzleManager;
 
         private void Awake()
         {
@@ -88,9 +92,14 @@ namespace Unibas.DBIS.VREP
             Debug.Log("Starting ExMan");
             _vremClient = gameObject.AddComponent<VREMClient>();
             _buildingManager = GetComponent<BuildingManager>();
+            PuzzleManager = gameObject.AddComponent<PuzzleManager>();
 
+            FadeController = gameObject.AddComponent<FadeController>();
+            
             LoadAndCreateExhibition();
         }
+
+        public FadeController FadeController;
 
         public void LoadAndCreateExhibition()
         {
@@ -118,9 +127,31 @@ namespace Unibas.DBIS.VREP
 
             if (Input.GetKey(KeyCode.F12)) {
                 _exhibitionManager.RestoreExhibits();
+                PuzzleManager.GetInstance().RemovePuzzle();
             }
         }
 
+        public ExhibitionManager GetExhibitionManager()
+        {
+            return _exhibitionManager;
+        }
+
+        public BuildingManager GetBuildingManager()
+        {
+            return _buildingManager;
+        }
+
+        public Displayal GetDisplayalForId(string id)
+        {
+            var go = GameObject.Find("Displayal (" + id + ")");
+            if (go != null)
+            {
+                return go.GetComponent<Displayal>();
+            }
+
+            return null;
+        }
+        
         private void ParseExhibition(string json)
         {
             if (json == null)

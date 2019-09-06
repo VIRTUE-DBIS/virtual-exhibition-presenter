@@ -12,6 +12,8 @@ public class BuildingManager : MonoBehaviour {
 	public float Offset = 5f;
 
 	public GameObject RoomPrefab;
+	public GameObject FancyButtonPrefab;
+	public GameObject FireworksPrefab;
 
 	private Exhibition _exhibition;
 	private int currentPosition = 0;

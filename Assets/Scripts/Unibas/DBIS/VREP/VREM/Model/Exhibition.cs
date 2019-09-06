@@ -15,7 +15,17 @@ namespace DefaultNamespace.VREM.Model {
     public string description;
 
     public Room[] rooms;
-    
 
+    public Exhibit[] GetExhibits()
+    {
+      List<Exhibit> exhibits = new List<Exhibit>();
+      foreach (var room in rooms)
+      {
+        exhibits.AddRange(room.GetWallExhibits());
+      }
+
+      return exhibits.ToArray();
+    }
+    
   }
 }

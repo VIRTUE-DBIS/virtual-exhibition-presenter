@@ -48,6 +48,8 @@ namespace DefaultNamespace
         /// Default: False
         /// </summary>
         public bool PlaygroundEnabled = false;
+        
+        
 
         /// <summary>
         /// Whether the server will be queried for exhibitions

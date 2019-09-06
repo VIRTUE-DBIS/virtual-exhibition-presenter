@@ -26,6 +26,8 @@ namespace World {
     /// </summary>
     public GameObject Anchor{ get; set; }
 
+    public Vector3 RoomPosition;
+
     public List<Displayal> Displayals = new List<Displayal>();
 
     public void RestoreDisplayals() {
@@ -44,7 +46,8 @@ namespace World {
         var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
         //displayal.transform.rotation = Quaternion.Euler(ObjectFactory.CalculateRotation(WallData.direction));
-        var rot =  Quaternion.Euler(90,0,180);
+//        var rot =  Quaternion.Euler(90,0,180);
+        var rot =  Quaternion.Euler(92.5f ,0,180);//90,0,180
         displayal.transform.localRotation = rot;// Because prefab is messed up
         
         
@@ -56,6 +59,7 @@ namespace World {
         disp.SetExhibitModel(e);
         disp.OriginalPosition = pos;
         disp.OriginalRotation = rot;
+        disp.RoomPosition = RoomPosition;
         Displayals.Add(disp);
 		
         ImageLoader image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>(); // Displayal
@@ -63,6 +67,10 @@ namespace World {
         image.ReloadImage(e.GetURLEncodedPath());
         displayal.transform.localScale = ScalingUtility.convertMeters2PlaneScaleSize(e.size.x, e.size.y);
 
+        if (VREPController.Instance.Settings.PlaygroundEnabled) {
+          StartCoroutine(VREPController.Instance.PuzzleManager.PreparePuzzleForDisplayal(disp));
+        }
+        
         if (e.audio != null)
         {
           Debug.Log("added audio to display object");
