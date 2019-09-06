@@ -1978,7 +1978,7 @@ MonoBehaviour:
   - Tracker
   syncableValues:
   - {fileID: 1173948120}
-  uuid: exihibtionCubeContainer
+  uuid: exhibitionCubeContainer
   name: Test
   type: 3
 --- !u!65 &1173948122
