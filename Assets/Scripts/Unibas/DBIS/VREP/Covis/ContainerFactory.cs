@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Linq;
@@ -48,8 +49,8 @@ namespace Unibas.DBIS.VREP.Covis
             {
                 case SyncableContainerType.Tracker:
                 {
-                    Debug.Log("Instantiating tracker...");
-                    var instance = Instantiate(prefab);
+                    Debug.Log("Instantiating tracker with model: \"" + container.Model + "\"...");
+                    var instance = (GameObject)Instantiate(Resources.Load("Prefabs/Syncables/" + container.Model));
                     var syncables = new Dictionary<string, Syncable>();
                     var syncable = container.Syncables["Tracker"];
                     var syncableComponent = instance.AddComponent<Syncable>();

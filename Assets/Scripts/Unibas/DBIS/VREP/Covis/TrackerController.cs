@@ -1,28 +1,58 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Google.Protobuf;
 using UnityEngine;
 using Valve.VR;
 
-public class TrackerController : MonoBehaviour
+namespace Unibas.DBIS.VREP.Covis
 {
-    public GameObject trackerPrefab;
-    
-    void OnEnable() {
-        SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
-        Debug.Log("Listening for connected devices...");
-    }
- 
-    private void OnDeviceConnected(int index, bool connected) {
-        if(connected) {
-            if(OpenVR.System != null) {
-                ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass((uint) index);
-                if(deviceClass == ETrackedDeviceClass.GenericTracker) {
-                    Debug.Log("Vive Tracker was connected at index: " + index);
-                    GameObject tracker = Instantiate(trackerPrefab);
-                    tracker.GetComponent<SteamVR_TrackedObject>().index = (SteamVR_TrackedObject.EIndex)index;
-                    tracker.transform.SetParent(transform);
+    public class TrackerController : MonoBehaviour
+    {
+        public string trackerPrefabName;
+
+        void OnEnable()
+        {
+            SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
+            Debug.Log("Listening for connected devices...");
+        }
+
+        private void OnDeviceConnected(int index, bool connected)
+        {
+            if (connected)
+            {
+                if (OpenVR.System != null)
+                {
+                    ETrackedDeviceClass deviceClass = OpenVR.System.GetTrackedDeviceClass((uint) index);
+                    if (deviceClass == ETrackedDeviceClass.GenericTracker)
+                    {
+                        Debug.Log("Vive Tracker was connected at index: " + index);
+                        InstantiateTracker(trackerPrefabName, index);
+                    }
                 }
             }
+        }
+
+        private void InstantiateTracker(string model, int index)
+        {
+            var instance = (GameObject)Instantiate(Resources.Load("Prefabs/Syncables/" + model), transform, true);
+            SteamVR_TrackedObject trackedObjectScript = instance.AddComponent<SteamVR_TrackedObject>();
+            trackedObjectScript.index = (SteamVR_TrackedObject.EIndex) index;
+
+            var syncables = new Dictionary<string, Syncable>();
+            var syncableComponent = instance.AddComponent<Syncable>();
+            var containerComp = instance.AddComponent<SyncableContainer>();
+            syncables.Add("Tracker", syncableComponent);
+
+            syncableComponent.Initialize();
+            containerComp.uuid = Guid.NewGuid().ToString();
+            containerComp.name = "Tracker";
+            containerComp.syncables = syncables;
+            containerComp.type = SyncableContainerType.Tracker;
+            containerComp.model = model;
+            SynchronizationManager.Register(containerComp);
+            containerComp.SendUpdate();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Unibas.DBIS.VREP.Covis
         public Dictionary<string, Syncable> syncables = new Dictionary<string, Syncable>();
         public string uuid;
         public string name;
+        public string model;
         public SyncableContainerType type;
 
         public void Initialize()
@@ -46,6 +47,7 @@ namespace Unibas.DBIS.VREP.Covis
             name = container.Name;
             syncables = messageSyncables;
             type = container.Type;
+            model = container.Model;
         }
 
         public void SendUpdate()
@@ -63,7 +65,7 @@ namespace Unibas.DBIS.VREP.Covis
             container.Uuid = uuid;
             container.Name = name;
             container.Type = type;
-            // TODO: Model
+            container.Model = model;
 
             message.Container = container;
             // TODO: Set timestamp
