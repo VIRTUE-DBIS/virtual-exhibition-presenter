@@ -10,7 +10,9 @@ namespace Unibas.DBIS.VREP.Covis
 {
     public class TrackerController : MonoBehaviour
     {
-        public string trackerPrefabName;
+        public string[] trackerPrefabNames;
+
+        private int trackerPrefabIndex = 0;
 
         void OnEnable()
         {
@@ -28,7 +30,12 @@ namespace Unibas.DBIS.VREP.Covis
                     if (deviceClass == ETrackedDeviceClass.GenericTracker)
                     {
                         Debug.Log("Vive Tracker was connected at index: " + index);
-                        InstantiateTracker(trackerPrefabName, index);
+                        if (trackerPrefabIndex >= trackerPrefabNames.Length)
+                        {
+                            Debug.LogError("Not enough distinct tracker prefab names given! Looping to beginning.");
+                        }
+                        InstantiateTracker(trackerPrefabNames[trackerPrefabIndex % trackerPrefabNames.Length], index);
+                        trackerPrefabIndex++;
                     }
                 }
             }
