@@ -47,6 +47,7 @@ public class ClosenessDetector : MonoBehaviour {
 
 	private IEnumerator LoadAudio(string url)
 	{     
+		Debug.Log("Fetching audio from url " + url);
 		using (WWW www = new WWW (url)){
 			yield return www;
 
@@ -65,8 +66,14 @@ public class ClosenessDetector : MonoBehaviour {
 	{
 		if (audioSource != null && audioSource.clip != null && playing == false)
 		{
+			Debug.Log("playing audio");
 			audioSource.Play();
 			playing = true;
+		}
+
+		if (playing == false)
+		{
+			Debug.Log("not playing audio because it doesn't exist");
 		}
 	}
 

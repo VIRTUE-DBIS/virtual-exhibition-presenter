@@ -32,6 +32,7 @@ namespace DefaultNamespace
 
                 if (www.isDone)
                 {
+                    Debug.Log("Fetching audio from url " + url);
                     AudioClip audioClip = www.GetAudioClip(false, true) as AudioClip;
                     this.audioSource.clip = audioClip;
                     this.audioSource.volume = 0.2f;
