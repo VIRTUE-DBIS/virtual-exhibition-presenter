@@ -50,6 +50,10 @@ namespace Unibas.DBIS.VREP.Covis
 
         public void SendUpdate()
         {
+            if (!CovisClientImpl.Instance.connected)
+            {
+                return;
+            }
             UpdateMessage message = new UpdateMessage();
             global::SyncableContainer container = new global::SyncableContainer();
 

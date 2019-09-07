@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Core.Utils;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Network
@@ -16,7 +17,8 @@ namespace Unibas.DBIS.VREP.Network
         public static CovisClientImpl Instance => instance;
 
         private static CovisClientImpl instance;
-        
+
+        public bool connected;
         private Channel channel;
         private CovisService.CovisServiceClient client;
         private AsyncDuplexStreamingCall<UpdateMessage, UpdateMessage> duplexStreamingCall;
@@ -25,13 +27,23 @@ namespace Unibas.DBIS.VREP.Network
         {
             instance = new CovisClientImpl(host, port);
         }
-   
+
         public CovisClientImpl(String host, int port)
         {
             channel = new Channel(host, port, ChannelCredentials.Insecure);
             client = new CovisService.CovisServiceClient(channel);
+            try
+            {
+                this.PingBlocking();
+                connected = true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("ping to covis was unsuccessful, not connecting to server");
+                connected = false;
+            }
         }
-        
+
         /**
          * Sends an UpdateMessage to covis-server.
          * It is expected that the first time you are sending a Syncable or SyncableContainer, you send the full information associated with it.
@@ -48,7 +60,10 @@ namespace Unibas.DBIS.VREP.Network
                 throw new Exception();
             }
 
-            duplexStreamingCall.RequestStream.WriteAsync(update).Wait();
+            if (connected)
+            {
+                duplexStreamingCall.RequestStream.WriteAsync(update).Wait();
+            }
         }
 
         /**
@@ -62,8 +77,12 @@ namespace Unibas.DBIS.VREP.Network
                 Debug.Log("Called subscribe() twice. This is a grave error");
                 throw new Exception();
             }
-            duplexStreamingCall = client.Sync(new CallOptions());
-            duplexStreamingCall.ResponseStream.ForEachAsync(message => Task.Run(() => observer.onNext(message)));
+
+            if (connected)
+            {
+                duplexStreamingCall = client.Sync(new CallOptions());
+                duplexStreamingCall.ResponseStream.ForEachAsync(message => Task.Run(() => observer.onNext(message)));
+            }
         }
 
         /**
@@ -73,7 +92,7 @@ namespace Unibas.DBIS.VREP.Network
         {
             client.Ping(new Empty());
         }
-        
+
         public void CloseBlocking()
         {
             duplexStreamingCall.RequestStream.CompleteAsync().Wait();

@@ -150,6 +150,10 @@ namespace Unibas.DBIS.VREP.Covis
         //TODO Maybe fixedupdate?
         void Update()
         {
+            if (!CovisClientImpl.Instance.connected)
+            {
+                return;
+            }
             var queue = SynchronizationManager.Instance.SyncableUpdateQueue[uuid];
             if (!queue.IsEmpty)
             {
