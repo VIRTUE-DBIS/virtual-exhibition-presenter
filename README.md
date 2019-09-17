@@ -3,7 +3,7 @@
 Virtual Reality Exhibitions with HTC Vive and Unity3d.
 This is the front-end repository. For the back-end see https://github.com/dbisUnibas/virtual-exhibition-manager
 
-Please see the [wiki](https://github.com/dbisUnibas/virtual-exhibition-presenter/wiki) for further information or consider reading the [Getting Started](https://github.com/VIRTUE-DBIS/virtual-exhibition-presenter/wiki/Setup-Guide) guide, if you want to setup your own virtual exhibition
+Please see the [wiki](https://github.com/dbisUnibas/virtual-exhibition-presenter/wiki) for further information or consider reading the [Getting Started](https://github.com/VIRTUE-DBIS/virtual-exhibition-presenter/wiki/Setup-Guide) guide, for setup and usage
 
 ## Vision
 
