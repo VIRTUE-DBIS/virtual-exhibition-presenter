@@ -19,11 +19,6 @@ virtual exhibition space.
 
 ## Unity
 
-**We use Unity 2017.4.2**
-
-Set up your Unity and IDE as you wish.
-IntelliJ Rider is recommended for everyone that uses IDEA / PyCharm on a regular basis.
-
 **GIT & Unity**:
 In Unity set meta files to be visible and textual via:
 
@@ -33,34 +28,10 @@ In Unity set meta files to be visible and textual via:
  
 These steps are taken from https://stackoverflow.com/a/18225479
 
-## Project Structure
-
-```
- /
-	+ Assets/                     - All custom unity stuff in here
-		|
-		+ Fonts/                  - Fonts files, if custom fonts are used
-		|
-		+ Materials/              - Unity Materials, if materials are used
-		|
-		+ Modules/                - Per self-contained feature a module
-		|
-		+ Prefabs/                - Unity Prefabs, if if prefabs are used
-		|
-		+ Scenes/                 - Home of the scenes, e.g. 'Worlds'
-		|
-		+ Scripts/                - Home of the scripts, e.g. the logic
-		|
-		+ Sprites/                - Home of any sprites used
-	|
-	+ Library/                    - Libraries for unity to work
-	|
-	+ ProjectSettings/            - Self explanatory
-	|
-	+ UnityPackageManager/)       - Unity stuff
-```
  
 ## Getting Started
+
+These
 
 To start working on the project
 
@@ -76,11 +47,12 @@ To start working on the project
  
 ## Contributors
 
- * Ivan Giangreco
  * Ralph Gasser
+ * Ivan Giangreco
  * Silvan Heller
  * Mahnaz Parian
  * Loris Sauter
+ * Florian Spiess
 
 ---
 
