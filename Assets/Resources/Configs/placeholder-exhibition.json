@@ -1,0 +1,135 @@
+{
+  "name": "Placeholder",
+  "description": "Placeholder Exhibition",
+  "rooms": [
+    {
+      "text": "A room",
+      "floor": "NWoodFloor",
+      "ceiling": "WhiteStucco",
+      "size":{
+        "x": 10.0,
+        "y": 5.0,
+        "z": 10.0
+      },
+      "position": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "walls": [
+        {
+          "color": {
+            "x": 0.7,
+            "y": 0.7,
+            "z": 0.7
+          },
+          "texture": "CONCRETE",
+          "direction": "NORTH",
+          "exhibits": [
+            {
+              "position": {
+                "x": 5.0,
+                "y": 1.5,
+                "z": 0.0
+              },
+              "size": {
+                "x": 1.6770833,
+                "y": 2.0,
+                "z": 0.0
+              },
+              "light": false,
+              "name": "An image",
+              "type": "IMAGE",
+              "path": "path/to/image/relative/to/documentRoot.png",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "color": {
+            "x": 0.7,
+            "y": 0.7,
+            "z": 0.7
+          },
+          "texture": "BRICKS",
+          "direction": "EAST",
+          "exhibits": [
+            {
+              "position": {
+                "x": 5.0,
+                "y": 1.5,
+                "z": 0.0
+              },
+              "size": {
+                "x": 1.6770833,
+                "y": 2.0,
+                "z": 0.0
+              },
+              "light": false,
+              "name": "An image",
+              "type": "IMAGE",
+              "path": "path/to/image/relative/to/documentRoot.png",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "color": {
+            "x": 0.7,
+            "y": 0.7,
+            "z": 0.7
+          },
+          "texture": "BRICKS",
+          "direction": "SOUTH",
+          "exhibits": [
+            {
+              "position": {
+                "x": 5.0,
+                "y": 1.5,
+                "z": 0.0
+              },
+              "size": {
+                "x": 1.6770833,
+                "y": 2.0,
+                "z": 0.0
+              },
+              "light": false,
+              "name": "An image",
+              "type": "IMAGE",
+              "path": "path/to/image/relative/to/documentRoot.png",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "color": {
+            "x": 0.7,
+            "y": 0.7,
+            "z": 0.7
+          },
+          "texture": "BRICKS",
+          "direction": "WEST",
+          "exhibits": [
+            {
+              "position": {
+                "x": 5.0,
+                "y": 1.5,
+                "z": 0.0
+              },
+              "size": {
+                "x": 1.6770833,
+                "y": 2.0,
+                "z": 0.0
+              },
+              "light": false,
+              "name": "An image",
+              "type": "IMAGE",
+              "path": "path/to/image/relative/to/documentRoot.png",
+              "description": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

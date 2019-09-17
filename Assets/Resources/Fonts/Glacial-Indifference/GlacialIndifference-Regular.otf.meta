@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 36e3ff808c4d44a408eb07452a39988b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Glacial Indifference
+  fontNames:
+  - 'Glacial Indifference-Regular
+
+    Glacial Indifference'
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 888b19e263e2b4043a935a619283f440, type: 3}
+  - {fileID: 12800000, guid: 0c6cf93d23228c24081575ab433287f1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
