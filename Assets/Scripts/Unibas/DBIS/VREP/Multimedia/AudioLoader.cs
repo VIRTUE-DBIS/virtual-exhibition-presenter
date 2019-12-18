@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DefaultNamespace
 {
@@ -26,19 +27,24 @@ namespace DefaultNamespace
                 yield break;
             }
 
-            using (WWW www = new WWW(url))
+            using (var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS))
             {
-                yield return www;
-
-                if (www.isDone)
+                yield return request.SendWebRequest();
+                if (!(request.isNetworkError || request.isHttpError))
                 {
-                    AudioClip audioClip = www.GetAudioClip(false, true) as AudioClip;
+                    var audioClip = DownloadHandlerAudioClip.GetContent(request);
                     this.audioSource.clip = audioClip;
                     this.audioSource.volume = 0.2f;
                     this.audioSource.loop = true;
                     this.audioSource.Play();
                     _loaded = true;
                     _lastUrl = url;
+                }
+                else
+                {
+                    Debug.LogError(request.error);
+                    Debug.LogError(request.url);
+                    Debug.LogError(request.GetResponseHeaders());
                 }
             }
         }
