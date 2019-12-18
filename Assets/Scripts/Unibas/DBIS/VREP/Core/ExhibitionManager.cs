@@ -96,13 +96,13 @@ namespace Unibas.DBIS.VREP.Core
                 }
                 if (VREPController.Instance.Settings.WallTimerEnabled)
                 {
-                    GameObject obj = new GameObject();
-                    obj.name = "Timer";
+                    GameObject obj = new GameObject("Timer");
                     obj.transform.SetParent(exhibitionRoom.transform, false);
                     obj.transform.localPosition =
                         new Vector3(-4.8f,4.8f, 4.8f); // manually found values
-                    obj.transform.localScale = Vector3.one * 0.5f;
+                    obj.transform.localScale = Vector3.one * 0.05f;
                     TextMesh textMesh = obj.AddComponent<TextMesh>();
+                    textMesh.fontSize = 150;
                     Countdown timer = obj.AddComponent<Countdown>();
                     timer.countdown = textMesh;
                 }
