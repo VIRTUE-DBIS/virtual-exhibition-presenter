@@ -43,7 +43,7 @@ public class ClosenessDetector : MonoBehaviour {
 	private IEnumerator LoadAudio(string url)
 	{     
 		using (var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS)){
-			yield return request;
+			yield return request.SendWebRequest();
 
 			if (!(request.isNetworkError || request.isHttpError)) {
 				var audioClip = DownloadHandlerAudioClip.GetContent(request);
