@@ -11,11 +11,8 @@ public class ClosenessDetector : MonoBehaviour {
 	private bool downloading = false;
 
 	public float maxDistance = 2;
-
-	private WWW www = null;
-
 	
-    // Use this for initialization
+	// Use this for initialization
 	private void Start()
 	{
 		audioSource =  gameObject.AddComponent<AudioSource>();
