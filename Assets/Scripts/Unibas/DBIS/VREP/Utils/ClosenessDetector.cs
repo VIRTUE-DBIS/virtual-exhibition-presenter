@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -47,12 +45,18 @@ public class ClosenessDetector : MonoBehaviour {
 
 	private IEnumerator LoadAudio(string url)
 	{     
-		using (WWW www = new WWW (url)){
-			yield return www;
+		using (var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS)){
+			yield return request;
 
-			if (www.isDone){
-				AudioClip audioClip = www.GetAudioClip(false, true) as AudioClip;
+			if (!(request.isNetworkError || request.isHttpError)) {
+				var audioClip = DownloadHandlerAudioClip.GetContent(request);
 				this.audioSource.clip = audioClip;
+			}
+			else
+			{
+				Debug.LogError(request.error);
+				Debug.LogError(request.url);
+				Debug.LogError(request.GetResponseHeaders());
 			}
 		}
 	}
