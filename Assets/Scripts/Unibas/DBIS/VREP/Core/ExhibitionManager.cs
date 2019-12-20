@@ -99,7 +99,7 @@ namespace Unibas.DBIS.VREP.Core
                     GameObject obj = new GameObject("Timer");
                     obj.transform.SetParent(exhibitionRoom.transform, false);
                     obj.transform.localPosition =
-                        new Vector3(-4.8f,4.8f, 4.8f); // manually found values
+                        new Vector3(-room.size.x/2 + 0.2f, room.size.y - 0.2f, room.size.z/2); // manually found values
                     obj.transform.localScale = Vector3.one * 0.05f;
                     TextMesh textMesh = obj.AddComponent<TextMesh>();
                     textMesh.fontSize = 150;
