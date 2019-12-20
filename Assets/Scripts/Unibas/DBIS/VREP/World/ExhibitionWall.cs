@@ -67,7 +67,7 @@ namespace World {
         {
           Debug.Log("added audio to display object");
           var closenessDetector = displayal.AddComponent<ClosenessDetector>();
-          closenessDetector.url = e.audio;
+          closenessDetector.url = e.GetURLEncodedAudioPath();
         }
       }
     }
