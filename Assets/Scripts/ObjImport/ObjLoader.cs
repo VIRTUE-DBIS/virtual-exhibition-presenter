@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DefaultNamespace.ObjImport {
   public class ObjLoader : MonoBehaviour{
@@ -16,19 +17,19 @@ namespace DefaultNamespace.ObjImport {
 
 	  private IEnumerator LoadModel(string url) {
 		  Debug.Log("Loading "+url);
-		  using (WWW www = new WWW(url)) {
-			  yield return www;
-			  if (string.IsNullOrEmpty(www.error)) {
-				  Debug.Log(www.text);
+		  using (var request = UnityWebRequest.Get(url)) {
+			  yield return request.SendWebRequest();
+			  if (!(request.isNetworkError || request.isHttpError)) {
+				  Debug.Log(request.downloadHandler.text);
 				  Mesh holderMesh = new Mesh();
 		  
-				  holderMesh = FastObjImporter.Instance.ImportFile(www.text);
+				  holderMesh = FastObjImporter.Instance.ImportFile(request.downloadHandler.text);
 
 				  MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
 				  MeshFilter filter = gameObject.AddComponent<MeshFilter>();
 				  filter.mesh = holderMesh;
 			  } else {
-				  Debug.LogError(www.error);
+				  Debug.LogError(request.error);
 			  }
 		  }
 	  }

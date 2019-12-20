@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
-using DefaultNamespace.VREM.Model;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DefaultNamespace.VREM
 {
@@ -36,22 +36,24 @@ namespace DefaultNamespace.VREM
             SanitizeServerUrl();
             
             Debug.Log("[VREMClient] Requesting... "+ServerUrl+LOAD_EXHIBITION_ACTION+suffix);
-            WWW www = new WWW(ServerUrl + LOAD_EXHIBITION_ACTION + suffix);
-            yield return www;
-            if (www.error == null)
+            using (var request = UnityWebRequest.Get(ServerUrl + LOAD_EXHIBITION_ACTION + suffix))
             {
-                response = www.text;
-                if (responseProcessor != null)
+                yield return request.SendWebRequest();
+                if (!(request.isNetworkError || request.isHttpError))
                 {
-                    responseProcessor.Invoke(response);
+                    response = request.downloadHandler.text;
+                    if (responseProcessor != null)
+                    {
+                        responseProcessor.Invoke(response);
+                    }
                 }
-            }
-            else
-            {
-                Debug.LogError(www.error);
-                // TODO Error, handle it!
-                error = true;
-                responseProcessor.Invoke(null);
+                else
+                {
+                    Debug.LogError(request.error);
+                    // TODO Error, handle it!
+                    error = true;
+                    responseProcessor.Invoke(null);
+                }
             }
         }
 
@@ -60,21 +62,22 @@ namespace DefaultNamespace.VREM
             SanitizeServerUrl();
             
             Debug.Log("[VREMClient] Requesting exhibition list ");
-            
-            WWW www = new WWW(ServerUrl+LIST_EXHIBITIONS_ACTION);
-            yield return www;
-            if (www.error == null)
+            using (var request = UnityWebRequest.Get(ServerUrl+LIST_EXHIBITIONS_ACTION))
             {
-                response = www.text;
-                // TODO Parse list of IDs and further loading of the exhibitions.
-                // Will induce follow-up DoExhibitonRequests
-            }
-            else
-            {
-                Debug.LogError(www.error);
-                // TODO Handle error properly
-                error = true;
-                responseProcessor.Invoke(null);
+                yield return request.SendWebRequest();
+                if (!(request.isNetworkError || request.isHttpError))
+                {
+                    response = request.downloadHandler.text;
+                    // TODO Parse list of IDs and further loading of the exhibitions.
+                    // Will induce follow-up DoExhibitonRequests
+                }
+                else
+                {
+                    Debug.LogError(request.error);
+                    // TODO Handle error properly
+                    error = true;
+                    responseProcessor.Invoke(null);
+                }
             }
         }
 
