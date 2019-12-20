@@ -140,6 +140,7 @@ namespace Unibas.DBIS.VREP
             
             _exhibitionManager = new ExhibitionManager(ex);
             _exhibitionManager.GenerateExhibition();
+            GameObject.Find("Lobby").GetComponent<Lobby>().activateRoomTrigger(_exhibitionManager);
             //_buildingManager.Create(ex);
             
             

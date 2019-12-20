@@ -52,7 +52,6 @@ namespace Unibas.DBIS.VREP.World
 
         private void Start()
         {
-            _audioLoader = GetComponent<AudioLoader>();
         }
 
         /// <summary>
@@ -71,7 +70,10 @@ namespace Unibas.DBIS.VREP.World
         /// </summary>
         public void OnRoomLeave()
         {
-            _audioLoader.Stop();
+            if (_audioLoader != null)
+            {
+               _audioLoader.Stop(); 
+            }
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace Unibas.DBIS.VREP.World
         /// </summary>
         public void OnRoomEnter()
         {
-            _audioLoader.Play();
+            LoadAmbientAudio();
         }
 
         /// <summary>
