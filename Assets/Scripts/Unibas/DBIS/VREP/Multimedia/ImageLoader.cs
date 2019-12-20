@@ -9,22 +9,25 @@ public class ImageLoader : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		_renderer = GetComponent<MeshRenderer>();
-		//StartCoroutine(LoadImage());
 	}
 		
 	private IEnumerator LoadImage(string url)
 	{
+		if (_renderer == null)
+		{
+			_renderer = GetComponent<MeshRenderer>();
+		}
 		Texture2D tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
 		var hasError = false;
 		using (var request = UnityWebRequestTexture.GetTexture(url))
 		{
 			yield return request.SendWebRequest();
-			if (!(request.isNetworkError || request.isHttpError)) {
+			if (!(request.isNetworkError || request.isHttpError))
+			{
 				tex = DownloadHandlerTexture.GetContent(request);
-				GetComponent<Renderer>().material.mainTexture = tex;
-				GC.Collect();
-			} else {
+			}
+			else
+			{
 				Debug.LogError(request.error);
 				Debug.LogError(request.url);
 				Debug.LogError(request.GetResponseHeaders());
@@ -40,7 +43,7 @@ public class ImageLoader : MonoBehaviour {
 		{
 			_renderer.material.mainTexture = tex;
 		}
-		
+		GC.Collect();
 	}
 
 	/// <summary>
