@@ -63,8 +63,10 @@ public class ClosenessDetector : MonoBehaviour {
 	/// </summary>
 	public void Play()
 	{
-		if (audioSource != null && audioSource.clip != null && playing == false)
+		if (!playing && !AudioListener.pause && audioSource != null && audioSource.clip != null)
 		{
+			AudioListener.pause = true;
+			audioSource.ignoreListenerPause = true;
 			audioSource.Play();
 			playing = true;
 		}
@@ -75,10 +77,12 @@ public class ClosenessDetector : MonoBehaviour {
 	/// </summary>
 	public void Stop()
 	{
-		if (audioSource != null  && audioSource.clip != null && playing)
+		if (playing && AudioListener.pause && audioSource != null  && audioSource.clip != null)
 		{
 			audioSource.Stop();
 			playing = false;
+			audioSource.ignoreListenerPause = false;
+			AudioListener.pause = false;
 		}
 	}
    
