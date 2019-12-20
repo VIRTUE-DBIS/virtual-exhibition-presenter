@@ -42,6 +42,11 @@ namespace DefaultNamespace
         /// Whether in each room the Logo is placed on the ceiling.
         /// </summary>
         public bool CeilingLogoEnabled = true;
+        
+        /// <summary>
+        /// Whether in each room a timer is placed on the wall.
+        /// </summary>
+        public bool WallTimerEnabled = true;
 
         /// <summary>
         /// Whether experimental, "playground" features are enabled

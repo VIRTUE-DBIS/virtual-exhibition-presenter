@@ -94,6 +94,18 @@ namespace Unibas.DBIS.VREP.Core
                     logo.transform.localRotation = Quaternion.Euler(new Vector3(90, 180));
                     logo.transform.localScale = Vector3.one * 10000;
                 }
+                if (VREPController.Instance.Settings.WallTimerEnabled)
+                {
+                    GameObject obj = new GameObject("Timer");
+                    obj.transform.SetParent(exhibitionRoom.transform, false);
+                    obj.transform.localPosition =
+                        new Vector3(-room.size.x/2 + 0.2f, room.size.y - 0.2f, room.size.z/2); // manually found values
+                    obj.transform.localScale = Vector3.one * 0.05f;
+                    TextMesh textMesh = obj.AddComponent<TextMesh>();
+                    textMesh.fontSize = 150;
+                    Countdown timer = obj.AddComponent<Countdown>();
+                    timer.countdown = textMesh;
+                }
             }
 
             // For teleporting, each room needs to be created.
