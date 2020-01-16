@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Unibas.DBIS.VREP.World
 {
     public class Countdown : MonoBehaviour {
-        public int timeLeft = 600;
+        public int timeLeft;
         public TextMesh countdown;
         void Start () {
             StartCoroutine("LoseTime");

@@ -44,9 +44,9 @@ namespace DefaultNamespace
         public bool CeilingLogoEnabled = true;
         
         /// <summary>
-        /// Whether in each room a timer is placed on the wall.
+        /// Whether in each room a timer is placed on the wall, counting down provided seconds.
         /// </summary>
-        public bool WallTimerEnabled = true;
+        public int WallTimerCount;
 
         /// <summary>
         /// Whether experimental, "playground" features are enabled

@@ -94,7 +94,7 @@ namespace Unibas.DBIS.VREP.Core
                     logo.transform.localRotation = Quaternion.Euler(new Vector3(90, 180));
                     logo.transform.localScale = Vector3.one * 10000;
                 }
-                if (VREPController.Instance.Settings.WallTimerEnabled)
+                if (VREPController.Instance.Settings.WallTimerCount > 0)
                 {
                     GameObject obj = new GameObject("Timer");
                     obj.transform.SetParent(exhibitionRoom.transform, false);
@@ -105,6 +105,7 @@ namespace Unibas.DBIS.VREP.Core
                     textMesh.fontSize = 150;
                     Countdown timer = obj.AddComponent<Countdown>();
                     timer.countdown = textMesh;
+                    timer.timeLeft = VREPController.Instance.Settings.WallTimerCount;
                 }
             }
 
