@@ -22,6 +22,7 @@ namespace Unibas.DBIS.VREP.World
         public void Restart()
         {
             StopCoroutine("LoseTime");
+            countdown.color = Color.white;
             StartCoroutine("LoseTime");
         }
         
