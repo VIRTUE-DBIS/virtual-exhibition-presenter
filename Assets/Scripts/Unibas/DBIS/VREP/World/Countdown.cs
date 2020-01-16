@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Unibas.DBIS.VREP.World
 {
@@ -29,6 +28,7 @@ namespace Unibas.DBIS.VREP.World
         IEnumerator LoseTime()
         {
             timeLeft = initTime;
+            GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = -1;
             while (true) {
                 yield return new WaitForSeconds (1);
                 timeLeft--;
@@ -40,6 +40,7 @@ namespace Unibas.DBIS.VREP.World
                         if (timeLeft == 0)
                         {
                             StopCoroutine("LoseTime");
+                            GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = 0;
                         }
                     }
                     else
