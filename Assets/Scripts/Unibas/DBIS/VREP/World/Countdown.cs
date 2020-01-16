@@ -5,12 +5,11 @@ using UnityEngine.UI;
 namespace Unibas.DBIS.VREP.World
 {
     public class Countdown : MonoBehaviour {
-        private int initTime;
-        public int timeLeft;
+        public int initTime;
+        private int timeLeft;
         public TextMesh countdown;
         void Start ()
         {
-            initTime = timeLeft;
             StartCoroutine("LoseTime");
             Time.timeScale = 1;
         }

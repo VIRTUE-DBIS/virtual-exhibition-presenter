@@ -105,7 +105,7 @@ namespace Unibas.DBIS.VREP.Core
                     textMesh.fontSize = 150;
                     Countdown timer = obj.AddComponent<Countdown>();
                     timer.countdown = textMesh;
-                    timer.timeLeft = VREPController.Instance.Settings.WallTimerCount;
+                    timer.initTime = VREPController.Instance.Settings.WallTimerCount;
                 }
             }
 
