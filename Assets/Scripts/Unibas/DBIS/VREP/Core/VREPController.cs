@@ -4,7 +4,6 @@ using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP.Core;
 using UnityEngine;
-using World;
 
 namespace Unibas.DBIS.VREP
 {
@@ -112,10 +111,6 @@ namespace Unibas.DBIS.VREP
         }
 
         private void Update() {
-            if (!Settings.PlaygroundEnabled) {
-                return;
-            }
-
             if (Input.GetKey(KeyCode.F12)) {
                 _exhibitionManager.RestoreExhibits();
             }

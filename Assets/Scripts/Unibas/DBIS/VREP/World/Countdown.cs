@@ -5,9 +5,12 @@ using UnityEngine.UI;
 namespace Unibas.DBIS.VREP.World
 {
     public class Countdown : MonoBehaviour {
+        private int initTime;
         public int timeLeft;
         public TextMesh countdown;
-        void Start () {
+        void Start ()
+        {
+            initTime = timeLeft;
             StartCoroutine("LoseTime");
             Time.timeScale = 1;
         }
@@ -17,9 +20,16 @@ namespace Unibas.DBIS.VREP.World
             var sec = (timeLeft % 60).ToString().PadLeft(2,'0');
             countdown.text = (min + ":" + sec);
         }
+
+        public void Restart()
+        {
+            StopCoroutine("LoseTime");
+            StartCoroutine("LoseTime");
+        }
         
         IEnumerator LoseTime()
         {
+            timeLeft = initTime;
             while (true) {
                 yield return new WaitForSeconds (1);
                 timeLeft--;
