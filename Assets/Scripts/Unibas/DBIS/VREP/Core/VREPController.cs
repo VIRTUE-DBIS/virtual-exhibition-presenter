@@ -135,7 +135,15 @@ namespace Unibas.DBIS.VREP
             
             _exhibitionManager = new ExhibitionManager(ex);
             _exhibitionManager.GenerateExhibition();
-            GameObject.Find("Lobby").GetComponent<Lobby>().activateRoomTrigger(_exhibitionManager);
+            if (VREPController.Instance.Settings.StartInLobby)
+            {
+                GameObject.Find("Lobby").GetComponent<Lobby>().activateRoomTrigger(_exhibitionManager);
+            }
+            else
+            {
+                GameObject.Find("Room").gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
+            }
+            
             //_buildingManager.Create(ex);
             
             

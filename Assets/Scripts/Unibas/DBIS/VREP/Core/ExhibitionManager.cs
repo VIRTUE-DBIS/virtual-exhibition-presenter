@@ -106,6 +106,7 @@ namespace Unibas.DBIS.VREP.Core
                     Countdown timer = obj.AddComponent<Countdown>();
                     timer.countdown = textMesh;
                     timer.initTime = VREPController.Instance.Settings.WallTimerCount;
+                    obj.transform.GetComponent<MeshRenderer>().enabled = false;
                 }
             }
 
