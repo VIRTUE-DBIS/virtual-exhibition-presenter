@@ -5,7 +5,7 @@
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
   "CeilingLogoEnabled": true,
-  "WallTimerEnabled": true,
+  "WallTimerCount": 240,
   "PlaygroundEnabled": true,
   "RequestExhibitions": false,
   "exhibitionIds": [

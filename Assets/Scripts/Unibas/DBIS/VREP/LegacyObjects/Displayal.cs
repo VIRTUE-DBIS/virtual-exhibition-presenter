@@ -24,7 +24,10 @@ public class Displayal : MonoBehaviour
         transform.localPosition = OriginalPosition;
         transform.localRotation = OriginalRotation;
         var rigid = GetComponent<Rigidbody>();
-        rigid.velocity = Vector3.zero;
+        if (rigid != null)
+        {
+            rigid.velocity = Vector3.zero;
+        }
     }
     
     public void SetExhibitModel(Exhibit exhibit)
@@ -73,6 +76,13 @@ public class Displayal : MonoBehaviour
             t.attachmentFlags = Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
                 //Hand.AttachmentFlags.VelocityMovement  Hand.AttachmentFlags.TurnOffGravity;
             t.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
+            
+            // Fix non-convex meshcollider since unity5 not allowed...
+            var plane = transform.Find("Plane");
+            plane.GetComponent<MeshCollider>().convex = true;
+            var back = transform.Find("Back");
+            back.GetComponent<MeshCollider>().convex = true;
+            
             var anch = ModelFactory.CreateCuboid(_anchor);
             var col = anch.AddComponent<BoxCollider>();
             col.center = new Vector3(_anchor.Width / 2, _anchor.Height / 2, _anchor.Depth/2);

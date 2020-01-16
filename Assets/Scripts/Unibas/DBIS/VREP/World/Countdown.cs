@@ -1,13 +1,14 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Unibas.DBIS.VREP.World
 {
     public class Countdown : MonoBehaviour {
-        public int timeLeft = 600;
+        public int initTime;
+        private int timeLeft;
         public TextMesh countdown;
-        void Start () {
+        void Start ()
+        {
             StartCoroutine("LoseTime");
             Time.timeScale = 1;
         }
@@ -17,10 +18,19 @@ namespace Unibas.DBIS.VREP.World
             var sec = (timeLeft % 60).ToString().PadLeft(2,'0');
             countdown.text = (min + ":" + sec);
         }
+
+        public void Restart()
+        {
+            StopCoroutine("LoseTime");
+            countdown.color = Color.white;
+            StartCoroutine("LoseTime");
+        }
         
         IEnumerator LoseTime()
         {
-            while (true) {
+            timeLeft = initTime;
+            GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = -1;
+            while (timeLeft > 0) {
                 yield return new WaitForSeconds (1);
                 timeLeft--;
                 if (timeLeft <= 30)
@@ -28,10 +38,6 @@ namespace Unibas.DBIS.VREP.World
                     if (timeLeft % 2 == 0)
                     {
                         countdown.color = Color.red;
-                        if (timeLeft == 0)
-                        {
-                            StopCoroutine("LoseTime");
-                        }
                     }
                     else
                     {
@@ -39,6 +45,7 @@ namespace Unibas.DBIS.VREP.World
                     }
                 }
             }
+            GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = 0;
         }
     }
 }

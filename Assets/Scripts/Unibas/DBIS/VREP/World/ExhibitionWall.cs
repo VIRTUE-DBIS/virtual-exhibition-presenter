@@ -44,7 +44,7 @@ namespace World {
         var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
         //displayal.transform.rotation = Quaternion.Euler(ObjectFactory.CalculateRotation(WallData.direction));
-        var rot =  Quaternion.Euler(90,0,180);
+        var rot =  Quaternion.Euler(92.5f,0,180); // Non-90° as they would tip over othervise
         displayal.transform.localRotation = rot;// Because prefab is messed up
         
         

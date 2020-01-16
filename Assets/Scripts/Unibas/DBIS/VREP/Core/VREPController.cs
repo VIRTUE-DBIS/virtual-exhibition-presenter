@@ -4,7 +4,6 @@ using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP.Core;
 using UnityEngine;
-using World;
 
 namespace Unibas.DBIS.VREP
 {
@@ -112,10 +111,6 @@ namespace Unibas.DBIS.VREP
         }
 
         private void Update() {
-            if (!Settings.PlaygroundEnabled) {
-                return;
-            }
-
             if (Input.GetKey(KeyCode.F12)) {
                 _exhibitionManager.RestoreExhibits();
             }
@@ -140,7 +135,15 @@ namespace Unibas.DBIS.VREP
             
             _exhibitionManager = new ExhibitionManager(ex);
             _exhibitionManager.GenerateExhibition();
-            GameObject.Find("Lobby").GetComponent<Lobby>().activateRoomTrigger(_exhibitionManager);
+            if (VREPController.Instance.Settings.StartInLobby)
+            {
+                GameObject.Find("Lobby").GetComponent<Lobby>().activateRoomTrigger(_exhibitionManager);
+            }
+            else
+            {
+                GameObject.Find("Room").gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
+            }
+            
             //_buildingManager.Create(ex);
             
             

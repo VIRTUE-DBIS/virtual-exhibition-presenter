@@ -74,6 +74,7 @@ namespace Unibas.DBIS.VREP.World
             {
                _audioLoader.Stop(); 
             }
+            gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
         }
 
         /// <summary>
@@ -83,6 +84,7 @@ namespace Unibas.DBIS.VREP.World
         public void OnRoomEnter()
         {
             LoadAmbientAudio();
+            gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
         }
 
         /// <summary>
@@ -147,8 +149,10 @@ namespace Unibas.DBIS.VREP.World
             return transform.position + RoomData.entrypoint;
         }
 
-        public void RestoreWallExhibits() {
+        public void RestoreWallExhibits()
+        {
             Walls.ForEach(w => w.RestoreDisplayals());
+            gameObject.transform.Find("Timer").GetComponent<Countdown>().Restart();
         }
     }
 }
