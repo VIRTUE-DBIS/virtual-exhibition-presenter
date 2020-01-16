@@ -29,7 +29,7 @@ namespace Unibas.DBIS.VREP.World
         {
             timeLeft = initTime;
             GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = -1;
-            while (true) {
+            while (timeLeft > 0) {
                 yield return new WaitForSeconds (1);
                 timeLeft--;
                 if (timeLeft <= 30)
@@ -37,11 +37,6 @@ namespace Unibas.DBIS.VREP.World
                     if (timeLeft % 2 == 0)
                     {
                         countdown.color = Color.red;
-                        if (timeLeft == 0)
-                        {
-                            StopCoroutine("LoseTime");
-                            GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = 0;
-                        }
                     }
                     else
                     {
@@ -49,6 +44,7 @@ namespace Unibas.DBIS.VREP.World
                     }
                 }
             }
+            GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = 0;
         }
     }
 }
