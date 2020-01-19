@@ -53,6 +53,8 @@ To start working on the project
  * Mahnaz Parian
  * Loris Sauter
  * Florian Spiess
+ * Rahel Arnold
+ * Maurizio Pasquinelli
 
 ---
 
