@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
+using Unibas.DBIS.VREP;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,7 +14,8 @@ namespace DefaultNamespace.VREM
 
         private string response;
 
-        private const string LOAD_EXHIBITION_ACTION = "exhibitions/load/";
+        private const string LOAD_EXHIBITION_BY_ID_ACTION = "exhibitions/load/";
+        private const string LOAD_EXHIBITION_BY_NAME_ACTION = "exhibitions/loadbyname/";
         private const string LIST_EXHIBITIONS_ACTION = "exhibitions/list";
 
         private Action<string> responseProcessor;
@@ -34,9 +36,11 @@ namespace DefaultNamespace.VREM
         private IEnumerator DoExhibitionRequest()
         {
             SanitizeServerUrl();
-            
-            Debug.Log("[VREMClient] Requesting... "+ServerUrl+LOAD_EXHIBITION_ACTION+suffix);
-            using (var request = UnityWebRequest.Get(ServerUrl + LOAD_EXHIBITION_ACTION + suffix))
+            var action = VREPController.Instance.Settings.Server.LoadByName
+                ? ServerUrl + LOAD_EXHIBITION_BY_NAME_ACTION + suffix
+                : ServerUrl + LOAD_EXHIBITION_BY_ID_ACTION + suffix;
+            Debug.Log("[VREMClient] Requesting... "+action);
+            using (var request = UnityWebRequest.Get(action))
             {
                 yield return request.SendWebRequest();
                 if (!(request.isNetworkError || request.isHttpError))

@@ -40,22 +40,10 @@ namespace Unibas.DBIS.VREP
                 Settings = Settings.LoadSettings();
             }
 
-            SanitizeHost();
             Instance = this;
         }
 
-        private void SanitizeHost()
-        {
-            if (!Settings.VREMAddress.EndsWith("/"))
-            {
-                Settings.VREMAddress += "/";
-            }
-
-            if (!Settings.VREMAddress.StartsWith("http://"))
-            {
-                Settings.VREMAddress = "http://" + Settings.VREMAddress;
-            }
-        }
+        
 
         private void OnApplicationQuit()
         {
@@ -93,12 +81,12 @@ namespace Unibas.DBIS.VREP
 
         public void LoadAndCreateExhibition()
         {
-            _vremClient.ServerUrl = Settings.VREMAddress;
+            _vremClient.ServerUrl = Settings.Server.Address;
 
             var exId = "";
-            if (Settings.exhibitionIds != null && Settings.exhibitionIds.Length > 0 && Settings.exhibitionIds[0] != null)
+            if (Settings.Server.Exhibitions != null && Settings.Server.Exhibitions.Length > 0 && Settings.Server.Exhibitions[0] != null)
             {
-                exId = Settings.exhibitionIds[0];
+                exId = Settings.Server.Exhibitions[0];
             }
             else
             {

@@ -25,13 +25,14 @@ namespace DefaultNamespace.VREM.Model {
     public Vector3 size;
 
     public string GetURLEncodedPath() {
-      return VREPController.Instance.Settings.VREMAddress+"content/get/"+path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+      var uri = VREPController.Instance.Settings.Server.Address+"content/get/"+path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+//      Debug.Log("URI="+uri);
+      return uri;
     }
 
     public string GetURLEncodedAudioPath() {
       if (!string.IsNullOrEmpty(audio)) {
-        //return "https://upload.wikimedia.org/wikipedia/commons/7/7b/FurElise.ogg";
-        return VREPController.Instance.Settings.VREMAddress+"content/get/"+ audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+        return VREPController.Instance.Settings.Server.Address+"content/get/"+ audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
       else
       {

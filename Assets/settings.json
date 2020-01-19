@@ -1,14 +1,17 @@
 {
-  "StartInLobby": true,
-  "VREMAddress": "http://127.0.0.1:4567",
-  "SpotsEnabled": false,
-  "LobbyFloorLogoEnabled": true,
-  "LobbyCeilingLogoEnabled": true,
-  "CeilingLogoEnabled": true,
-  "WallTimerCount": 240,
-  "PlaygroundEnabled": true,
-  "RequestExhibitions": false,
-  "exhibitionIds": [
-    "5d80e13801087e14980615a4"
-  ]
+    "Server": {
+        "Address": "http://127.0.0.1:4567",
+        "RequestExhibitions": false,
+        "LoadByName": true,
+        "Exhibitions": [
+            "default-name"
+        ]
+    },
+    "StartInLobby": true,
+    "SpotsEnabled": false,
+    "LobbyFloorLogoEnabled": true,
+    "LobbyCeilingLogoEnabled": true,
+    "CeilingLogoEnabled": true,
+    "WallTimerCount": 0,
+    "PlaygroundEnabled": false
 }

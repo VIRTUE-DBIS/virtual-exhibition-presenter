@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Unibas.DBIS.VREP.Core;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -7,18 +8,19 @@ namespace DefaultNamespace
     [Serializable]
     public class Settings
     {
+
+        /// <summary>
+        /// The REST Endpoint settings
+        /// </summary>
+        public VREMSettings Server = new VREMSettings();
+        
         /// <summary>
         /// Whether the player starts in the lobby
         /// Default: False
         /// </summary>
         public bool StartInLobby = true;
 
-        /// <summary>
-        /// The Address of the VREM server instance, inclusive port
-        /// Usually this is 127.0.0.1:4567
-        /// Default: 127.0.0.1:4567
-        /// </summary>
-        public string VREMAddress = "http://127.0.0.1:4567";
+       
 
         /// <summary>
         /// Whether each exhibit has its own spotlight
@@ -55,18 +57,6 @@ namespace DefaultNamespace
         public bool PlaygroundEnabled = false;
 
         /// <summary>
-        /// Whether the server will be queried for exhibitions
-        /// Default: False
-        /// </summary>
-        public bool RequestExhibitions = false;
-
-        /// <summary>
-        /// A list of exhibition ids, which shall be loaded
-        /// Default: Empty
-        /// </summary>
-        public string[] exhibitionIds = new string[0];
-
-        /// <summary>
         /// The file name of this settings file.
         /// </summary>
         public const string FILE_NAME = "settings.json";
@@ -89,29 +79,35 @@ namespace DefaultNamespace
         public static Settings LoadSettings()
         {
             Debug.Log("Settings path: " + getPath());
+            Settings s = null;
             if (File.Exists(getPath()))
             {
                 string json = File.ReadAllText(getPath());
-                return JsonUtility.FromJson<Settings>(json);
+                s = JsonUtility.FromJson<Settings>(json);
             }
             else
             {
-                return createDefault();
+                s = createDefault();
             }
+            s.Server.SanitizeHost();
+            return s;
         }
 
         public static Settings LoadSettings(string path)
         {
             var filePath = Application.dataPath + "/" + path;
+            Settings settings = null;
             if (File.Exists(filePath))
             {
                 string json = File.ReadAllText(filePath);
-                return JsonUtility.FromJson<Settings>(json);
+                settings = JsonUtility.FromJson<Settings>(json);
             }
             else
             {
-                return createDefault();
+                settings = createDefault();
             }
+            settings.Server.SanitizeHost();
+            return settings;
         }
 
         private Settings()
