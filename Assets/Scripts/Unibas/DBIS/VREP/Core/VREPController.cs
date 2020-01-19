@@ -4,6 +4,7 @@ using DefaultNamespace.VREM;
 using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.VREP.Core;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP
 {
@@ -20,8 +21,12 @@ namespace Unibas.DBIS.VREP
         public string settingsPath;
 
         public static VREPController Instance;
+        
         private ExhibitionManager _exhibitionManager;
 
+        private Player player;
+        private PlayerTeleporter teleporter;
+        
         private void Awake()
         {
             if (Application.isEditor)
@@ -50,6 +55,18 @@ namespace Unibas.DBIS.VREP
             Settings.StoreSettings();
         }
 
+        public void SpawnPlayerInLobby()
+        {
+            SpawnPlayerAt(new Vector3(0,-9.8f,0));
+        }
+
+        public void SpawnPlayerAt(Vector3 pos)
+        {
+            teleporter = gameObject.AddComponent<PlayerTeleporter>();
+            teleporter.Destination = pos;
+            teleporter.TeleportPlayer();
+        }
+
         private void Start()
         {
             if (Settings == null)
@@ -60,10 +77,15 @@ namespace Unibas.DBIS.VREP
                     Settings = Settings.Default();
                 }
             }
+            
             var go = GameObject.FindWithTag("Player");
-            if (go != null && Settings.StartInLobby)
+            if (go != null)
             {
-                go.transform.position = new Vector3(0, -9.9f, 0);
+                player = go.GetComponent<Player>();
+            }
+            if (Settings.StartInLobby)
+            {
+                SpawnPlayerInLobby();
             }
 
             var lby = GameObject.Find("Lobby");
@@ -101,6 +123,8 @@ namespace Unibas.DBIS.VREP
         private void Update() {
             if (Input.GetKey(KeyCode.F12)) {
                 _exhibitionManager.RestoreExhibits();
+                var pos = _exhibitionManager.GetRoomByIndex(0).GetEntryPoint();
+                SpawnPlayerAt(pos);
             }
         }
 

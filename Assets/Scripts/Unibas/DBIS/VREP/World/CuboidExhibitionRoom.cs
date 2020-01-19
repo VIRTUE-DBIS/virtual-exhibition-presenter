@@ -72,8 +72,9 @@ namespace Unibas.DBIS.VREP.World
         {
             if (_audioLoader != null)
             {
-               _audioLoader.Stop(); 
+                _audioLoader.Stop();
             }
+
             gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
         }
 
@@ -152,7 +153,11 @@ namespace Unibas.DBIS.VREP.World
         public void RestoreWallExhibits()
         {
             Walls.ForEach(w => w.RestoreDisplayals());
-            gameObject.transform.Find("Timer").GetComponent<Countdown>().Restart();
+            var timer = gameObject.transform.Find("Timer");
+            if (timer != null)
+            {
+                timer.GetComponent<Countdown>().Restart();
+            }
         }
     }
 }

@@ -145,7 +145,7 @@ namespace Unibas.DBIS.VREP.Core
                 backTpBtn.OnTeleportStart = room.OnRoomLeave;
                 backTpBtn.OnTeleportEnd = prev.OnRoomEnter;
 
-                // back teleporter
+                // next teleporter
                 var nextTpBtn = SteamVRTeleportButton.Create(room.gameObject, nextPos, nd,
                     model,
                     Resources.Load<Sprite>("Sprites/UI/chevron-right"));

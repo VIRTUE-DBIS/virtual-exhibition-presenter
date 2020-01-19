@@ -32,6 +32,24 @@ namespace World {
       Displayals.ForEach(d => d.RestorePosition());
     }
 
+
+    /// <summary>
+    /// Returns the angle for the displayal, based on the settings.
+    /// If the playground is enabled, the have to slightly tilt back, as otherwise they would tip over.
+    /// </summary>
+    /// <returns>The angle in degrees</returns>
+    private float GetXAngle()
+    {
+      if (VREPController.Instance.Settings.PlaygroundEnabled)
+      {
+        return 92.5f;
+      }
+      else
+      {
+        return 90f;
+      }
+    }
+
     public void AttachExhibits()
     {
       // TODO Make displayal configurable
@@ -44,7 +62,7 @@ namespace World {
         var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
         //displayal.transform.rotation = Quaternion.Euler(ObjectFactory.CalculateRotation(WallData.direction));
-        var rot =  Quaternion.Euler(92.5f,0,180); // Non-90° as they would tip over othervise
+        var rot =  Quaternion.Euler(GetXAngle(),0,180); // Non-90° as they would tip over othervise
         displayal.transform.localRotation = rot;// Because prefab is messed up
         
         

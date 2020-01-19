@@ -12,6 +12,6 @@
     "LobbyFloorLogoEnabled": true,
     "LobbyCeilingLogoEnabled": true,
     "CeilingLogoEnabled": true,
-    "WallTimerCount": 0,
+    "WallTimerCount": 240,
     "PlaygroundEnabled": false
 }
