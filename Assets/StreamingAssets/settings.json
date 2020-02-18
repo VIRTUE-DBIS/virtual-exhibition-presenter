@@ -1,0 +1,13 @@
+{
+  "StartInLobby": true,
+  "VREMAddress": "http://10.34.58.45:9876/",
+  "SpotsEnabled": false,
+  "LobbyFloorLogoEnabled": true,
+  "LobbyCeilingLogoEnabled": true,
+  "CeilingLogoEnabled": true,
+  "PlaygroundEnabled": true,
+  "RequestExhibitions": false,
+  "exhibitionIds": [
+    "5dc999c707aa7b0f23a335ec"
+  ]
+}
