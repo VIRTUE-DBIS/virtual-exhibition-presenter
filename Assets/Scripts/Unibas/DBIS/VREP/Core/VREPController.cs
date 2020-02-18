@@ -16,36 +16,66 @@ namespace Unibas.DBIS.VREP
         public Vector3 LobbySpawn = new Vector3(0, -9, 0);
 
         public Settings Settings;
+        public Settings temp;
+        public Settings tmp;
 
         public string settingsPath;
 
         public static VREPController Instance;
         private ExhibitionManager _exhibitionManager;
 
+        /*
+         * If there is no text in the main menu slots for the IP / host name and the exhibition ID
+         * the default exhibitions are loaded
+         */
         private void Awake()
         {
+            Debug.Log(Application.dataPath );
+
             if (Application.isEditor)
             {
                 if (string.IsNullOrEmpty(settingsPath))
                 {
                     Settings = Settings.LoadSettings();
                 }
-                else
+            }
+            // For Android devices
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                 Settings = Settings.LoadSettingsFromAndroid();
+                if (!MainMenu.exText.Equals("") && !MainMenu.ipText.Equals(""))
                 {
-                    Settings = Settings.LoadSettings(settingsPath);
+                    Settings.VREMAddress = MainMenu.ipText;
+                    Settings.exhibitionIds[0] = MainMenu.exText;
                 }
             }
-            else
+            // For Windows devices
+            if (Application.platform == RuntimePlatform.WindowsPlayer)
             {
-                Settings = Settings.LoadSettings();
+                    Settings = Settings.LoadSettingsFromWindowsAndLinux();
+                if (!MainMenu.exText.Equals("") && !MainMenu.ipText.Equals(""))
+                {
+                    Settings.VREMAddress = MainMenu.ipText;
+                    Settings.exhibitionIds[0] = MainMenu.exText;
+                }
             }
-
+            // For Mac devices
+            if (Application.platform == RuntimePlatform.OSXPlayer)
+            {
+                Settings = Settings.LoadSettingsFromMac();
+                if (!MainMenu.exText.Equals("") && !MainMenu.ipText.Equals(""))
+                {
+                    Settings.VREMAddress = MainMenu.ipText;
+                    Settings.exhibitionIds[0] = MainMenu.exText;
+                }
+            }
             SanitizeHost();
             Instance = this;
         }
-
         private void SanitizeHost()
+
         {
+
             if (!Settings.VREMAddress.EndsWith("/"))
             {
                 Settings.VREMAddress += "/";
@@ -54,6 +84,7 @@ namespace Unibas.DBIS.VREP
             if (!Settings.VREMAddress.StartsWith("http://"))
             {
                 Settings.VREMAddress = "http://" + Settings.VREMAddress;
+
             }
         }
 
@@ -64,14 +95,7 @@ namespace Unibas.DBIS.VREP
 
         private void Start()
         {
-            if (Settings == null)
-            {
-                Settings = Settings.LoadSettings();
-                if (Settings == null)
-                {
-                    Settings = Settings.Default();
-                }
-            }
+            
             var go = GameObject.FindWithTag("Player");
             if (go != null && Settings.StartInLobby)
             {
@@ -94,6 +118,7 @@ namespace Unibas.DBIS.VREP
         public void LoadAndCreateExhibition()
         {
             _vremClient.ServerUrl = Settings.VREMAddress;
+            Debug.Log(_vremClient.ServerUrl+ "Zeile 112: Done");
 
             var exId = "";
             if (Settings.exhibitionIds != null && Settings.exhibitionIds.Length > 0 && Settings.exhibitionIds[0] != null)
@@ -146,6 +171,8 @@ namespace Unibas.DBIS.VREP
             
             //_buildingManager.Create(ex);
             
+            // The teleport buttons set the exhibitions
+            TeleportButtons.setExhibition(ex);
             
             //_buildingManager.BuildRoom(ex.rooms[0]);
 /*
