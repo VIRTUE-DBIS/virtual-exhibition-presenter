@@ -1,9 +1,41 @@
 fileFormatVersion: 2
-guid: 57c41ba818e3b49869888a5524759ee9
+guid: 38d7cdab0d1114da595b1a26bea5847c
 ModelImporter:
-  serializedVersion: 23
+  serializedVersion: 22
   fileIDToRecycleName:
-    2186277476908879412: ImportLogs
+    100000: Bild
+    100002: //RootNode
+    100004: Glas
+    100006: Licht
+    100008: Ramen
+    100010: "R\xFCckseite"
+    100012: Sonne
+    400000: Bild
+    400002: //RootNode
+    400004: Glas
+    400006: Licht
+    400008: Ramen
+    400010: "R\xFCckseite"
+    400012: Sonne
+    2100000: "R\xFCckseite"
+    2100002: Glas
+    2100004: Bild
+    2100006: Rahmen
+    2300000: Bild
+    2300002: Glas
+    2300004: Ramen
+    2300006: "R\xFCckseite"
+    3300000: Bild
+    3300002: Glas
+    3300004: Ramen
+    3300006: "R\xFCckseite"
+    4300000: "R\xFCckseite"
+    4300002: Glas
+    4300004: Bild
+    4300006: Ramen
+    9500000: //RootNode
+    10800000: Licht
+    10800002: Sonne
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -23,7 +55,6 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -38,7 +69,6 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -56,16 +86,11 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
-    blendShapeNormalImportMode: 1
-    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
@@ -80,6 +105,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
