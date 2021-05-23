@@ -91,6 +91,10 @@ public class Displayal : MonoBehaviour
             anch.transform.parent = transform.parent;
             anch.transform.localPosition = new Vector3(_exhibitModel.position.x-_anchor.Width/2, _exhibitModel.position.y-(_exhibitModel.size.y/2+magicOffset), -_anchor.Depth); //0.2 is magic number for frame
             anch.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+            // Ensure required properties exist, which are for some reason not created through AddComponent
+            var interactable = gameObject.GetComponent<Interactable>();
+            interactable.hideHighlight = new GameObject[] {};
         }
     }
 
