@@ -1,45 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
 
-public class PlayerTeleporter : MonoBehaviour {
-	
-	public Vector3 Destination = Vector3.zero;
+namespace Unibas.DBIS.VREP.Movement
+{
+  public class PlayerTeleporter : MonoBehaviour
+  {
+    public Vector3 destination = Vector3.zero;
 
 
-	public float MinDistance = 1f;
+    public float minDistance = 1f;
 
-	public void TeleportPlayer()
-	{
-		SteamVR_Fade.Start( Color.clear, 0.2f );
+    public void TeleportPlayer()
+    {
+      SteamVR_Fade.Start(Color.clear, 0.2f);
 
-		var pgo = GameObject.FindWithTag("Player");
-		if (pgo == null)
-		{
-			Debug.LogWarning("No player found!");
-		}
+      var pgo = GameObject.FindWithTag("Player");
+      if (pgo == null)
+      {
+        Debug.LogWarning("No player found!");
+      }
 
-		var _player = pgo.GetComponent<Player>();
-		
-		if (_player == null)
-		{
-			Debug.LogWarning("No SteamVR Player attached!");
-		}
-		
-		
-		Vector3 playerFeetOffset = _player.trackingOriginTransform.position - _player.feetPositionGuess;
-		_player.trackingOriginTransform.position = Destination + playerFeetOffset;
-	}
+      var player = pgo.GetComponent<Player>();
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+      if (player == null)
+      {
+        Debug.LogWarning("No SteamVR Player attached!");
+      }
+
+      var playerFeetOffset = player.trackingOriginTransform.position - player.feetPositionGuess;
+      player.trackingOriginTransform.position = destination + playerFeetOffset;
+    }
+  }
 }

@@ -1,6 +1,6 @@
 {
   "StartInLobby": true,
-  "VREMAddress": "http://127.0.0.1:4567",
+  "VREMAddress": "http://192.168.1.243:4567",
   "SpotsEnabled": false,
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
@@ -9,6 +9,6 @@
   "PlaygroundEnabled": true,
   "RequestExhibitions": false,
   "exhibitionIds": [
-    "5d80e13801087e14980615a4"
+    "60aa76ddcd3024309d0ad3fd"
   ]
 }

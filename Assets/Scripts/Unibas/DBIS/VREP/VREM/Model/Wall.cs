@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using Unibas.DBIS.VREP.World;
 using UnityEngine;
-using World;
 
-namespace DefaultNamespace.VREM.Model {
+namespace Unibas.DBIS.VREP.VREM.Model
+{
   [Serializable]
-  public class Wall {
-    
+  public class Wall
+  {
     public Vector3 color;
     public string direction;
 
@@ -18,6 +18,5 @@ namespace DefaultNamespace.VREM.Model {
     {
       return (WallOrientation) Enum.Parse(typeof(WallOrientation), direction, true);
     }
-    
   }
 }

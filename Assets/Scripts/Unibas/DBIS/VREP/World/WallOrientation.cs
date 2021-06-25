@@ -1,23 +1,25 @@
-﻿namespace World {
-  public enum WallOrientation {
-    
-    
+﻿namespace Unibas.DBIS.VREP.World
+{
+  public enum WallOrientation
+  {
     /// <summary>
     /// Looks into negative X direction. Red
     /// </summary>
-    NORTH,
+    North,
+
     /// <summary>
     /// Looks into negative X direction. Green
     /// </summary>
-    EAST,
+    East,
+
     /// <summary>
     /// Looks into positive X direction. Blue
     /// </summary>
-    SOUTH,
+    South,
+
     /// <summary>
     /// Looks into positive Z direction. Yellow
     /// </summary>
-    WEST
-    
+    West
   }
 }

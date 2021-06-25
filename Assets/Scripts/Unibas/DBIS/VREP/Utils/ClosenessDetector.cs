@@ -3,90 +3,88 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
+namespace Unibas.DBIS.VREP.Utils
+{
+  public class ClosenessDetector : MonoBehaviour
+  {
+    public string url;
+    private AudioSource _audioSource;
+    private bool _playing;
+    private bool _downloading;
 
-public class ClosenessDetector : MonoBehaviour {
-	public string url;
-	private AudioSource audioSource;
-	private bool playing = false;
-	private bool downloading = false;
+    public float maxDistance = 2;
 
-	public float maxDistance = 2;
-	
-	// Use this for initialization
-	private void Start()
-	{
-		audioSource =  gameObject.AddComponent<AudioSource>();
-	}
+    // Use this for initialization
+    private void Start()
+    {
+      _audioSource = gameObject.AddComponent<AudioSource>();
+    }
 
 
-	private void Update()
-	{
-		var cameraPosition = Camera.allCameras[0].transform.position;
-		var objectPosition = this.gameObject.transform.position;
+    private void Update()
+    {
+      var cameraPosition = Camera.allCameras[0].transform.position;
+      var objectPosition = this.gameObject.transform.position;
 
-		if (!string.IsNullOrEmpty(url) && this.audioSource.clip == null && !downloading)
-		{
-			downloading = true;
-			StartCoroutine(LoadAudio(url));	
-		}
+      if (!string.IsNullOrEmpty(url) && this._audioSource.clip == null && !_downloading)
+      {
+        _downloading = true;
+        StartCoroutine(LoadAudio(url));
+      }
 
-		var dist = Vector3.Distance(cameraPosition, objectPosition);
-				
-		if (Math.Abs(dist) < maxDistance){			
-			Play();
-		} else
-		{
-			Stop();
-		}
-	}
+      var dist = Vector3.Distance(cameraPosition, objectPosition);
 
-	private IEnumerator LoadAudio(string url)
-	{     
-		using (var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS)){
-			yield return request.SendWebRequest();
+      if (Math.Abs(dist) < maxDistance)
+      {
+        Play();
+      }
+      else
+      {
+        Stop();
+      }
+    }
 
-			if (!(request.isNetworkError || request.isHttpError)) {
-				var audioClip = DownloadHandlerAudioClip.GetContent(request);
-				this.audioSource.clip = audioClip;
-			}
-			else
-			{
-				Debug.LogError(request.error);
-				Debug.LogError(request.url);
-				Debug.LogError(request.GetResponseHeaders());
-			}
-		}
-	}
+    private IEnumerator LoadAudio(string audioURL)
+    {
+      using var request = UnityWebRequestMultimedia.GetAudioClip(audioURL, AudioType.OGGVORBIS);
 
-	
-	/// <summary>
-	/// 
-	/// </summary>
-	public void Play()
-	{
-		if (!playing && !AudioListener.pause && audioSource != null && audioSource.clip != null)
-		{
-			AudioListener.pause = true;
-			audioSource.ignoreListenerPause = true;
-			audioSource.Play();
-			playing = true;
-		}
-	}
+      yield return request.SendWebRequest();
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public void Stop()
-	{
-		if (playing && AudioListener.pause && audioSource != null  && audioSource.clip != null)
-		{
-			audioSource.Stop();
-			playing = false;
-			audioSource.ignoreListenerPause = false;
-			AudioListener.pause = false;
-		}
-	}
-   
-	
+      if (!(request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError))
+      {
+        var audioClip = DownloadHandlerAudioClip.GetContent(request);
+        _audioSource.clip = audioClip;
+      }
+      else
+      {
+        Debug.LogError(request.error);
+        Debug.LogError(request.url);
+        Debug.LogError(request.GetResponseHeaders());
+      }
+    }
+
+    public void Play()
+    {
+      if (_playing || AudioListener.pause || _audioSource == null || _audioSource.clip == null) return;
+      AudioListener.pause = true;
+      _audioSource.ignoreListenerPause = true;
+      _audioSource.Play();
+      _playing = true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Stop()
+    {
+      if (_playing && AudioListener.pause && _audioSource != null && _audioSource.clip != null)
+      {
+        _audioSource.Stop();
+        _playing = false;
+        _audioSource.ignoreListenerPause = false;
+        AudioListener.pause = false;
+      }
+    }
+  }
 }
-

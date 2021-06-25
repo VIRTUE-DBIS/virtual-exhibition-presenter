@@ -1,282 +1,227 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DefaultNamespace;
-using DefaultNamespace.ObjImport;
-using DefaultNamespace.VREM.Model;
-using Unibas.DBIS.VREP;
+using ObjImport;
+using Unibas.DBIS.VREP.LegacyObjects;
+using Unibas.DBIS.VREP.Multimedia;
+using Unibas.DBIS.VREP.Utils;
+using Unibas.DBIS.VREP.VREM.Model;
+using Unibas.DBIS.VREP.World;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
-using World;
 
-[Obsolete("Got replaced by CuboidExhibitionRoom")]
-public class Room : MonoBehaviour {
+namespace Unibas.DBIS.VREP.LegacyScripts
+{
+  [Obsolete("Got replaced by CuboidExhibitionRoom")]
+  public class Room : MonoBehaviour
+  {
+    private const string NorthWallName = "NorthWall";
+    private const string EastWallName = "EastWall";
+    private const string SouthWallName = "SouthWall";
+    private const string WestWallName = "WestWall";
 
-	private string _northWallName = "NorthWall";
-	private string _eastWallName = "EastWall";
-	private string _southWallName = "SouthWall";
-	private string _westWallName = "WestWall";
+    public GameObject planePrefab;
 
-	public GameObject PlanePrefab;
-	
-	public AudioLoader audio;
+    public new AudioLoader audio;
 
-	private List<GameObject> displayedImages = new List<GameObject>();
+    private readonly List<GameObject> _displayedImages = new List<GameObject>();
 
-	private bool LightingActivated = false;
+    private const bool LightingActivated = false;
 
-	public GameObject GlobePrefab;
+    public GameObject globePrefab;
 
-	// Use this for initialization
-	void Start () {
-		if (audio == null)
-		{
-			audio = gameObject.AddComponent<AudioLoader>();
-		}
-	}
+    // Use this for initialization
+    private void Start()
+    {
+      if (audio == null)
+      {
+        audio = gameObject.AddComponent<AudioLoader>();
+      }
+    }
 
-	
-	/// <summary>
-	/// 
-	/// </summary>
-	void OnLeave()
-	{
-		//TODO: call this when leaving room
-		audio.Stop();
-	}
+    private void OnLeave()
+    {
+      //TODO: call this when leaving room
+      audio.Stop();
+    }
 
+    private Wall GetWall(string wallName)
+    {
+      var go = transform.Find(wallName);
+      var str = go.transform.GetComponents<MonoBehaviour>().Aggregate("Components: ", (current, e) => current + e);
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="name"></param>
-	/// <returns></returns>
-	private Wall GetWall(string name) {
-		var go = transform.Find(name);
-		string str = "Components: ";
-		
-		foreach( var e in go.transform.GetComponents<MonoBehaviour>()) {
-			str += e.ToString();
-		}
-		
-		Debug.Log("[Room] "+str);
-		
-		return transform.Find(name).GetComponent<Wall>();
-	}
+      Debug.Log("[Room] " + str);
 
-	
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="orientation"></param>
-	/// <returns></returns>
-	/// <exception cref="ArgumentOutOfRangeException"></exception>
-	private Wall GetWallForOrientation(WallOrientation orientation) {
-		switch (orientation) {
-			case WallOrientation.NORTH:
-				return GetWall(_northWallName);
-			case WallOrientation.EAST:
-				return GetWall(_eastWallName);
-			case WallOrientation.SOUTH:
-				return GetWall(_southWallName);
-			case WallOrientation.WEST:
-				return GetWall(_westWallName);
-			default:
-				throw new ArgumentOutOfRangeException("orientation", orientation, null);
-		}
-	}
+      return transform.Find(wallName).GetComponent<Wall>();
+    }
+
+    private Wall GetWallForOrientation(WallOrientation orientation)
+    {
+      return orientation switch
+      {
+        WallOrientation.North => GetWall(NorthWallName),
+        WallOrientation.East => GetWall(EastWallName),
+        WallOrientation.South => GetWall(SouthWallName),
+        WallOrientation.West => GetWall(WestWallName),
+        _ => throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null)
+      };
+    }
+
+    /// <param name="url">url to access image</param>
+    /// <param name="wall">wall orientation</param>
+    /// <param name="x">x coordinate for corresponding wall based on left lower anchor</param>
+    /// <param name="y">x coordinate for corresponding wall based on left lower anchor</param>
+    public Displayal Display(string url, WallOrientation wall, float x, float y, float w, float h, bool lightOn = true,
+      string audioUrl = null)
+    {
+      Debug.Log($"{url}, {wall}, {x}/{y}, {w}/{h}");
+      var displayal = Instantiate(planePrefab);
+
+      var go = GameObject.Find("VirtualExhibitionManager");
+
+      if (!LightingActivated || !lightOn)
+      {
+        displayal.transform.Find("Directional light").gameObject.SetActive(false);
+      }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="url">url to access image</param>
-	/// <param name="wall">wall orientation</param>
-	/// <param name="x">x coordinate for corresponding wall based on left lower anchor</param>
-	/// <param name="y">x coordinate for corresponding wall based on left lower anchor</param>
-	public Displayal Display(string url,  WallOrientation wall, float x, float y, float w, float h, bool lightOn =  true, string audioUrl  = null) {
-		Debug.Log(string.Format("{0}, {1}, {2}/{3}, {4}/{5}",url,wall,x,y,w,h));
-		GameObject displayal = Instantiate(PlanePrefab);
+      var disp = displayal.gameObject.GetComponent<Displayal>();
 
-		var go = GameObject.Find("VirtualExhibitionManager");
-		if (go.GetComponent<VREPController>().Settings.PlaygroundEnabled)
-		{
-			//var r = displayal.AddComponent<Rigidbody>();
-			//r.useGravity = false;
-			/*var i = displayal.AddComponent<Interactable>();
-			i.hideHandOnAttach = true;
-			i.useHandObjectAttachmentPoint = true;
-			i.handFollowTransformPosition = true;
-			i.handFollowTransformRotation = true;
-			i.highlightOnHover = true;
-			var t = displayal.AddComponent<Throwable>();
-			t.releaseVelocityStyle = ReleaseStyle.NoChange;
-			t.restoreOriginalParent = false;*/
-		}
-		
-		if(!LightingActivated || !lightOn){	
-			displayal.transform.Find("Directional light").gameObject.SetActive(false);
-		}
-		
-		
-		Displayal disp = displayal.gameObject.GetComponent<Displayal>();
-		
-		ImageLoader image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>(); // Displayal
-		//ImageLoader image = displayal.AddComponent<ImageLoader>();// ImageDisplayPlane
-		image.ReloadImage(url);
-		Debug.Log(GetWallForOrientation(wall));
-		Vector3 pos = GetWallForOrientation(wall).CalculatePosition(transform.position,new Vector2(x,y));
-		Vector3 rot = GetWallForOrientation(wall).CalculateRotation();
-		displayal.transform.position = pos;
-		displayal.transform.rotation = Quaternion.Euler(rot);
-		displayal.transform.localScale = ScalingUtility.convertMeters2PlaneScaleSize(w, h);
+      var image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>(); // Displayal
+      image.ReloadImage(url);
+      Debug.Log(GetWallForOrientation(wall));
+      var pos = GetWallForOrientation(wall).CalculatePosition(transform.position, new Vector2(x, y));
+      var rot = GetWallForOrientation(wall).CalculateRotation();
+      displayal.transform.position = pos;
+      displayal.transform.rotation = Quaternion.Euler(rot);
+      displayal.transform.localScale = ScalingUtility.ConvertMeters2PlaneScaleSize(w, h);
 
-		if (audioUrl != null)
-		{
-			Debug.Log("added audio to display object");
-			var closenessDetector = displayal.AddComponent<ClosenessDetector>();
-			closenessDetector.url = audioUrl;
-		}
+      if (audioUrl != null)
+      {
+        Debug.Log("added audio to display object");
+        var closenessDetector = displayal.AddComponent<ClosenessDetector>();
+        closenessDetector.url = audioUrl;
+      }
 
-		
-		displayedImages.Add(displayal);
-		return disp;
-	}
 
-	
-	// UNUSED
-	private volatile bool first = true;
-	
-	
-	// Update is called once per frame
-	void Update () {
-		/*
-		if (first) {
-			// TESTING: 
-			Debug.Log("[Room] debug");
-			Display("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", WallOrientation.NORTH, 5,5, .53f, .77f);
-			Display("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", WallOrientation.EAST, 5,5, .53f, .77f);
-			Display("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", WallOrientation.SOUTH, 5,5, .53f, .77f);
-			Display("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", WallOrientation.WEST, 5,5, .53f, .77f);
-			first = false;
-		}*/
-	}
+      _displayedImages.Add(displayal);
+      return disp;
+    }
 
-	private DefaultNamespace.VREM.Model.Room _roomModel;
+    private VREM.Model.Room _roomModel;
 
-	private Room next;
-	private Room prev;
+    private Room _next;
+    private Room _prev;
 
-	public void SetNextRoom(Room next) {
-		this.next = next;
-	}
+    public void SetNextRoom(Room next)
+    {
+      _next = next;
+    }
 
-	public void SetPrevRoom(Room prev) {
-		this.prev = prev;
-	}
+    public void SetPrevRoom(Room prev)
+    {
+      _prev = prev;
+    }
 
-	public Room GetNextRoom() {
-		return next;
-	}
+    public Room GetNextRoom()
+    {
+      return _next;
+    }
 
-	public Room GetPrevRoom() {
-		return prev;
-	}
-	
+    public Room GetPrevRoom()
+    {
+      return _prev;
+    }
 
-	public DefaultNamespace.VREM.Model.Room GetRoomModel() {
-		return _roomModel;
-	}
 
-	public void Populate(DefaultNamespace.VREM.Model.Room room) {
-		Debug.Log(room);
-		Debug.Log(room.walls);
-		_roomModel = room;
+    public VREM.Model.Room GetRoomModel()
+    {
+      return _roomModel;
+    }
 
-		
-		Debug.Log("adjusting ceiling and floor");
-		// TODO Use new material loading code
-		this.gameObject.transform.Find("Ceiling").gameObject.GetComponent<TexturedMonoBehaviour>().LoadMaterial(TexturingUtility.Translate(room.ceiling));
-		this.gameObject.transform.Find("Floor").gameObject.GetComponent<TexturedMonoBehaviour>().LoadMaterial(TexturingUtility.Translate(room.floor));
-		
-		/*Debug.Log("add globe");
-		if(GlobePrefab != null){ //TODO: add a new check
-			var globe = Instantiate(GlobePrefab) as GameObject;
-			globe.transform.rotation = Quaternion.Euler(-90, -90, 0);
-			globe.transform.position = new Vector3(-2.5f, 0, -2.5f);
-			globe.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-		}*/
-		
-		if (!string.IsNullOrEmpty(room.GetURLEncodedAudioPath()))
-		{		
-			Debug.Log("add audio to room");
+    public void Populate(VREM.Model.Room room)
+    {
+      Debug.Log(room);
+      Debug.Log(room.walls);
+      _roomModel = room;
 
-			if (audio == null)
-			{
-				audio = gameObject.AddComponent<AudioLoader>();
-			}
-			
-			audio.ReloadAudio(room.GetURLEncodedAudioPath());
-		}
-		//
-		
-		PopulateWalls(room.walls);
-		//PlaceExhibits(room.exhibits);
 
-		
-		// DEBUG TESTING TODO REMOVE this when done
-		//Debug.Log("Test");
-		//LoadAndPlaceModel(ServerSettings.SERVER_ID+"content/get/5bd3292c64aa33a460bcdade%2f1%2fexhibits%2fearth.obj", new Vector3(0,1,0));
-		
-	}
+      Debug.Log("adjusting ceiling and floor");
+      // TODO Use new material loading code
+      gameObject.transform.Find("Ceiling").gameObject.GetComponent<TexturedMonoBehaviour>()
+        .LoadMaterial(TexturingUtility.Translate(room.ceiling));
+      gameObject.transform.Find("Floor").gameObject.GetComponent<TexturedMonoBehaviour>()
+        .LoadMaterial(TexturingUtility.Translate(room.floor));
 
-	private void PlaceExhibits(DefaultNamespace.VREM.Model.Exhibit[] exhibits) {
-		foreach (Exhibit exhibit in exhibits) {
-			LoadAndPlaceModel(exhibit.GetURLEncodedPath(), exhibit.position);
-		}
-	}
+      if (!string.IsNullOrEmpty(room.GetURLEncodedAudioPath()))
+      {
+        Debug.Log("add audio to room");
 
-	private void LoadAndPlaceModel(string url, Vector3 pos) {
-		GameObject parent = new GameObject("Model Anchor");
-		GameObject model = new GameObject("Model");
-		model.transform.SetParent(parent.transform);
-		parent.transform.position = pos;
-		ObjLoader objLoader = model.AddComponent<ObjLoader>();
-		model.transform.Rotate(-90,0,0);
-		model.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-		objLoader.Load(url);
-	}
+        if (audio == null)
+        {
+          audio = gameObject.AddComponent<AudioLoader>();
+        }
 
-	private void PopulateWalls(DefaultNamespace.VREM.Model.Wall[] walls) {
-		foreach (var wall in walls) {
-			if (wall.direction == "NORTH") {
-				LoadExhibits(wall, WallOrientation.NORTH);
-				GetWallForOrientation(WallOrientation.NORTH).LoadMaterial(TexturingUtility.Translate(wall.texture));
-			}
+        audio.ReloadAudio(room.GetURLEncodedAudioPath());
+      }
 
-			if (wall.direction == "EAST") {
-				LoadExhibits(wall, WallOrientation.EAST);
-				GetWallForOrientation(WallOrientation.EAST).LoadMaterial(TexturingUtility.Translate(wall.texture));
-			}
+      PopulateWalls(room.walls);
+    }
 
-			if (wall.direction == "SOUTH") {
-				LoadExhibits(wall, WallOrientation.SOUTH);
-				GetWallForOrientation(WallOrientation.SOUTH).LoadMaterial(TexturingUtility.Translate(wall.texture));
-			}
+    private void PlaceExhibits(IEnumerable<Exhibit> exhibits)
+    {
+      foreach (var exhibit in exhibits)
+      {
+        LoadAndPlaceModel(exhibit.GetURLEncodedPath(), exhibit.position);
+      }
+    }
 
-			if (wall.direction == "WEST") {
-				LoadExhibits(wall, WallOrientation.WEST);
-				GetWallForOrientation(WallOrientation.WEST).LoadMaterial(TexturingUtility.Translate(wall.texture));
-			}
-		}
-	}
+    private static void LoadAndPlaceModel(string url, Vector3 pos)
+    {
+      var parent = new GameObject("Model Anchor");
+      var model = new GameObject("Model");
+      model.transform.SetParent(parent.transform);
+      parent.transform.position = pos;
+      var objLoader = model.AddComponent<ObjLoader>();
+      model.transform.Rotate(-90, 0, 0);
+      model.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+      objLoader.Load(url);
+    }
 
-	private void LoadExhibits(DefaultNamespace.VREM.Model.Wall wall, WallOrientation orientation) {
-		foreach (Exhibit e in wall.exhibits) {
-			Debug.Log(string.Format("E: {0}/{1} at {2}/{3}", e.position.x, e.position.y, e.size.x, e.size.y));
-			var disp = Display(e.GetURLEncodedPath(), orientation, e.position.x, e.position.y, e.size.x, e.size.y, e.light, e.GetURLEncodedAudioPath());
-			disp.SetExhibitModel(e);
-		}
-	}
+    private void PopulateWalls(IEnumerable<VREM.Model.Wall> walls)
+    {
+      foreach (var wall in walls)
+      {
+        switch (wall.direction)
+        {
+          case "NORTH":
+            LoadExhibits(wall, WallOrientation.North);
+            GetWallForOrientation(WallOrientation.North).LoadMaterial(TexturingUtility.Translate(wall.texture));
+            break;
+          case "EAST":
+            LoadExhibits(wall, WallOrientation.East);
+            GetWallForOrientation(WallOrientation.East).LoadMaterial(TexturingUtility.Translate(wall.texture));
+            break;
+          case "SOUTH":
+            LoadExhibits(wall, WallOrientation.South);
+            GetWallForOrientation(WallOrientation.South).LoadMaterial(TexturingUtility.Translate(wall.texture));
+            break;
+          case "WEST":
+            LoadExhibits(wall, WallOrientation.West);
+            GetWallForOrientation(WallOrientation.West).LoadMaterial(TexturingUtility.Translate(wall.texture));
+            break;
+        }
+      }
+    }
+
+    private void LoadExhibits(VREM.Model.Wall wall, WallOrientation orientation)
+    {
+      foreach (var e in wall.exhibits)
+      {
+        Debug.Log($"E: {e.position.x}/{e.position.y} at {e.size.x}/{e.size.y}");
+        var disp = Display(e.GetURLEncodedPath(), orientation, e.position.x, e.position.y, e.size.x, e.size.y, e.light,
+          e.GetURLEncodedAudioPath());
+        disp.SetExhibitModel(e);
+      }
+    }
+  }
 }

@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace World
+namespace Unibas.DBIS.VREP.World
 {
-    public interface IDisplayalProvider
-    {
-        GameObject ProvideDisplayal();
-    }
+  public interface IDisplayalProvider
+  {
+    GameObject ProvideDisplayal();
+  }
 }

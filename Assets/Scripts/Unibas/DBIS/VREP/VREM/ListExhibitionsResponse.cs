@@ -1,11 +1,11 @@
 using System;
-using DefaultNamespace.VREM.Model;
+using Unibas.DBIS.VREP.VREM.Model;
 
-namespace DefaultNamespace.VREM
+namespace Unibas.DBIS.VREP.VREM
 {
     [Serializable]
     public class ListExhibitionsResponse
     {
-        public ExhibitionSummary[] exhibitions;
+        public ExhibitionSummary[] Exhibitions;
     }
 }

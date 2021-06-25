@@ -1,77 +1,79 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace.VREM.Model;
+﻿using System.Collections.Generic;
+using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 
-public class BuildingManager : MonoBehaviour {
+namespace Unibas.DBIS.VREP.LegacyScripts
+{
+  public class BuildingManager : MonoBehaviour
+  {
+    public float roomSize = 10f;
+
+    public float offset = 5f;
+
+    public GameObject roomPrefab;
+
+    private Exhibition _exhibition;
+
+    private readonly List<Room> _theRooms = new List<Room>();
+
+    private int GetNextPosition(int pos)
+    {
+      return (pos + 1) % _exhibition.rooms.Length;
+    }
+
+    private int GetPreviousPosition(int pos)
+    {
+      return (pos - 1 + _exhibition.rooms.Length) % _exhibition.rooms.Length;
+    }
 
 
-	public float RoomSize = 10f;
+    private Vector3 CalculateRoomPosition(VREM.Model.Room room)
+    {
+      float x = room.position.x, y = room.position.y, z = room.position.z;
+      return new Vector3(x * roomSize + x * offset, y * roomSize + y * offset, z * roomSize + z * offset);
+    }
 
-	public float Offset = 5f;
+    public void BuildRoom(VREM.Model.Room room)
+    {
+      var goRoom = Instantiate(roomPrefab);
+      goRoom.transform.position = CalculateRoomPosition(room);
+      var roomLogic = goRoom.GetComponent<Room>();
+      roomLogic.Populate(room);
+    }
 
-	public GameObject RoomPrefab;
+    private Room CreateRoom(VREM.Model.Room room)
+    {
+      var goRoom = Instantiate(roomPrefab);
+      goRoom.transform.position = CalculateRoomPosition(room);
+      var roomLogic = goRoom.GetComponent<Room>();
+      return roomLogic;
+    }
 
-	private Exhibition _exhibition;
-	private int currentPosition = 0;
 
-	private GameObject roomObject;
-	private Room roomLogic;
-	
-	private List<Room> theRooms = new List<Room>();
+    public void Create(Exhibition exhibition)
+    {
+      _exhibition = exhibition;
+      foreach (var room in exhibition.rooms)
+      {
+        Room r = CreateRoom(room);
+        _theRooms.Add(r);
+        r.Populate(room);
+      }
 
-	private int GetNextPosition(int pos) {
-		return (pos + 1) % _exhibition.rooms.Length;
-	}
-
-	private int GetPreviousPosition(int pos) {
-		return (pos - 1 + _exhibition.rooms.Length) % _exhibition.rooms.Length;
-	}
-	
-
-	private Vector3 CalculateRoomPosition(DefaultNamespace.VREM.Model.Room room) {
-		float x = room.position.x, y = room.position.y, z = room.position.z;
-		return new Vector3(x * RoomSize + x * Offset, y * RoomSize + y * Offset, z * RoomSize + z * Offset);
-	}
-
-	public void BuildRoom(DefaultNamespace.VREM.Model.Room room) {
-		var goRoom = Instantiate(RoomPrefab);
-		goRoom.transform.position = CalculateRoomPosition(room);
-		Room roomLogic = goRoom.GetComponent<Room>();
-		roomLogic.Populate(room);
-	}
-
-	private Room CreateRoom(DefaultNamespace.VREM.Model.Room room) {
-		var goRoom = Instantiate(RoomPrefab);
-		goRoom.transform.position = CalculateRoomPosition(room);
-		Room roomLogic = goRoom.GetComponent<Room>();
-		return roomLogic;
-	}
-
-	
-
-	public void Create(Exhibition exhibition) {
-		_exhibition = exhibition;
-		foreach (var room in exhibition.rooms) {
-			Room r = CreateRoom(room);
-			theRooms.Add(r);
-			r.Populate(room);
-		}
-
-		for (int i = 0; i < exhibition.rooms.Length; i++)
-		{
-			Room r = theRooms[i];
-			r.SetNextRoom(theRooms[GetNextPosition(i)]);
-			var tp = r.gameObject.transform.Find("TeleportPoint");
-			if (tp != null && theRooms.Count > 1)
-			{
-				var porter = tp.GetComponent<TeleportPoint>();
-				var dest = CalculateRoomPosition(r.GetNextRoom().GetRoomModel());
-				porter.transform.position = dest;
-				r.SetPrevRoom(theRooms[GetPreviousPosition(i)]);
-			}
-		}
-	}
-	
+      for (var i = 0; i < exhibition.rooms.Length; i++)
+      {
+        Room r = _theRooms[i];
+        r.SetNextRoom(_theRooms[GetNextPosition(i)]);
+        var tp = r.gameObject.transform.Find("TeleportPoint");
+        if (tp != null && _theRooms.Count > 1)
+        {
+          var porter = tp.GetComponent<TeleportPoint>();
+          var dest = CalculateRoomPosition(r.GetNextRoom().GetRoomModel());
+          porter.transform.position = dest;
+          r.SetPrevRoom(_theRooms[GetPreviousPosition(i)]);
+        }
+      }
+    }
+  }
 }

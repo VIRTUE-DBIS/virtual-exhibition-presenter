@@ -1,8 +1,8 @@
-namespace DefaultNamespace.VREM.Model
+namespace Unibas.DBIS.VREP.VREM.Model
 {
-    public class ExhibitionSummary
-    {
-        public string objectId;
-        public string name;
-    }
+  public class ExhibitionSummary
+  {
+    public string ObjectId;
+    public string Name;
+  }
 }
