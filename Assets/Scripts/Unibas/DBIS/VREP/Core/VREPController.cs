@@ -51,6 +51,7 @@ namespace Unibas.DBIS.VREP
                 Settings.VREMAddress += "/";
             }
 
+            // TODO: TLS support
             if (!Settings.VREMAddress.StartsWith("http://"))
             {
                 Settings.VREMAddress = "http://" + Settings.VREMAddress;
@@ -64,6 +65,7 @@ namespace Unibas.DBIS.VREP
 
         private void Start()
         {
+            // TODO: After what happens in Awake, this is not necesssary
             if (Settings == null)
             {
                 Settings = Settings.LoadSettings();

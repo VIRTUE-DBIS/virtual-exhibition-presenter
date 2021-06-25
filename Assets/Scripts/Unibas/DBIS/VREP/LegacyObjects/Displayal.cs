@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace.VREM.Model;
+﻿using DefaultNamespace.VREM.Model;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
 
 public class Displayal : MonoBehaviour
 {
@@ -72,16 +69,6 @@ public class Displayal : MonoBehaviour
         if (VREPController.Instance.Settings.PlaygroundEnabled)
         {
             var magicOffset = 0.17f;
-            var t = gameObject.AddComponent<Throwable>();
-            t.attachmentFlags = Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
-                //Hand.AttachmentFlags.VelocityMovement  Hand.AttachmentFlags.TurnOffGravity;
-            t.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
-            
-            // Fix non-convex meshcollider since unity5 not allowed...
-            var plane = transform.Find("Plane");
-            plane.GetComponent<MeshCollider>().convex = true;
-            var back = transform.Find("Back");
-            back.GetComponent<MeshCollider>().convex = true;
             
             var anch = ModelFactory.CreateCuboid(_anchor);
             var col = anch.AddComponent<BoxCollider>();
@@ -91,29 +78,11 @@ public class Displayal : MonoBehaviour
             anch.transform.parent = transform.parent;
             anch.transform.localPosition = new Vector3(_exhibitModel.position.x-_anchor.Width/2, _exhibitModel.position.y-(_exhibitModel.size.y/2+magicOffset), -_anchor.Depth); //0.2 is magic number for frame
             anch.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-            // Ensure required properties exist, which are for some reason not created through AddComponent
-            var interactable = gameObject.GetComponent<Interactable>();
-            interactable.hideHighlight = new GameObject[] {};
         }
     }
 
     public Exhibit GetExhibit()
     {
         return _exhibitModel;
-    }
-
-
-    Renderer m_Renderer;
-
-    // Use this for initialization
-    void Start()
-    {
-        m_Renderer = GetComponent<Renderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }
