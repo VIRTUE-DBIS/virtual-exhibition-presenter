@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Movement;
 using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.VREM.Model;
@@ -21,7 +22,10 @@ namespace Unibas.DBIS.VREP.World
     public static GameObject GetDisplayalPrefab()
     {
       // TODO Use other prefabs
-      var prefab = Resources.Load("Prefabs/" + Settings.standardDisplayalPrefabName, typeof(GameObject)) as GameObject;
+      var prefabName = VREPController.Instance.settings.PlaygroundEnabled
+        ? Settings.throwableDisplayalPrefabName
+        : Settings.standardDisplayalPrefabName;
+      var prefab = Resources.Load("Prefabs/" + prefabName, typeof(GameObject)) as GameObject;
       if (prefab == null)
       {
         throw new Exception($"Could not load '{Settings.standardDisplayalPrefabName}' as Resource");

@@ -46,7 +46,11 @@ namespace Unibas.DBIS.VREP.World
         displayal.name = "Displayal (" + e.name + ")";
         var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
-        var rot = Quaternion.Euler(92.5f, 0, 180); // Non-90° as they would tip over othervise
+
+        // Non-90° as they would tip over otherwise
+        var rot = VREPController.Instance.settings.PlaygroundEnabled
+          ? Quaternion.Euler(92.5f, 0, 180)
+          : Quaternion.Euler(90, 0, 180);
         displayal.transform.localRotation = rot; // Because prefab is messed up
 
 
