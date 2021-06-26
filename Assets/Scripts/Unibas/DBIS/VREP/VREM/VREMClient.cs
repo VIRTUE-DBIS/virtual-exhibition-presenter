@@ -96,18 +96,5 @@ namespace Unibas.DBIS.VREP.VREM
     {
       return _error;
     }
-
-    /// <summary>
-    /// Generates a WWW object with given params
-    /// </summary>
-    /// <param name="url">A string which represents the url</param>
-    /// <param name="json">The json data to send, as a string</param>
-    /// <returns></returns>
-    public static WWW GenerateJSONPostRequest(string url, string json)
-    {
-      var headers = new Hashtable {{"Content-Type", "application/json"}};
-      var postData = Encoding.ASCII.GetBytes(json.ToCharArray());
-      return new WWW(url, postData);
-    }
   }
 }

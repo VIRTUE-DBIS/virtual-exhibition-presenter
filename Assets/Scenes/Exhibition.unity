@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731689, g: 0.13414702, b: 0.1210784, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,7 +133,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 123453532}
-  - component: {fileID: 123453531}
   - component: {fileID: 123453530}
   - component: {fileID: 123453533}
   m_Layer: 0
@@ -155,11 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd383596e0c94e46a6268577549e3d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExhibitionId: 5c2c65934d7ec8ccb89bef9e
-  LobbySpawn: {x: 0, y: -9.9, z: 0}
-  Settings:
-    StartInLobby: 0
-    VREMAddress: 127.0.0.1:4567
+  exhibitionId: 
+  lobbySpawn: {x: 0, y: -9, z: 0}
+  settings:
+    StartInLobby: 1
+    VREMAddress: http://127.0.0.1:4567
     SpotsEnabled: 0
     LobbyFloorLogoEnabled: 1
     LobbyCeilingLogoEnabled: 1
@@ -169,21 +168,6 @@ MonoBehaviour:
     RequestExhibitions: 0
     exhibitionIds: []
   settingsPath: 
---- !u!114 &123453531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 123453529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6408bd7e6b99ba745a8f2541dbd30bac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RoomSize: 10
-  Offset: 5
-  RoomPrefab: {fileID: 1414472768723842, guid: f3ec7ae51b8e6124797fd84a359dc393, type: 3}
 --- !u!4 &123453532
 Transform:
   m_ObjectHideFlags: 0
@@ -210,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c68d093f404f82a3a4e01368162c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 0
+  isEnabled: 0
 --- !u!1 &169713636
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +724,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 471107342}
-  - component: {fileID: 471107341}
   - component: {fileID: 471107343}
   m_Layer: 0
   m_Name: Lobby
@@ -749,24 +732,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &471107341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114247994260953484, guid: 43ad350a40367054ca51c3cb0d240eb8,
-    type: 2}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 471107340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7adf81c04b262a4b8e81b9aff5a8793, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlanePrefab: {fileID: 1723144634915134, guid: 693ba3952c1874807ad3166efd424e58,
-    type: 3}
-  audio: {fileID: 0}
-  GlobePrefab: {fileID: 1051155230607358, guid: 31ec8781b97bb41f09b6daa2cea5b36f,
-    type: 3}
 --- !u!4 &471107342
 Transform:
   m_ObjectHideFlags: 0
@@ -1397,7 +1362,6 @@ GameObject:
   - component: {fileID: 913630419}
   - component: {fileID: 913630418}
   - component: {fileID: 913630417}
-  - component: {fileID: 913630416}
   m_Layer: 0
   m_Name: SouthWall
   m_TagString: Untagged
@@ -1420,21 +1384,6 @@ Transform:
   m_Father: {fileID: 471107342}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &913630416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114846969025674480, guid: 43ad350a40367054ca51c3cb0d240eb8,
-    type: 2}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 913630414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 453b6e0995157534e90ddd721f3fc607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Orientation: 2
-  RoomRadius: 5
 --- !u!23 &913630417
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2037,7 +1986,6 @@ GameObject:
   - component: {fileID: 1294949436}
   - component: {fileID: 1294949435}
   - component: {fileID: 1294949434}
-  - component: {fileID: 1294949433}
   m_Layer: 0
   m_Name: WestWall
   m_TagString: Untagged
@@ -2060,21 +2008,6 @@ Transform:
   m_Father: {fileID: 471107342}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1294949433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114859673643067282, guid: 43ad350a40367054ca51c3cb0d240eb8,
-    type: 2}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1294949431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 453b6e0995157534e90ddd721f3fc607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Orientation: 3
-  RoomRadius: 5
 --- !u!23 &1294949434
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2269,7 +2202,6 @@ GameObject:
   - component: {fileID: 1393683093}
   - component: {fileID: 1393683092}
   - component: {fileID: 1393683091}
-  - component: {fileID: 1393683090}
   m_Layer: 0
   m_Name: NorthWall
   m_TagString: Untagged
@@ -2292,21 +2224,6 @@ Transform:
   m_Father: {fileID: 471107342}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
---- !u!114 &1393683090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114957097166043772, guid: 43ad350a40367054ca51c3cb0d240eb8,
-    type: 2}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1393683088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 453b6e0995157534e90ddd721f3fc607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Orientation: 0
-  RoomRadius: 5
 --- !u!23 &1393683091
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2385,7 +2302,6 @@ GameObject:
   - component: {fileID: 1402571958}
   - component: {fileID: 1402571957}
   - component: {fileID: 1402571956}
-  - component: {fileID: 1402571955}
   m_Layer: 0
   m_Name: EastWall
   m_TagString: Untagged
@@ -2408,21 +2324,6 @@ Transform:
   m_Father: {fileID: 471107342}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &1402571955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114187801076618424, guid: 43ad350a40367054ca51c3cb0d240eb8,
-    type: 2}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402571953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 453b6e0995157534e90ddd721f3fc607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Orientation: 1
-  RoomRadius: 5
 --- !u!23 &1402571956
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3046,8 +2947,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf19c800ac07f2347a6149846709dc15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destination: {x: 0, y: 0, z: 0}
-  MinDistance: 1
+  destination: {x: 0, y: 0, z: 0}
+  minDistance: 1
 --- !u!23 &1913549277
 MeshRenderer:
   m_ObjectHideFlags: 0

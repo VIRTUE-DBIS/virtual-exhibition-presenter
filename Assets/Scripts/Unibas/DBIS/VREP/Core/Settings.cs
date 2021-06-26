@@ -150,7 +150,7 @@ namespace Unibas.DBIS.VREP.Core
       }
       else
       {
-        Debug.LogWarning("Will not override settings");
+        Debug.Log("Will not override settings");
       }
     }
   }

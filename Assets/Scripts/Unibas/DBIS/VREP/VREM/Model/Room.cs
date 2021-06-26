@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     {
       if (!string.IsNullOrEmpty(ambient))
       {
-        return ServerSettings.ServerID + "content/get/" + ambient.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+        return VREPController.Instance.settings.VREMAddress + "/content/get/" + ambient.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
 
       return null;

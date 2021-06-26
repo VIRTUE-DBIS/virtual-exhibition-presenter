@@ -1,5 +1,4 @@
-﻿using Unibas.DBIS.VREP.LegacyScripts;
-using Unibas.DBIS.VREP.VREM;
+﻿using Unibas.DBIS.VREP.VREM;
 using Unibas.DBIS.VREP.VREM.Model;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
@@ -9,7 +8,6 @@ namespace Unibas.DBIS.VREP.Core
   public class VREPController : MonoBehaviour
   {
     private VREMClient _vremClient;
-    private BuildingManager _buildingManager;
     public string exhibitionId;
 
     public Vector3 lobbySpawn = new Vector3(0, -9, 0);
@@ -74,7 +72,6 @@ namespace Unibas.DBIS.VREP.Core
 
       Debug.Log("Starting ExMan");
       _vremClient = gameObject.AddComponent<VREMClient>();
-      _buildingManager = GetComponent<BuildingManager>();
 
       LoadAndCreateExhibition();
     }
@@ -118,9 +115,6 @@ namespace Unibas.DBIS.VREP.Core
 
       Debug.Log(json);
       var ex = JsonUtility.FromJson<Exhibition>(json);
-      Debug.Log(json);
-      Debug.Log(ex);
-      Debug.Log(_buildingManager);
       // TODO create lobby
 
       _exhibitionManager = new ExhibitionManager(ex);

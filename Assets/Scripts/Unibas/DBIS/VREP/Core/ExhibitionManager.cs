@@ -119,9 +119,8 @@ namespace Unibas.DBIS.VREP.Core
       var nextPos = new Vector3(.25f, 0, .2f);
 
       // TODO Configurable TPBtnModel
-      var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f,
-        TexturingUtility.LoadMaterialByName("none"), TexturingUtility.LoadMaterialByName("NMetal"),
-        TexturingUtility.LoadMaterialByName("NPlastic"));
+      var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f, null,
+        TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"));
 
       if (_exhibition.rooms.Length > 1)
       {
