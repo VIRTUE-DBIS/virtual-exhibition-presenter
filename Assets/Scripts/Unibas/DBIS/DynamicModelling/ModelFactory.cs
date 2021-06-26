@@ -23,17 +23,17 @@ namespace Unibas.DBIS.DynamicModelling
     public static GameObject CreateFreeformQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d,
       Material material = null)
     {
-      GameObject go = new GameObject("FreeformQuad");
-      MeshFilter meshFilter = go.AddComponent<MeshFilter>();
-      MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
-      Mesh mesh = meshFilter.mesh;
-      Vector3[] vertices = new[]
+      var go = new GameObject("FreeformQuad");
+      var meshFilter = go.AddComponent<MeshFilter>();
+      var meshRenderer = go.AddComponent<MeshRenderer>();
+      var mesh = meshFilter.mesh;
+      var vertices = new[]
       {
         a, b, c, d
       };
       mesh.vertices = vertices;
 
-      int[] tri = new int[6];
+      var tri = new int[6];
 
       tri[0] = 0;
       tri[1] = 2;
@@ -55,7 +55,7 @@ namespace Unibas.DBIS.DynamicModelling
 
       mesh.normals = normals;*/
 
-      Vector2[] uv = new Vector2[4];
+      var uv = new Vector2[4];
 
       /*
       float xUnit = 1;
@@ -86,9 +86,10 @@ namespace Unibas.DBIS.DynamicModelling
 
       if (material != null)
       {
-        meshRenderer.material.CopyPropertiesFromMaterial(material);
+        var mat = meshRenderer.material;
+        mat.CopyPropertiesFromMaterial(material);
         //meshRenderer.material.SetTextureScale("_MainTex", new Vector2(1,1));
-        meshRenderer.material.name = material.name + "(Instance)";
+        mat.name = material.name + "(Instance)";
       }
       else
       {
@@ -111,10 +112,10 @@ namespace Unibas.DBIS.DynamicModelling
     public static GameObject CreatePositionedWall(Vector3 start, Vector3 end, float height,
       string materialName = null)
     {
-      float width = Vector3.Distance(start, end);
-      float a = Vector3.Angle(end - start, Vector3.right);
-      GameObject go = new GameObject("PositionedWall");
-      GameObject wall = CreateWall(width, height, materialName);
+      var width = Vector3.Distance(start, end);
+      var a = Vector3.Angle(end - start, Vector3.right);
+      var go = new GameObject("PositionedWall");
+      var wall = CreateWall(width, height, materialName);
 
       wall.transform.parent = go.transform;
       wall.transform.position = Vector3.zero;
@@ -125,15 +126,15 @@ namespace Unibas.DBIS.DynamicModelling
 
     public static GameObject CreateWall(WallModel model)
     {
-      float width = Vector3.Distance(model.Start, model.End);
-      float a = Vector3.Angle(model.Start - model.End, Vector3.right);
-      GameObject go = new GameObject("PositionedWall");
-      GameObject wall = CreateWall(width, model.Height, model.Material);
+      var width = Vector3.Distance(model.start, model.end);
+      var a = Vector3.Angle(model.start - model.end, Vector3.right);
+      var go = new GameObject("PositionedWall");
+      var wall = CreateWall(width, model.height, model.material);
 
       wall.transform.parent = go.transform;
       wall.transform.position = Vector3.zero;
       wall.transform.Rotate(Vector3.up, -a);
-      go.transform.position = model.Start;
+      go.transform.position = model.start;
       go.AddComponent<ModelContainer>().Model = model;
       return go;
     }
@@ -149,39 +150,39 @@ namespace Unibas.DBIS.DynamicModelling
     /// <returns></returns>
     public static GameObject CreateCuboidRoom(Vector3 position, float size, float height, string[] materialNames)
     {
-      GameObject root = new GameObject("SquareRoom");
+      var root = new GameObject("SquareRoom");
 
-      float halfSize = size / 2f;
+      var halfSize = size / 2f;
 
       // North wall
-      GameObject north = CreateWall(size, height, materialNames[2]);
+      var north = CreateWall(size, height, materialNames[2]);
       north.name = "NorthWall";
       north.transform.parent = root.transform;
       north.transform.position = new Vector3(-halfSize, 0, halfSize);
       // East wall
-      GameObject east = CreateWall(size, height, materialNames[3]);
+      var east = CreateWall(size, height, materialNames[3]);
       east.name = "EastWall";
       east.transform.parent = root.transform;
       east.transform.position = new Vector3(halfSize, 0, halfSize);
       east.transform.Rotate(Vector3.up, 90);
       // South wall
-      GameObject south = CreateWall(size, height, materialNames[4]);
+      var south = CreateWall(size, height, materialNames[4]);
       south.name = "SouthWall";
       south.transform.parent = root.transform;
       south.transform.position = new Vector3(halfSize, 0, -halfSize);
       south.transform.Rotate(Vector3.up, 180);
       // West wall
-      GameObject west = CreateWall(size, height, materialNames[5]);
+      var west = CreateWall(size, height, materialNames[5]);
       west.name = "WestWall";
       west.transform.parent = root.transform;
       west.transform.position = new Vector3(-halfSize, 0, -halfSize);
       west.transform.Rotate(Vector3.up, 270);
 
       // Floor
-      GameObject floorAnchor = new GameObject("FloorAnchor");
+      var floorAnchor = new GameObject("FloorAnchor");
       floorAnchor.transform.parent = root.transform;
 
-      GameObject floor = CreateWall(size, size, materialNames[0]);
+      var floor = CreateWall(size, size, materialNames[0]);
       floor.name = "Floor";
       floor.transform.parent = floorAnchor.transform;
       // North Aligned
@@ -192,10 +193,10 @@ namespace Unibas.DBIS.DynamicModelling
       //floorAnchor.transform.Rotate(Vector3f.back,90);
 
       // Ceiling
-      GameObject ceilingAnchor = new GameObject("CeilingAnchor");
+      var ceilingAnchor = new GameObject("CeilingAnchor");
       ceilingAnchor.transform.parent = root.transform;
 
-      GameObject ceiling = CreateWall(size, size, materialNames[1]);
+      var ceiling = CreateWall(size, size, materialNames[1]);
       ceiling.name = "Ceiling";
       ceiling.transform.parent = ceilingAnchor.transform;
 
@@ -212,39 +213,39 @@ namespace Unibas.DBIS.DynamicModelling
 
     public static GameObject CreateCuboidRoom(CuboidRoomModel model)
     {
-      GameObject root = new GameObject("CuboidRoom");
+      var root = new GameObject("CuboidRoom");
 
-      float halfSize = model.Size / 2f;
+      var halfSize = model.size / 2f;
 
       // North wall
-      GameObject north = CreateWall(model.Size, model.Height, model.NorthMaterial);
+      var north = CreateWall(model.size, model.height, model.northMaterial);
       north.name = "NorthWall";
       north.transform.parent = root.transform;
       north.transform.position = new Vector3(-halfSize, 0, halfSize);
       // East wall
-      GameObject east = CreateWall(model.Size, model.Height, model.EastMaterial);
+      var east = CreateWall(model.size, model.height, model.eastMaterial);
       east.name = "EastWall";
       east.transform.parent = root.transform;
       east.transform.position = new Vector3(halfSize, 0, halfSize);
       east.transform.Rotate(Vector3.up, 90);
       // South wall
-      GameObject south = CreateWall(model.Size, model.Height, model.SouthMaterial);
+      var south = CreateWall(model.size, model.height, model.southMaterial);
       south.name = "SouthWall";
       south.transform.parent = root.transform;
       south.transform.position = new Vector3(halfSize, 0, -halfSize);
       south.transform.Rotate(Vector3.up, 180);
       // West wall
-      GameObject west = CreateWall(model.Size, model.Height, model.WestMaterial);
+      var west = CreateWall(model.size, model.height, model.westMaterial);
       west.name = "WestWall";
       west.transform.parent = root.transform;
       west.transform.position = new Vector3(-halfSize, 0, -halfSize);
       west.transform.Rotate(Vector3.up, 270);
 
       // Floor
-      GameObject floorAnchor = new GameObject("FloorAnchor");
+      var floorAnchor = new GameObject("FloorAnchor");
       floorAnchor.transform.parent = root.transform;
 
-      GameObject floor = CreateWall(model.Size, model.Size, model.FloorMaterial);
+      var floor = CreateWall(model.size, model.size, model.floorMaterial);
       floor.name = "Floor";
       floor.transform.parent = floorAnchor.transform;
       // North Aligned
@@ -255,22 +256,22 @@ namespace Unibas.DBIS.DynamicModelling
       //floorAnchor.transform.Rotate(Vector3f.back,90);
 
       // Ceiling
-      GameObject ceilingAnchor = new GameObject("CeilingAnchor");
+      var ceilingAnchor = new GameObject("CeilingAnchor");
       ceilingAnchor.transform.parent = root.transform;
 
-      GameObject ceiling = CreateWall(model.Size, model.Size, model.CeilingMaterial);
+      var ceiling = CreateWall(model.size, model.size, model.ceilingMaterial);
       ceiling.name = "Ceiling";
       ceiling.transform.parent = ceilingAnchor.transform;
 
 
       // North Aligned
-      ceilingAnchor.transform.position = new Vector3(-halfSize, model.Height, halfSize);
+      ceilingAnchor.transform.position = new Vector3(-halfSize, model.height, halfSize);
       ceilingAnchor.transform.Rotate(Vector3.right, -90);
       // East Aligned
       //ceilingAnchor.transform.position = new Vector3(halfSize, height, -halfSize);
       //ceilingAnchor.transform.Rotate( Vector3.back, -90);
 
-      root.transform.position = model.Position;
+      root.transform.position = model.position;
 
       root.AddComponent<ModelContainer>().Model = model;
       return root;
@@ -308,11 +309,11 @@ namespace Unibas.DBIS.DynamicModelling
 
     public static GameObject CreateWall(float width, float height, Material mat = null)
     {
-      GameObject go = new GameObject("Wall");
-      MeshFilter meshFilter = go.AddComponent<MeshFilter>();
-      MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
-      Mesh mesh = meshFilter.mesh;
-      Vector3[] vertices = new Vector3[4];
+      var go = new GameObject("Wall");
+      var meshFilter = go.AddComponent<MeshFilter>();
+      var meshRenderer = go.AddComponent<MeshRenderer>();
+      var mesh = meshFilter.mesh;
+      var vertices = new Vector3[4];
       vertices[0] = new Vector3(0, 0, 0);
       vertices[1] = new Vector3(width, 0, 0);
       vertices[2] = new Vector3(0, height, 0);
@@ -320,7 +321,7 @@ namespace Unibas.DBIS.DynamicModelling
 
       mesh.vertices = vertices;
 
-      int[] tri = new int[6];
+      var tri = new int[6];
 
       tri[0] = 0;
       tri[1] = 2;
@@ -332,7 +333,7 @@ namespace Unibas.DBIS.DynamicModelling
 
       mesh.triangles = tri;
 
-      Vector3[] normals = new Vector3[4];
+      var normals = new Vector3[4];
 
       normals[0] = -Vector3.forward;
       normals[1] = -Vector3.forward;
@@ -341,7 +342,7 @@ namespace Unibas.DBIS.DynamicModelling
 
       mesh.normals = normals;
 
-      Vector2[] uv = new Vector2[4];
+      var uv = new Vector2[4];
 
       float xUnit = 1;
       float yUnit = 1;
@@ -368,9 +369,10 @@ namespace Unibas.DBIS.DynamicModelling
 
       if (mat != null)
       {
-        meshRenderer.material.CopyPropertiesFromMaterial(mat);
+        var material = meshRenderer.material;
+        material.CopyPropertiesFromMaterial(mat);
         //meshRenderer.material.SetTextureScale("_MainTex", new Vector2(1,1));
-        meshRenderer.material.name = mat.name;
+        material.name = mat.name;
       }
       else
       {
@@ -389,14 +391,13 @@ namespace Unibas.DBIS.DynamicModelling
 
     private static Vector3 CalculateUnit(Vector3 dimensions)
     {
-      float m = Math.Max(Math.Max(dimensions.x, dimensions.y), dimensions.z);
+      var m = Math.Max(Math.Max(dimensions.x, dimensions.y), dimensions.z);
       return new Vector3(m / dimensions.x, m / dimensions.y, m / dimensions.z);
     }
 
     private static Vector2 CalculateUnit(float width, float height)
     {
       return CalculateNormalizedToLeastSquareUnit(width, height);
-      //return CalculateNormalizedToOneUnit(width, height);
     }
 
     private static Vector2 CalculateNormalizedToLeastSquareUnit(float width, float height)
@@ -423,17 +424,18 @@ namespace Unibas.DBIS.DynamicModelling
 
     public static GameObject CreateCuboid(CuboidModel cuboid)
     {
-      GameObject cub = CreateCuboid(cuboid.Width, cuboid.Height, cuboid.Depth);
-      MeshRenderer meshRenderer = cub.GetComponent<MeshRenderer>();
-      if (cuboid.Material != null)
+      var cub = CreateCuboid(cuboid.width, cuboid.height, cuboid.depth);
+      var meshRenderer = cub.GetComponent<MeshRenderer>();
+      if (cuboid.material != null)
       {
-        meshRenderer.material.CopyPropertiesFromMaterial(cuboid.Material);
+        meshRenderer.material.CopyPropertiesFromMaterial(cuboid.material);
       }
       else
       {
-        meshRenderer.material = new Material(Shader.Find("Standard"));
-        meshRenderer.material.name = "Default";
-        meshRenderer.material.color = Color.white;
+        var material = new Material(Shader.Find("Standard"));
+        meshRenderer.material = material;
+        material.name = "Default";
+        material.color = Color.white;
       }
 
       cub.AddComponent<ModelContainer>().Model = cuboid;
@@ -442,23 +444,23 @@ namespace Unibas.DBIS.DynamicModelling
 
     public static GameObject CreateCuboid(float width, float height, float depth)
     {
-      GameObject go = new GameObject("Cuboid");
-      MeshFilter meshFilter = go.AddComponent<MeshFilter>();
-      MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
-      Mesh mesh = meshFilter.mesh;
+      var go = new GameObject("Cuboid");
+      var meshFilter = go.AddComponent<MeshFilter>();
+      var meshRenderer = go.AddComponent<MeshRenderer>();
+      var mesh = meshFilter.mesh;
 
       // The naming is always from the front and downwards looking! e.g. From the back, left and right is swapped
-      Vector3 frontLeftDown = Vector3.zero;
-      Vector3 frontRightDown = new Vector3(width, 0, 0);
-      Vector3 frontLeftUp = new Vector3(0, height, 0);
-      Vector3 frontRightUp = new Vector3(width, height, 0);
+      var frontLeftDown = Vector3.zero;
+      var frontRightDown = new Vector3(width, 0, 0);
+      var frontLeftUp = new Vector3(0, height, 0);
+      var frontRightUp = new Vector3(width, height, 0);
 
-      Vector3 backLeftDown = new Vector3(0, 0, depth);
-      Vector3 backRightDown = new Vector3(width, 0, depth);
-      Vector3 backLeftUp = new Vector3(0, height, depth);
-      Vector3 backRightUp = new Vector3(width, height, depth);
+      var backLeftDown = new Vector3(0, 0, depth);
+      var backRightDown = new Vector3(width, 0, depth);
+      var backLeftUp = new Vector3(0, height, depth);
+      var backRightUp = new Vector3(width, height, depth);
 
-      Vector3[] vertices = new[]
+      var vertices = new[]
       {
         // Front
         frontLeftDown, frontRightDown, frontLeftUp, frontRightUp,
@@ -475,7 +477,7 @@ namespace Unibas.DBIS.DynamicModelling
       };
       mesh.vertices = vertices;
 
-      int[] triangles = new[]
+      var triangles = new[]
       {
         // Front
         0, 2, 1, 2, 3, 1,
@@ -492,7 +494,7 @@ namespace Unibas.DBIS.DynamicModelling
       };
       mesh.triangles = triangles;
 
-      Vector3[] normals = new[]
+      var normals = new[]
       {
         // Front
         -Vector3.forward, -Vector3.forward, -Vector3.forward, -Vector3.forward,
@@ -518,16 +520,16 @@ namespace Unibas.DBIS.DynamicModelling
       */
 
       var u = Math.Min(Math.Min(width, height), depth);
-      var w = width / u;
-      var h = height / u;
-      var d = depth / u;
+      // var w = width / u;
+      // var h = height / u;
+      // var d = depth / u;
 
-      Vector2 uvUnits = new Vector2(u, u);
+      var uvUnits = new Vector2(u, u);
       var fOff = uvUnits.x * depth;
       var rOff = uvUnits.x * width + fOff;
       var bOff = uvUnits.x * depth + rOff;
       var uOff = uvUnits.y * depth + uvUnits.y * height;
-      Vector2[] uv = new[]
+      var uv = new[]
       {
         // Front
         new Vector2(fOff, uvUnits.y * depth), new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth),
@@ -563,21 +565,22 @@ namespace Unibas.DBIS.DynamicModelling
       mesh.RecalculateNormals();
       mesh.RecalculateTangents();
 
-      meshRenderer.material = new Material(Shader.Find("Standard"));
-      meshRenderer.material.name = "Default";
-      meshRenderer.material.color = Color.green;
+      var material = new Material(Shader.Find("Standard"));
+      meshRenderer.material = material;
+      material.name = "Default";
+      material.color = Color.green;
 
       return go;
     }
 
     public static GameObject CreateModel(ComplexCuboidModel model)
     {
-      GameObject root = new GameObject("ComplexCuboid");
-      for (int i = 0; i < model.Size(); i++)
+      var root = new GameObject("ComplexCuboid");
+      for (var i = 0; i < model.Size(); i++)
       {
-        Vector3 pos = model.GetPositionAt(i);
-        CuboidModel cuboid = model.GetCuboidAt(i);
-        GameObject cub = CreateCuboid(cuboid);
+        var pos = model.GetPositionAt(i);
+        var cuboid = model.GetCuboidAt(i);
+        var cub = CreateCuboid(cuboid);
         cub.transform.parent = root.transform;
         cub.transform.position = pos;
       }

@@ -83,7 +83,7 @@ namespace Unibas.DBIS.VREP.World
 
       var teleportArea = new GameObject("TeleportArea");
       var col = teleportArea.AddComponent<BoxCollider>();
-      col.size = new Vector3(modelData.Size, 0.01f, modelData.Size);
+      col.size = new Vector3(modelData.size, 0.01f, modelData.size);
       teleportArea.AddComponent<MeshRenderer>();
       var tpa = teleportArea.AddComponent<TeleportArea>();
       var t1 = tpa.transform;
@@ -123,7 +123,7 @@ namespace Unibas.DBIS.VREP.World
       anchor.transform.parent = room.transform;
       Vector3 pos;
       float a;
-      var sizeHalf = model.Size / 2f;
+      var sizeHalf = model.size / 2f;
       switch (orientation)
       {
         case WallOrientation.North:

@@ -15,22 +15,22 @@ namespace Unibas.DBIS.DynamicModelling.Models
     /// <summary>
     /// The width of the cuboid (along the X axis) in standard units.
     /// </summary>
-    public float Width;
+    public float width;
 
     /// <summary>
     /// The height of the cuboid (along the Y axis) in standard units.
     /// </summary>
-    public float Height;
+    public float height;
 
     /// <summary>
     /// The depth of the cuboid (along the Z axis) in standard units.
     /// </summary>
-    public float Depth;
+    public float depth;
 
     /// <summary>
     /// The cuboid's material, iff any.
     /// </summary>
-    public Material Material;
+    public Material material;
 
     /// <summary>
     /// Creates a new cuboid based on its width, height and depth.
@@ -42,10 +42,10 @@ namespace Unibas.DBIS.DynamicModelling.Models
     /// <param name="material">The optional material of the cuboid. Otherwise it will be white</param>
     public CuboidModel(float width, float height, float depth, Material material = null)
     {
-      Width = width;
-      Height = height;
-      Depth = depth;
-      Material = material;
+      this.width = width;
+      this.height = height;
+      this.depth = depth;
+      this.material = material;
     }
   }
 }

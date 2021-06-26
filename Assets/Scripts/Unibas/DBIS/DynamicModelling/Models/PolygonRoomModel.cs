@@ -6,17 +6,17 @@ namespace Unibas.DBIS.DynamicModelling.Models
   [System.Serializable]
   public class PolygonRoomModel : IModel
   {
-    public Vector3 Position;
+    public Vector3 position;
     private List<WallModel> _walls;
-    public Material FloorMaterial;
-    public Material CeilingMaterial;
+    public Material floorMaterial;
+    public Material ceilingMaterial;
 
     public PolygonRoomModel(Vector3 position, List<WallModel> walls, Material floorMaterial, Material ceilingMaterial)
     {
-      Position = position;
+      this.position = position;
       _walls = walls;
-      FloorMaterial = floorMaterial;
-      CeilingMaterial = ceilingMaterial;
+      this.floorMaterial = floorMaterial;
+      this.ceilingMaterial = ceilingMaterial;
     }
 
     public WallModel[] GetWalls()

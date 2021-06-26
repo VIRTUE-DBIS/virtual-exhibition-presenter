@@ -76,13 +76,13 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
         var anchor = ModelFactory.CreateCuboid(_anchor);
         var col = anchor.AddComponent<BoxCollider>();
-        col.center = new Vector3(_anchor.Width / 2, _anchor.Height / 2, _anchor.Depth / 2);
-        col.size = new Vector3(_anchor.Width, _anchor.Height, _anchor.Depth);
+        col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
+        col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
         anchor.name = "Anchor (" + id + ")";
         anchor.transform.parent = transform.parent;
-        anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.Width / 2,
+        anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.width / 2,
           _exhibitModel.position.y - (_exhibitModel.size.y / 2 + magicOffset),
-          -_anchor.Depth); //0.2 is magic number for frame
+          -_anchor.depth); //0.2 is magic number for frame
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }
     }
