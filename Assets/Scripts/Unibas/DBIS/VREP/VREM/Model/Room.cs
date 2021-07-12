@@ -23,7 +23,6 @@ namespace Unibas.DBIS.VREP.VREM.Model
 
     public Exhibit[] exhibits;
 
-
     public string GetURLEncodedAudioPath()
     {
       if (!string.IsNullOrEmpty(ambient))
@@ -38,9 +37,10 @@ namespace Unibas.DBIS.VREP.VREM.Model
     public Wall GetWall(WallOrientation orientation)
     {
       return (from wall in walls
-        let wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wall.direction, true)
-        where wor.Equals(orientation)
-        select wall).FirstOrDefault();
+          let wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wall.direction, true)
+          where wor.Equals(orientation)
+          select wall)
+        .FirstOrDefault();
     }
   }
 }

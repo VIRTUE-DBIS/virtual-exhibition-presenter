@@ -12,7 +12,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
 
     public Exhibit[] exhibits;
 
-    public string texture; // NONE -> debug: colors
+    public string texture; // NONE -> Debug: Colors.
 
     public WallOrientation GetOrientation()
     {

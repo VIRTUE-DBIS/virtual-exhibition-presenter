@@ -33,11 +33,15 @@ namespace Unibas.DBIS.VREP.World
     {
       _timeLeft = initTime;
       GameObject.Find("VRCamera").GetComponent<Camera>().cullingMask = -1;
+
       while (_timeLeft > 0)
       {
         yield return new WaitForSeconds(1);
+
         _timeLeft--;
+
         if (_timeLeft > 30) continue;
+
         countdown.color = _timeLeft % 2 == 0 ? Color.red : Color.white;
       }
 

@@ -41,9 +41,7 @@ namespace Unibas.DBIS.VREP.World
     public string text;
     public Sprite image;
 
-
     public GameObject uiElement;
-
     public GameObject pedestal;
     public GameObject button;
 
@@ -52,19 +50,18 @@ namespace Unibas.DBIS.VREP.World
     public Action OnTeleportStart;
     public Action OnTeleportEnd;
 
-
     public static SteamVRTeleportButton Create(GameObject parent, Vector3 position, Vector3 destination,
       TeleportButtonModel model, string text)
     {
       var go = new GameObject("TeleportButton");
       var tp = go.AddComponent<SteamVRTeleportButton>();
       var t = tp.transform;
+
       t.SetParent(parent.transform, false);
       t.localPosition = position;
       tp.destination = destination;
       tp.model = model;
       tp.text = text;
-
 
       return tp;
     }
@@ -75,12 +72,12 @@ namespace Unibas.DBIS.VREP.World
       var go = new GameObject("TeleportButton");
       var tp = go.AddComponent<SteamVRTeleportButton>();
       var t = tp.transform;
+
       t.SetParent(parent.transform, false);
       t.localPosition = position;
       tp.destination = destination;
       tp.model = model;
       tp.image = image;
-
 
       return tp;
     }
@@ -111,9 +108,11 @@ namespace Unibas.DBIS.VREP.World
       var height = GetButtonHeight();
       var border = GetButtonBorder();
       var cubeModel = new ComplexCuboidModel();
+
       cubeModel.Add(Vector3.zero, new CuboidModel(size, size, height, this.model.plateMaterial));
       cubeModel.Add(new Vector3(border, border, -height),
         new CuboidModel(size - 2 * border, size - 2 * border, height, this.model.buttonMaterial));
+
       return cubeModel;
     }
 
@@ -148,11 +147,11 @@ namespace Unibas.DBIS.VREP.World
         model.height = 0;
       }
 
-
       button = ModelFactory.CreateModel(CreateButtonModel());
       button.transform.SetParent(transform, false);
       button.transform.localPosition =
         new Vector3(model.border / 2, model.height + GetButtonHeight(), model.border / 2);
+
       if (model.hasPedestal)
       {
         button.transform.Rotate(Vector3.right, 90);
@@ -167,10 +166,13 @@ namespace Unibas.DBIS.VREP.World
       var size = GetButtonSize();
       var height = GetButtonHeight();
       var border = GetButtonBorder();
+
       col.size = new Vector3(size, size, border * 2);
       col.center = new Vector3(size / 2f, size / 2f, -border);
       button.AddComponent<Button>();
+
       var hand = new CustomEvents.UnityEventHand();
+
       hand.AddListener(h => { ButtonPress(); });
       button.AddComponent<UIElement>().onHandClick = hand;
     }
@@ -205,9 +207,11 @@ namespace Unibas.DBIS.VREP.World
       var to = new GameObject("Text");
       to.transform.SetParent(canvas.transform, false);
       var txt = to.AddComponent<Text>();
+
       txt.text = newText;
       txt.alignment = TextAnchor.MiddleCenter;
       txt.resizeTextForBestFit = true;
+
       var f = Resources.Load<Font>("Fonts/Glacial-Indifference/GlacialIndifference-Regular");
       if (f == null)
       {
@@ -223,21 +227,23 @@ namespace Unibas.DBIS.VREP.World
       var co = new GameObject("Canvas");
       var canvas = co.AddComponent<Canvas>();
       var rt = (RectTransform) canvas.transform;
-      //rt.sizeDelta = new Vector2(512,512);
+
+      // rt.sizeDelta = new Vector2(512, 512);
       co.transform.localScale = new Vector3((GetButtonSize() - 2 * GetButtonBorder()) / rt.rect.width,
         (GetButtonSize() - 2 * GetButtonBorder()) / rt.rect.height);
       co.transform.SetParent(button.transform, false);
       co.transform.localPosition = new Vector3(GetButtonSize() / 2, GetButtonSize() / 2,
         -(GetButtonHeight() + GetButtonBorder() / 100f));
+
       return canvas;
     }
-
 
     private void SetupImage(Sprite img)
     {
       var canvas = CreateAndPositionCanvas();
       var io = new GameObject("Image");
       var newImage = io.AddComponent<Image>();
+
       newImage.sprite = img;
       io.transform.SetParent(canvas.transform, false);
       uiElement = io;

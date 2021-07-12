@@ -7,7 +7,7 @@ using Valve.Newtonsoft.Json;
 namespace Unibas.DBIS.VREP.VREM.Model
 {
   /// <summary>
-  /// ch.unibas.dmi.dbis.vrem.model.Ehibit
+  /// ch.unibas.dmi.dbis.vrem.model.Exhibit
   /// </summary>
   [Serializable]
   public class Exhibit

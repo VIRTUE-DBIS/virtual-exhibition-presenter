@@ -10,6 +10,10 @@ namespace Unibas.DBIS.VREP.Core
   {
     private Exhibition _exhibition;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="exhibition"></param>
     public ExhibitionManager(Exhibition exhibition)
     {
       _exhibition = exhibition;
@@ -104,7 +108,6 @@ namespace Unibas.DBIS.VREP.Core
         CreateAndAttachTeleporters(room);
       }
     }
-
 
     private void CreateAndAttachTeleporters(CuboidExhibitionRoom room)
     {

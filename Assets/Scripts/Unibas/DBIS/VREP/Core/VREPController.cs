@@ -7,7 +7,7 @@ namespace Unibas.DBIS.VREP.Core
 {
   public class VREPController : MonoBehaviour
   {
-    private VREMClient _vremClient;
+    private VremClient _vremClient;
     public string exhibitionId;
 
     public Vector3 lobbySpawn = new Vector3(0, -9, 0);
@@ -71,7 +71,7 @@ namespace Unibas.DBIS.VREP.Core
       }
 
       Debug.Log("Starting ExMan");
-      _vremClient = gameObject.AddComponent<VREMClient>();
+      _vremClient = gameObject.AddComponent<VremClient>();
 
       LoadAndCreateExhibition();
     }

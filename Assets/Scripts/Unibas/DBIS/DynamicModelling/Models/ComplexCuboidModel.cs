@@ -8,7 +8,7 @@ namespace Unibas.DBIS.DynamicModelling.Models
   /// Represents a complex model, based on cuboids.
   /// Each cuboid has a position relative to the model's origin.
   ///
-  /// This class is basically a glorified list of tuples: (pos, cuboidmodel)
+  /// This class is basically a list of (pos, cuboidmodel) tuples.
   /// </summary>
   [Serializable]
   public class ComplexCuboidModel : IModel

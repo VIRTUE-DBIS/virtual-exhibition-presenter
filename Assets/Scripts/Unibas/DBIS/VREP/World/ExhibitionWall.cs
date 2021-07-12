@@ -10,12 +10,12 @@ using UnityEngine;
 namespace Unibas.DBIS.VREP.World
 {
   /// <summary>
-  /// A representation of a wall, attachable to a gameobject.
+  /// A representation of a wall, attachable to a game object.
   /// </summary>
   public class ExhibitionWall : MonoBehaviour
   {
     /// <summary>
-    /// The wall's data
+    /// The wall's data.
     /// </summary>
     public Wall WallData { get; set; }
 
@@ -38,22 +38,23 @@ namespace Unibas.DBIS.VREP.World
 
     public void AttachExhibits()
     {
-      // TODO Make displayal configurable
+      // TODO Make displayal configurable.
       var prefab = ObjectFactory.GetDisplayalPrefab();
+
       foreach (var e in WallData.exhibits)
       {
         var displayal = Instantiate(prefab, Anchor.transform, true);
         displayal.name = "Displayal (" + e.name + ")";
+
         var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
 
-        // Non-90° as they would tip over otherwise
+        // Non-90° as they would tip over otherwise.
         var rot = VREPController.Instance.settings.PlaygroundEnabled
           ? Quaternion.Euler(92.5f, 0, 180)
           : Quaternion.Euler(90, 0, 180);
-        displayal.transform.localRotation = rot; // Because prefab is messed up
-
-
+        displayal.transform.localRotation = rot; // Because prefab is messed up.
+        
         if (!VREPController.Instance.settings.SpotsEnabled || !e.light)
         {
           displayal.transform.Find("Directional light").gameObject.SetActive(false);
@@ -65,13 +66,14 @@ namespace Unibas.DBIS.VREP.World
         disp.originalRotation = rot;
         displayals.Add(disp);
 
-        var image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>(); // Displayal
+        var image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>();
         image.ReloadImage(e.GetURLEncodedPath());
         displayal.transform.localScale = ScalingUtility.ConvertMeters2PlaneScaleSize(e.size.x, e.size.y);
 
         if (e.audio == null) continue;
 
-        Debug.Log("added audio to display object");
+        Debug.Log("Added audio to display object.");
+
         var closenessDetector = displayal.AddComponent<ClosenessDetector>();
         closenessDetector.url = e.GetURLEncodedAudioPath();
       }

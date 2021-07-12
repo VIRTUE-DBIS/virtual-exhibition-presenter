@@ -1,24 +1,27 @@
 ﻿namespace Unibas.DBIS.VREP.World
 {
+  /// <summary>
+  /// Cardinal directions for walls (N/E/S/W).
+  /// </summary>
   public enum WallOrientation
   {
     /// <summary>
-    /// Looks into negative X direction. Red
+    /// Faces positive Z direction (Blue).
     /// </summary>
     North,
 
     /// <summary>
-    /// Looks into negative X direction. Green
+    /// Faces positive X direction (Red).
     /// </summary>
     East,
 
     /// <summary>
-    /// Looks into positive X direction. Blue
+    /// Faces negative Z direction (Blue).
     /// </summary>
     South,
 
     /// <summary>
-    /// Looks into positive Z direction. Yellow
+    /// Faces negative X direction (Red).
     /// </summary>
     West
   }

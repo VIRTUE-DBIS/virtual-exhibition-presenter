@@ -21,11 +21,12 @@ namespace Unibas.DBIS.VREP.World
 
     public static GameObject GetDisplayalPrefab()
     {
-      // TODO Use other prefabs
+      // TODO Use other prefabs.
       var prefabName = VREPController.Instance.settings.PlaygroundEnabled
         ? Settings.throwableDisplayalPrefabName
         : Settings.standardDisplayalPrefabName;
       var prefab = Resources.Load("Prefabs/" + prefabName, typeof(GameObject)) as GameObject;
+
       if (prefab == null)
       {
         throw new Exception($"Could not load '{Settings.standardDisplayalPrefabName}' as Resource");
@@ -36,7 +37,7 @@ namespace Unibas.DBIS.VREP.World
 
     public static Vector3 CalculateRoomPosition(Room room)
     {
-      // TODO exhibition-dependent calculation
+      // TODO exhibition-dependent calculation.
       float x = room.position.x, y = room.position.y, z = room.position.z;
       var off = Settings.RoomOffset;
       return new Vector3(x * room.size.x + x * off, y * room.size.y + y * off, z * room.size.z + z * off);
@@ -53,13 +54,16 @@ namespace Unibas.DBIS.VREP.World
         GetMaterialForWallOrientation(WallOrientation.South, roomData),
         GetMaterialForWallOrientation(WallOrientation.West, roomData)
       };
+
       var modelData = new CuboidRoomModel(CalculateRoomPosition(roomData), roomData.size.x, roomData.size.y,
         mats[0], mats[1], mats[2], mats[3], mats[4], mats[5]);
       var room = ModelFactory.CreateCuboidRoom(modelData);
+
       var er = room.AddComponent<CuboidExhibitionRoom>();
       er.RoomModel = modelData;
       er.Model = room;
       er.RoomData = roomData;
+
       var na = CreateAnchor(WallOrientation.North, room, modelData);
       var ea = CreateAnchor(WallOrientation.East, room, modelData);
       var sa = CreateAnchor(WallOrientation.South, room, modelData);
@@ -80,6 +84,7 @@ namespace Unibas.DBIS.VREP.World
       l.color = Color.white;
       l.intensity = 1.5f;
       l.renderMode = LightRenderMode.ForcePixel;
+
       var t = l.transform;
       t.parent = room.transform;
       t.localPosition = new Vector3(0, 2.5f, 0);
@@ -89,6 +94,7 @@ namespace Unibas.DBIS.VREP.World
       var col = teleportArea.AddComponent<BoxCollider>();
       col.size = new Vector3(modelData.size, 0.01f, modelData.size);
       teleportArea.AddComponent<MeshRenderer>();
+
       var tpa = teleportArea.AddComponent<TeleportArea>();
       var t1 = tpa.transform;
       t1.parent = room.transform;
@@ -100,9 +106,11 @@ namespace Unibas.DBIS.VREP.World
     private static ExhibitionWall CreateExhibitionWall(WallOrientation orientation, Room room, GameObject anchor)
     {
       var wall = anchor.AddComponent<ExhibitionWall>();
+
       wall.Anchor = anchor;
       wall.WallModel = null;
       wall.WallData = room.GetWall(orientation);
+
       return wall;
     }
 
@@ -113,7 +121,9 @@ namespace Unibas.DBIS.VREP.World
       {
         var wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wallData.direction, true);
         if (!wor.Equals(orientation)) continue;
+
         Debug.Log("Material " + wallData.texture + " for room " + roomData.position);
+
         return TexturingUtility.LoadMaterialByName(wallData.texture, true);
       }
 
@@ -125,9 +135,11 @@ namespace Unibas.DBIS.VREP.World
     {
       var anchor = new GameObject(orientation + "Anchor");
       anchor.transform.parent = room.transform;
+
       Vector3 pos;
       float a;
       var sizeHalf = model.size / 2f;
+
       switch (orientation)
       {
         case WallOrientation.North:
@@ -152,15 +164,18 @@ namespace Unibas.DBIS.VREP.World
 
       anchor.transform.Rotate(Vector3.up, a);
       anchor.transform.localPosition = pos;
+
       return anchor;
     }
 
     private static ComplexCuboidModel GenerateButtonModel(float size, float border, float height)
     {
       var model = new ComplexCuboidModel();
-      // TODO Add material somehow
+
+      // TODO Add material somehow.
       model.Add(Vector3.zero, new CuboidModel(size, size, height));
       model.Add(new Vector3(border, border, -height), new CuboidModel(size - 2 * border, size - 2 * border, height));
+
       return model;
     }
 
@@ -168,28 +183,29 @@ namespace Unibas.DBIS.VREP.World
     {
       var modelData = GenerateButtonModel(size, border, border / 2f);
       var buttonObj = ModelFactory.CreateModel(modelData);
+
       var tpBtn = buttonObj.AddComponent<PlayerTeleporter>();
       tpBtn.destination = destination;
+
       var col = buttonObj.AddComponent<BoxCollider>();
       col.size = new Vector3(size, size, border * 2);
       col.center = new Vector3(size / 2f, size / 2f, -border);
       buttonObj.AddComponent<Button>();
+
       var hand = new CustomEvents.UnityEventHand();
       hand.AddListener(h => { tpBtn.TeleportPlayer(); });
       buttonObj.AddComponent<UIElement>().onHandClick = hand;
       buttonObj.transform.position = position;
       buttonObj.name = "TeleportButton (Instance)";
+
       return buttonObj;
     }
 
 
-    /// <summary>
-    /// TODO Fix rotations!
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static Vector3 CalculateRotation(WallOrientation orientation)
     {
+      // TODO Fix rotations!
+
       return orientation switch
       {
         WallOrientation.North => new Vector3(90, 180, 0),

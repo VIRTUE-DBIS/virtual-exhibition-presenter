@@ -8,22 +8,21 @@ namespace Unibas.DBIS.VREP.World
 {
   /// <summary>
   /// A cuboid exhibition room.
-  /// The exhibition room has four walls of tyep <see cref="ExhibitionWall"/> (north, east, south. west).
+  /// The exhibition room has four walls of type <see cref="ExhibitionWall"/> (north, east, south. west).
   ///
   /// The walls manage the exhibits associated with them by themselves. Call PopulateWalls() for that purpose.
-  /// The room may has 3d exhibits associated with it, which are placed by PopulateRoom().
+  /// The room may has 3D exhibits associated with it, which are placed by PopulateRoom().
   ///
   /// There are two handlers for entering and leaving the room: OnRoomEnter() and OnRoomLeave() respectively.
   /// It is expected that these handlers are called when appropriate.
   ///
-  /// The room is set up as its corresponding model is defined (RoomData). The virtual 3d appearance is driven by its model.
-  /// 
+  /// The room is set up as its corresponding model is defined (RoomData). The virtual 3D appearance is driven by its model.
   /// </summary>
   [RequireComponent(typeof(AudioLoader))]
   public class CuboidExhibitionRoom : MonoBehaviour
   {
     /// <summary>
-    /// The room's 3d appearance as a model.
+    /// The room's 3D appearance as a model.
     /// </summary>
     public CuboidRoomModel RoomModel { get; set; }
 
@@ -88,7 +87,7 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public static void PopulateRoom()
     {
-      Debug.LogWarning("Cannot place 3d objects yet");
+      Debug.LogWarning("Cannot place 3D objects yet.");
     }
 
     /// <summary>
@@ -116,8 +115,7 @@ namespace Unibas.DBIS.VREP.World
     public void LoadAmbientAudio()
     {
       if (string.IsNullOrEmpty(RoomData.GetURLEncodedAudioPath())) return;
-      Debug.Log("add audio to room");
-
+      Debug.Log("Add audio to room.");
 
       if (_audioLoader == null)
       {
