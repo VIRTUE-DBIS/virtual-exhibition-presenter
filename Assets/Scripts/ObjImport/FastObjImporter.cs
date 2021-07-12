@@ -11,12 +11,10 @@ namespace ObjImport
   public sealed class FastObjImporter
   {
     /* FastObjImporter.cs
- * by Marc Kusters (Nighteyes)
- * 
- * Used for loading .obj files exported by Blender
- * Example usage: Mesh myMesh = FastObjImporter.Instance.ImportFile("path_to_obj_file.obj");
- */
-
+     * by Marc Kusters (Nighteyes)
+     * Used for loading .obj files exported by Blender
+     * Example usage: Mesh myMesh = FastObjImporter.Instance.ImportFile("path_to_obj_file.obj");
+     */
 
     #region singleton
 

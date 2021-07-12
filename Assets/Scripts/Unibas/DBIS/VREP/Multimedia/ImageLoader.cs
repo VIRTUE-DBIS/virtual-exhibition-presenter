@@ -21,7 +21,8 @@ namespace Unibas.DBIS.VREP.Multimedia
       using (var request = UnityWebRequestTexture.GetTexture(url))
       {
         yield return request.SendWebRequest();
-        if (!(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError))
+        if (!(request.result == UnityWebRequest.Result.ConnectionError ||
+              request.result == UnityWebRequest.Result.ProtocolError))
         {
           tex = DownloadHandlerTexture.GetContent(request);
         }

@@ -26,7 +26,8 @@ namespace Unibas.DBIS.VREP.Multimedia
 
       using var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS);
       yield return request.SendWebRequest();
-      if (!(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError))
+      if (!(request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError))
       {
         var audioClip = DownloadHandlerAudioClip.GetContent(request);
         _audioSource.clip = audioClip;

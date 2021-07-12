@@ -12,10 +12,6 @@ namespace Unibas.DBIS.VREP.VREM.Model
   [Serializable]
   public class Exhibit
   {
-    [NonSerialized] public static string urlStringPrefix =
-      VREPController.Instance.settings.VREMAddress + "content/get/" +
-      VREPController.Instance.settings.exhibitionId + "%2F";
-
     [JsonProperty("_id")] public string id;
     public string name;
     public string type;
@@ -32,14 +28,18 @@ namespace Unibas.DBIS.VREP.VREM.Model
 
     public string GetURLEncodedPath()
     {
-      return urlStringPrefix + path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+      return VREPController.Instance.settings.VREMAddress + "content/get/" +
+             VREPController.Instance.settings.exhibitionId + "%2F" +
+             path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
     }
 
     public string GetURLEncodedAudioPath()
     {
       if (!string.IsNullOrEmpty(audio))
       {
-        return urlStringPrefix + audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+        return VREPController.Instance.settings.VREMAddress + "content/get/" +
+               VREPController.Instance.settings.exhibitionId + "%2F" +
+               audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
 
       return null;
