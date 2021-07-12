@@ -14,19 +14,18 @@ namespace Unibas.DBIS.VREP.Utils
 
     public float maxDistance = 2;
 
-    // Use this for initialization
+    // Use this for initialization.
     private void Start()
     {
       _audioSource = gameObject.AddComponent<AudioSource>();
     }
 
-
     private void Update()
     {
       var cameraPosition = Camera.allCameras[0].transform.position;
-      var objectPosition = this.gameObject.transform.position;
+      var objectPosition = gameObject.transform.position;
 
-      if (!string.IsNullOrEmpty(url) && this._audioSource.clip == null && !_downloading)
+      if (!string.IsNullOrEmpty(url) && _audioSource.clip == null && !_downloading)
       {
         _downloading = true;
         StartCoroutine(LoadAudio(url));
@@ -73,9 +72,6 @@ namespace Unibas.DBIS.VREP.Utils
       _playing = true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Stop()
     {
       if (_playing && AudioListener.pause && _audioSource != null && _audioSource.clip != null)

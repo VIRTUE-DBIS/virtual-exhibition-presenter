@@ -8,30 +8,30 @@ namespace Unibas.DBIS.VREP.Core
   public class Settings
   {
     /// <summary>
-    /// Whether the player starts in the lobby
+    /// Whether the player starts in the lobby.
     /// Default: False
     /// </summary>
     public bool StartInLobby = true;
 
     /// <summary>
-    /// The Address of the VREM server instance, inclusive port
+    /// The Address of the VREM server instance, inclusive port.
     /// </summary>
     public string VREMAddress;
 
     /// <summary>
-    /// Whether each exhibit has its own spotlight
+    /// Whether each exhibit has its own spotlight.
     /// Default: False 
     /// </summary>
     public bool SpotsEnabled;
 
     /// <summary>
-    /// Whether in the Lobby the UNIBAS logo is displayed on the floor
+    /// Whether in the Lobby the UNIBAS logo is displayed on the floor.
     /// Default: True
     /// </summary>
     public bool LobbyFloorLogoEnabled = true;
 
     /// <summary>
-    /// Whether in the Lobby the UNIBAS logo is displayed on the ceiling
+    /// Whether in the Lobby the UNIBAS logo is displayed on the ceiling.
     /// Default: True
     /// </summary>
     public bool LobbyCeilingLogoEnabled = true;
@@ -47,19 +47,19 @@ namespace Unibas.DBIS.VREP.Core
     public int WallTimerCount;
 
     /// <summary>
-    /// Whether experimental, "playground" features are enabled
+    /// Whether experimental, "playground" features are enabled.
     /// Default: False
     /// </summary>
     public bool PlaygroundEnabled;
 
     /// <summary>
-    /// Whether the server will be queried for exhibitions
+    /// Whether the server will be queried for exhibitions.
     /// Default: False
     /// </summary>
     public bool RequestExhibitions;
 
     /// <summary>
-    /// The ID of the exhibition to load
+    /// The ID of the exhibition to load.
     /// Default: Empty
     /// </summary>
     public string exhibitionId;
@@ -74,14 +74,15 @@ namespace Unibas.DBIS.VREP.Core
     /// <summary>
     /// Returns whether this settings file is the default one.
     /// </summary>
-    /// <returns>Whether this settings file is the default one</returns>
+    /// <returns>True if this is the default config, false otherwise.</returns>
     public bool IsDefault()
     {
       return _default;
     }
 
     /// <summary>
-    /// Loads the settings file. In UnityEditor this is at Assets/settings.json, in standalone this should be a sibling of the executable
+    /// Loads the settings file.
+    /// In UnityEditor this is at Assets/settings.json, in standalone this should be a sibling of the executable.
     /// </summary>
     /// <returns></returns>
     public static Settings LoadSettings()
@@ -137,7 +138,7 @@ namespace Unibas.DBIS.VREP.Core
     }
 
     /// <summary>
-    /// Stores this settings file at the preferred location, if there isn't already one
+    /// Stores this settings file at the preferred location, if there isn't already one.
     /// </summary>
     public void StoreSettings()
     {
@@ -148,7 +149,7 @@ namespace Unibas.DBIS.VREP.Core
       }
       else
       {
-        Debug.Log("Will not override settings");
+        Debug.Log("Will not override settings.");
       }
     }
   }

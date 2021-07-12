@@ -27,7 +27,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     {
       if (!string.IsNullOrEmpty(ambient))
       {
-        return VREPController.Instance.settings.VREMAddress + "/content/get/" +
+        return VrepController.Instance.settings.VREMAddress + "/content/get/" +
                ambient.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
 

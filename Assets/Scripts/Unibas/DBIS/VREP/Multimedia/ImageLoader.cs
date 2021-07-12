@@ -18,6 +18,7 @@ namespace Unibas.DBIS.VREP.Multimedia
 
       var tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
       var hasError = false;
+
       using (var request = UnityWebRequestTexture.GetTexture(url))
       {
         yield return request.SendWebRequest();
@@ -40,10 +41,6 @@ namespace Unibas.DBIS.VREP.Multimedia
       GC.Collect();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="url"></param>
     public void ReloadImage(string url)
     {
       StartCoroutine(LoadImage(url));

@@ -22,7 +22,7 @@ namespace Unibas.DBIS.VREP.World
     public static GameObject GetDisplayalPrefab()
     {
       // TODO Use other prefabs.
-      var prefabName = VREPController.Instance.settings.PlaygroundEnabled
+      var prefabName = VrepController.Instance.settings.PlaygroundEnabled
         ? Settings.throwableDisplayalPrefabName
         : Settings.standardDisplayalPrefabName;
       var prefab = Resources.Load("Prefabs/" + prefabName, typeof(GameObject)) as GameObject;

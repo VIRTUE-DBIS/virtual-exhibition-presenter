@@ -28,8 +28,8 @@ namespace Unibas.DBIS.VREP.VREM.Model
 
     public string GetURLEncodedPath()
     {
-      return VREPController.Instance.settings.VREMAddress + "content/get/" +
-             VREPController.Instance.settings.exhibitionId + "%2F" +
+      return VrepController.Instance.settings.VREMAddress + "content/get/" +
+             VrepController.Instance.settings.exhibitionId + "%2F" +
              path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
     }
 
@@ -37,8 +37,8 @@ namespace Unibas.DBIS.VREP.VREM.Model
     {
       if (!string.IsNullOrEmpty(audio))
       {
-        return VREPController.Instance.settings.VREMAddress + "content/get/" +
-               VREPController.Instance.settings.exhibitionId + "%2F" +
+        return VrepController.Instance.settings.VREMAddress + "content/get/" +
+               VrepController.Instance.settings.exhibitionId + "%2F" +
                audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
 

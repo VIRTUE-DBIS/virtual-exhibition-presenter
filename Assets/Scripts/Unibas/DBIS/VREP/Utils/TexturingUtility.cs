@@ -54,7 +54,7 @@ namespace Unibas.DBIS.VREP.Utils
       }
 
 
-      return null; //TODO: return default material
+      return null; // TODO: Return default material.
     }
   }
 }

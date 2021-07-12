@@ -9,7 +9,7 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
     public Font font;
 
-    // Use this for initialization
+    // Use this for initialization.
     private void Start()
     {
       if (font != null)

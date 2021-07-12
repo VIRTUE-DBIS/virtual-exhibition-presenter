@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Unibas.DBIS.VREP.Movement
 {
   /// <summary>
-  /// by http://wiki.unity3d.com/index.php/SmoothMouseLook
+  /// From http://wiki.unity3d.com/index.php/SmoothMouseLook
   /// </summary>
   [AddComponentMenu("Camera-Control/Smooth Mouse Look")]
   public class SmoothMouseLook : MonoBehaviour

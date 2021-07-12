@@ -9,15 +9,12 @@ namespace Unibas.DBIS.VREP.LegacyObjects
   public class Displayal : MonoBehaviour
   {
     private Exhibit _exhibitModel;
-
-
     public string id;
 
     public Vector3 originalPosition;
     public Quaternion originalRotation;
 
     private readonly CuboidModel _anchor = new CuboidModel(1, 0.01f, .1f);
-
 
     public void RestorePosition()
     {
@@ -36,6 +33,7 @@ namespace Unibas.DBIS.VREP.LegacyObjects
       _exhibitModel = exhibit;
       id = _exhibitModel.id;
       name = "Displayal (" + id + ")";
+
       var tp = transform.Find("TitlePlaquette");
       if (tp != null)
       {
@@ -70,19 +68,21 @@ namespace Unibas.DBIS.VREP.LegacyObjects
         Debug.LogError("no dp");
       }
 
-      if (VREPController.Instance.settings.PlaygroundEnabled)
+      if (VrepController.Instance.settings.PlaygroundEnabled)
       {
         const float magicOffset = 0.17f;
 
         var anchor = ModelFactory.CreateCuboid(_anchor);
         var col = anchor.AddComponent<BoxCollider>();
+
         col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
         col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
+
         anchor.name = "Anchor (" + id + ")";
         anchor.transform.parent = transform.parent;
         anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.width / 2,
           _exhibitModel.position.y - (_exhibitModel.size.y / 2 + magicOffset),
-          -_anchor.depth); //0.2 is magic number for frame
+          -_anchor.depth); // 0.2 is the magic number for frame.
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }
     }

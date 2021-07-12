@@ -5,10 +5,10 @@ namespace Unibas.DBIS.VREP.Utils
   public static class ScalingUtility
   {
     /// <summary>
-    /// Transforms sizes from meters to unity scales
+    /// Transforms sizes from meters to unity scales.
     /// </summary>
-    /// <param name="meterWidth">width in meters</param>
-    /// <param name="meterHeight">height in meters</param>
+    /// <param name="meterWidth">The width in meters.</param>
+    /// <param name="meterHeight">The height in meters.</param>
     /// <returns></returns>
     public static Vector3 ConvertMeters2PlaneScaleSize(float meterWidth, float meterHeight)
     {
@@ -16,9 +16,9 @@ namespace Unibas.DBIS.VREP.Utils
     }
 
     /// <summary>
-    /// Transforms sizes from meters to unity scales
+    /// Transforms sizes from meters to unity scales.
     /// </summary>
-    /// <param name="meterSize">size in meters</param>
+    /// <param name="meterSize">The size in meters.</param>
     /// <returns></returns>
     private static Vector3 ConvertMeters2PlaceScaleSize(Vector3 meterSize)
     {

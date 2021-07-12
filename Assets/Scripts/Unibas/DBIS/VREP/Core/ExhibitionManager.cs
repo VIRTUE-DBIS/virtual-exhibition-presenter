@@ -10,10 +10,6 @@ namespace Unibas.DBIS.VREP.Core
   {
     private Exhibition _exhibition;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="exhibition"></param>
     public ExhibitionManager(Exhibition exhibition)
     {
       _exhibition = exhibition;
@@ -76,28 +72,32 @@ namespace Unibas.DBIS.VREP.Core
         var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
         _rooms.Add(exhibitionRoom);
 
-        if (VREPController.Instance.settings.CeilingLogoEnabled)
+        if (VrepController.Instance.settings.CeilingLogoEnabled)
         {
           var pref = Resources.Load<GameObject>("Objects/unibas");
           var logo = Object.Instantiate(pref, exhibitionRoom.transform, false);
+
           logo.name = "UnibasLogo";
           logo.transform.localPosition = new Vector3(-1.493f, room.size.y - .01f, 3.35f); // manually found values
           logo.transform.localRotation = Quaternion.Euler(new Vector3(90, 180));
           logo.transform.localScale = Vector3.one * 10000;
         }
 
-        if (VREPController.Instance.settings.WallTimerCount > 0)
+        if (VrepController.Instance.settings.WallTimerCount > 0)
         {
           var obj = new GameObject("Timer");
           obj.transform.SetParent(exhibitionRoom.transform, false);
           obj.transform.localPosition =
             new Vector3(-room.size.x / 2 + 0.2f, room.size.y - 0.2f, room.size.z / 2); // manually found values
           obj.transform.localScale = Vector3.one * 0.05f;
+
           var textMesh = obj.AddComponent<TextMesh>();
           textMesh.fontSize = 150;
+
           var timer = obj.AddComponent<Countdown>();
           timer.countdown = textMesh;
-          timer.initTime = VREPController.Instance.settings.WallTimerCount;
+          timer.initTime = VrepController.Instance.settings.WallTimerCount;
+
           obj.transform.GetComponent<MeshRenderer>().enabled = false;
         }
       }
@@ -121,32 +121,31 @@ namespace Unibas.DBIS.VREP.Core
       var backPos = new Vector3(-.25f, 0, .2f);
       var nextPos = new Vector3(.25f, 0, .2f);
 
-      // TODO Configurable TPBtnModel
+      // TODO Configurable TPBtnModel.
       var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f, null,
         TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"));
 
       if (_exhibition.rooms.Length > 1)
       {
-        // back teleporter
+        // Back teleporter.
         var backTpBtn = SteamVRTeleportButton.Create(room.gameObject, backPos, pd, model,
           Resources.Load<Sprite>("Sprites/UI/chevron-left"));
 
         backTpBtn.OnTeleportStart = room.OnRoomLeave;
         backTpBtn.OnTeleportEnd = prev.OnRoomEnter;
 
-        // back teleporter
+        // Back teleporter.
         var nextTpBtn = SteamVRTeleportButton.Create(room.gameObject, nextPos, nd, model,
           Resources.Load<Sprite>("Sprites/UI/chevron-right"));
 
         nextTpBtn.OnTeleportStart = room.OnRoomLeave;
         nextTpBtn.OnTeleportEnd = next.OnRoomEnter;
       }
-
-
-      if (VREPController.Instance.settings.StartInLobby)
+      
+      if (VrepController.Instance.settings.StartInLobby)
       {
         var lobbyTpBtn = SteamVRTeleportButton.Create(room.gameObject, new Vector3(0, 0, .2f),
-          VREPController.Instance.lobbySpawn, model, "Lobby");
+          VrepController.Instance.lobbySpawn, model, "Lobby");
         lobbyTpBtn.OnTeleportStart = room.OnRoomLeave;
       }
     }

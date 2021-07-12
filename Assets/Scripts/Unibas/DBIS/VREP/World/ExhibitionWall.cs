@@ -50,12 +50,12 @@ namespace Unibas.DBIS.VREP.World
         displayal.transform.localPosition = pos;
 
         // Non-90° as they would tip over otherwise.
-        var rot = VREPController.Instance.settings.PlaygroundEnabled
+        var rot = VrepController.Instance.settings.PlaygroundEnabled
           ? Quaternion.Euler(92.5f, 0, 180)
           : Quaternion.Euler(90, 0, 180);
         displayal.transform.localRotation = rot; // Because prefab is messed up.
         
-        if (!VREPController.Instance.settings.SpotsEnabled || !e.light)
+        if (!VrepController.Instance.settings.SpotsEnabled || !e.light)
         {
           displayal.transform.Find("Directional light").gameObject.SetActive(false);
         }

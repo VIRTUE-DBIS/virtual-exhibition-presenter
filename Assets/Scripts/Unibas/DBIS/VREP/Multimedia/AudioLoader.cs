@@ -26,10 +26,12 @@ namespace Unibas.DBIS.VREP.Multimedia
 
       using var request = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS);
       yield return request.SendWebRequest();
+
       if (!(request.result == UnityWebRequest.Result.ConnectionError ||
             request.result == UnityWebRequest.Result.ProtocolError))
       {
         var audioClip = DownloadHandlerAudioClip.GetContent(request);
+
         _audioSource.clip = audioClip;
         _audioSource.volume = 0.2f;
         _audioSource.loop = true;
@@ -60,18 +62,11 @@ namespace Unibas.DBIS.VREP.Multimedia
       }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Stop()
     {
       _audioSource.Stop();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="url"></param>
     public void ReloadAudio(string url)
     {
       if (!string.IsNullOrEmpty(url))
