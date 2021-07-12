@@ -1,4 +1,5 @@
 ﻿using System;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.VREM.Model
 {
@@ -8,7 +9,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
   [Serializable]
   public class Exhibition
   {
-    public string id;
+    [JsonProperty("_id")] public string id;
     public string name;
     public string description;
 

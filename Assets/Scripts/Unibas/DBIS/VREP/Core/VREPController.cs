@@ -80,18 +80,7 @@ namespace Unibas.DBIS.VREP.Core
     {
       _vremClient.serverUrl = settings.VREMAddress;
 
-      string exId;
-      if (settings.exhibitionIds != null && settings.exhibitionIds.Length > 0 && settings.exhibitionIds[0] != null)
-      {
-        exId = settings.exhibitionIds[0];
-      }
-      else
-      {
-        exId = exhibitionId;
-      }
-
-
-      _vremClient.RequestExhibition(exId, ParseExhibition);
+      _vremClient.RequestExhibition(settings.exhibitionId, ParseExhibition);
       Debug.Log("Requested ex");
     }
 

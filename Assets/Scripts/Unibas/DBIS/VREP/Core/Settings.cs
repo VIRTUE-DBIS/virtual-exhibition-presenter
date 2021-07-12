@@ -15,10 +15,8 @@ namespace Unibas.DBIS.VREP.Core
 
     /// <summary>
     /// The Address of the VREM server instance, inclusive port
-    /// Usually this is 127.0.0.1:4567
-    /// Default: 127.0.0.1:4567
     /// </summary>
-    public string VREMAddress = "http://127.0.0.1:4567";
+    public string VREMAddress;
 
     /// <summary>
     /// Whether each exhibit has its own spotlight
@@ -61,10 +59,10 @@ namespace Unibas.DBIS.VREP.Core
     public bool RequestExhibitions;
 
     /// <summary>
-    /// A list of exhibition ids, which shall be loaded
+    /// The ID of the exhibition to load
     /// Default: Empty
     /// </summary>
-    public string[] exhibitionIds = new string[0];
+    public string exhibitionId;
 
     /// <summary>
     /// The file name of this settings file.
