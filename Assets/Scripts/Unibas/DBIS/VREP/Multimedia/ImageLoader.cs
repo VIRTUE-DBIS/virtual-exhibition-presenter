@@ -19,13 +19,22 @@ namespace Unibas.DBIS.VREP.Multimedia
       var tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
       var hasError = false;
 
-      using (var request = UnityWebRequestTexture.GetTexture(url))
+      // Do NOT use UnityWebRequestTexture here or you will run out of memory quickly if you load many images.
+      using (var request = UnityWebRequest.Get(url))
       {
         yield return request.SendWebRequest();
         if (!(request.result == UnityWebRequest.Result.ConnectionError ||
               request.result == UnityWebRequest.Result.ProtocolError))
         {
-          tex = DownloadHandlerTexture.GetContent(request);
+          tex.LoadImage(request.downloadHandler.data);
+
+          // Rescale so we don't run out of memory upon loading huge images.
+          // TODO This should only be a temporary resolution; consider adjusting this based on the exhibits size vector.
+          if (tex.height > 1024 || tex.width > 1024)
+          {
+            var resize = 1024.0 / Math.Max(tex.height, tex.width);
+            TextureScale.Bilinear(tex, (int) (tex.width * resize), (int) (tex.height * resize));
+          }
         }
         else
         {
