@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731689, g: 0.13414702, b: 0.1210784, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731707, g: 0.13414726, b: 0.12107857, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd383596e0c94e46a6268577549e3d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exhibitionId: 
   lobbySpawn: {x: 0, y: -9, z: 0}
   settings:
     StartInLobby: 1
@@ -166,7 +165,7 @@ MonoBehaviour:
     WallTimerCount: 0
     PlaygroundEnabled: 0
     RequestExhibitions: 0
-    exhibitionIds: []
+    ExhibitionId: 
   settingsPath: 
 --- !u!4 &123453532
 Transform:
@@ -207,7 +206,7 @@ GameObject:
   - component: {fileID: 169713637}
   - component: {fileID: 169713638}
   m_Layer: 0
-  m_Name: IndoorPlant1 (2)
+  m_Name: IndoorPlant3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2401,7 +2400,7 @@ GameObject:
   - component: {fileID: 1432769504}
   - component: {fileID: 1432769505}
   m_Layer: 0
-  m_Name: IndoorPlant1 (1)
+  m_Name: IndoorPlant2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
