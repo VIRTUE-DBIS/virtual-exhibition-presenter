@@ -74,13 +74,11 @@ namespace Unibas.DBIS.VREP.Utils
 
     public void Stop()
     {
-      if (_playing && AudioListener.pause && _audioSource != null && _audioSource.clip != null)
-      {
-        _audioSource.Stop();
-        _playing = false;
-        _audioSource.ignoreListenerPause = false;
-        AudioListener.pause = false;
-      }
+      if (!_playing || !AudioListener.pause || _audioSource == null || _audioSource.clip == null) return;
+      _audioSource.Stop();
+      _playing = false;
+      _audioSource.ignoreListenerPause = false;
+      AudioListener.pause = false;
     }
   }
 }

@@ -48,12 +48,11 @@ namespace Unibas.DBIS.VREP.World
     private AudioLoader _audioLoader;
 
     /// <summary>
-    /// Populates this room.
-    /// In other words: The walls will load their exhibits and this room will place its exhibits in its space.
+    /// Populates this room (walls load their exhibits).
     /// </summary>
     public void Populate()
     {
-      PopulateRoom();
+      PopulateRoom(); // Not yet implemented.
       PopulateWalls();
     }
 

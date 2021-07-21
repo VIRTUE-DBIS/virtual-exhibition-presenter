@@ -19,8 +19,8 @@ namespace Unibas.DBIS.VREP.World
     public string standardDisplayalPrefabName = "Displayal";
     public string throwableDisplayalPrefabName = "ThrowableDisplayal";
 
-    private static ExhibitionBuildingSettings _instance;
+    private static ExhibitionBuildingSettings instance;
 
-    public static ExhibitionBuildingSettings Instance => _instance ??= new ExhibitionBuildingSettings();
+    public static ExhibitionBuildingSettings Instance => instance ??= new ExhibitionBuildingSettings();
   }
 }

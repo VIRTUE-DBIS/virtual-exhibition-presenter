@@ -8,7 +8,6 @@ namespace Unibas.DBIS.VREP.Core
   public class VrepController : MonoBehaviour
   {
     private VremClient _vremClient;
-    public string exhibitionId;
 
     public Vector3 lobbySpawn = new Vector3(0, -9, 0);
 
@@ -79,7 +78,7 @@ namespace Unibas.DBIS.VREP.Core
     {
       _vremClient.serverUrl = settings.VREMAddress;
 
-      _vremClient.RequestExhibition(settings.exhibitionId, ParseExhibition);
+      _vremClient.RequestExhibition(settings.ExhibitionId, ParseExhibition);
       Debug.Log("Requested ex");
     }
 

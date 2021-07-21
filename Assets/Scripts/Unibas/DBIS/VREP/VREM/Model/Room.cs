@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.VREM.Model
 {
+  /// <summary>
+  /// ch.unibas.dmi.dbis.vrem.model.exhibition.Room
+  /// </summary>
   [Serializable]
   public class Room
   {

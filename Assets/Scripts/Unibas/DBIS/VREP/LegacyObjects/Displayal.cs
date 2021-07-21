@@ -70,7 +70,7 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
       if (VrepController.Instance.settings.PlaygroundEnabled)
       {
-        const float magicOffset = 0.17f;
+        const float magicOffset = 0.5f; // TODO Find a fix so this works regardless of image dimensions.
 
         var anchor = ModelFactory.CreateCuboid(_anchor);
         var col = anchor.AddComponent<BoxCollider>();
@@ -82,7 +82,7 @@ namespace Unibas.DBIS.VREP.LegacyObjects
         anchor.transform.parent = transform.parent;
         anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.width / 2,
           _exhibitModel.position.y - (_exhibitModel.size.y / 2 + magicOffset),
-          -_anchor.depth); // 0.2 is the magic number for frame.
+          -_anchor.depth);
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }
     }

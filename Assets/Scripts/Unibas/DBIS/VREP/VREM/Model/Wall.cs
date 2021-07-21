@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.VREM.Model
 {
+  /// <summary>
+  /// ch.unibas.dmi.dbis.vrem.model.exhibition.Wall
+  /// </summary>
   [Serializable]
   public class Wall
   {
@@ -12,7 +15,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
 
     public Exhibit[] exhibits;
 
-    public string texture; // NONE -> Debug: Colors.
+    public string texture;
 
     public WallOrientation GetOrientation()
     {

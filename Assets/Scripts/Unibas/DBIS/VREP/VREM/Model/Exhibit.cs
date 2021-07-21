@@ -7,7 +7,7 @@ using Valve.Newtonsoft.Json;
 namespace Unibas.DBIS.VREP.VREM.Model
 {
   /// <summary>
-  /// ch.unibas.dmi.dbis.vrem.model.Exhibit
+  /// ch.unibas.dmi.dbis.vrem.model.exhibition.Exhibit
   /// </summary>
   [Serializable]
   public class Exhibit
@@ -29,7 +29,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     public string GetURLEncodedPath()
     {
       return VrepController.Instance.settings.VREMAddress + "content/get/" +
-             VrepController.Instance.settings.exhibitionId + "%2F" +
+             VrepController.Instance.settings.ExhibitionId + "%2F" +
              path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
     }
 
@@ -38,7 +38,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
       if (!string.IsNullOrEmpty(audio))
       {
         return VrepController.Instance.settings.VREMAddress + "content/get/" +
-               VrepController.Instance.settings.exhibitionId + "%2F" +
+               VrepController.Instance.settings.ExhibitionId + "%2F" +
                audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
 

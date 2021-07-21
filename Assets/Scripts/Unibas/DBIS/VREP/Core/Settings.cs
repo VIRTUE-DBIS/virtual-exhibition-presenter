@@ -25,13 +25,13 @@ namespace Unibas.DBIS.VREP.Core
     public bool SpotsEnabled;
 
     /// <summary>
-    /// Whether in the Lobby the UNIBAS logo is displayed on the floor.
+    /// Whether in the Lobby the Unibas logo is displayed on the floor.
     /// Default: True
     /// </summary>
     public bool LobbyFloorLogoEnabled = true;
 
     /// <summary>
-    /// Whether in the Lobby the UNIBAS logo is displayed on the ceiling.
+    /// Whether in the Lobby the Unibas logo is displayed on the ceiling.
     /// Default: True
     /// </summary>
     public bool LobbyCeilingLogoEnabled = true;
@@ -62,12 +62,12 @@ namespace Unibas.DBIS.VREP.Core
     /// The ID of the exhibition to load.
     /// Default: Empty
     /// </summary>
-    public string exhibitionId;
+    public string ExhibitionId;
 
     /// <summary>
     /// The file name of this settings file.
     /// </summary>
-    public const string FILE_NAME = "settings.json";
+    public const string FileName = "settings.json";
 
     private bool _default;
 
@@ -129,11 +129,11 @@ namespace Unibas.DBIS.VREP.Core
     {
       if (Application.isEditor)
       {
-        return Application.dataPath + "/" + FILE_NAME;
+        return Application.dataPath + "/" + FileName;
       }
       else
       {
-        return Application.dataPath + "/../" + FILE_NAME;
+        return Application.dataPath + "/../" + FileName;
       }
     }
 

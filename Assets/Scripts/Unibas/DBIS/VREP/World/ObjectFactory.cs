@@ -21,7 +21,6 @@ namespace Unibas.DBIS.VREP.World
 
     public static GameObject GetDisplayalPrefab()
     {
-      // TODO Use other prefabs.
       var prefabName = VrepController.Instance.settings.PlaygroundEnabled
         ? Settings.throwableDisplayalPrefabName
         : Settings.standardDisplayalPrefabName;
@@ -29,7 +28,7 @@ namespace Unibas.DBIS.VREP.World
 
       if (prefab == null)
       {
-        throw new Exception($"Could not load '{Settings.standardDisplayalPrefabName}' as Resource");
+        throw new Exception($"Could not load '{Settings.standardDisplayalPrefabName}' as Resource.");
       }
 
       return prefab;
@@ -37,7 +36,8 @@ namespace Unibas.DBIS.VREP.World
 
     public static Vector3 CalculateRoomPosition(Room room)
     {
-      // TODO exhibition-dependent calculation.
+      // This currently works only for 1 exhibition (with multiple rooms).
+      // Rework this if multiple exhibitions should be loaded.
       float x = room.position.x, y = room.position.y, z = room.position.z;
       var off = Settings.RoomOffset;
       return new Vector3(x * room.size.x + x * off, y * room.size.y + y * off, z * room.size.z + z * off);
@@ -114,8 +114,7 @@ namespace Unibas.DBIS.VREP.World
       return wall;
     }
 
-    private static Material GetMaterialForWallOrientation(WallOrientation orientation,
-      Room roomData)
+    private static Material GetMaterialForWallOrientation(WallOrientation orientation, Room roomData)
     {
       foreach (var wallData in roomData.walls)
       {
@@ -128,7 +127,7 @@ namespace Unibas.DBIS.VREP.World
       }
 
       throw new ArgumentException("Couldn't find material for orientation " + orientation + " in room at " +
-                                  roomData.position);
+                                  roomData.position + ".");
     }
 
     private static GameObject CreateAnchor(WallOrientation orientation, GameObject room, CuboidRoomModel model)

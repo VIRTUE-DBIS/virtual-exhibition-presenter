@@ -55,6 +55,7 @@ namespace Unibas.DBIS.VREP.VREM
 
     private IEnumerator DoListExhibitionRequest()
     {
+      // TODO Implement this.
       SanitizeServerUrl();
 
       Debug.Log("[VREMClient] Requesting exhibition list.");
@@ -67,12 +68,11 @@ namespace Unibas.DBIS.VREP.VREM
       {
         _response = request.downloadHandler.text;
         // TODO Parse list of IDs and further loading of the exhibitions.
-        // Will induce follow-up DoExhibitonRequests
       }
       else
       {
         Debug.LogError(request.error);
-        // TODO Handle error properly
+        // TODO Proper error handling.
         _error = true;
         _responseProcessor.Invoke(null);
       }

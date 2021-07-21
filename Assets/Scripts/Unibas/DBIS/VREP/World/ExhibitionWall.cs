@@ -38,7 +38,6 @@ namespace Unibas.DBIS.VREP.World
 
     public void AttachExhibits()
     {
-      // TODO Make displayal configurable.
       var prefab = ObjectFactory.GetDisplayalPrefab();
 
       foreach (var e in WallData.exhibits)
@@ -49,12 +48,12 @@ namespace Unibas.DBIS.VREP.World
         var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
 
-        // Non-90° as they would tip over otherwise.
+        // Non-90° as they would tip over otherwise (exhibits stand on the little bar below).
         var rot = VrepController.Instance.settings.PlaygroundEnabled
-          ? Quaternion.Euler(92.5f, 0, 180)
+          ? Quaternion.Euler(92.5f, 0, 180) // Slightly more than 90° or it would fall down.
           : Quaternion.Euler(90, 0, 180);
-        displayal.transform.localRotation = rot; // Because prefab is messed up.
-        
+        displayal.transform.localRotation = rot; // Required due to prefab orientation.
+
         if (!VrepController.Instance.settings.SpotsEnabled || !e.light)
         {
           displayal.transform.Find("Directional light").gameObject.SetActive(false);
