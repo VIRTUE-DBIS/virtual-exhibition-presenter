@@ -4,19 +4,22 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Core
 {
+  /// <summary>
+  /// Settings class; serialized from/to JSON.
+  /// </summary>
   [Serializable]
   public class Settings
   {
+    /// <summary>
+    /// The Address of the VREM server instance, inclusive port.
+    /// </summary>
+    public string VREMAddress;
+
     /// <summary>
     /// Whether the player starts in the lobby.
     /// Default: False
     /// </summary>
     public bool StartInLobby = true;
-
-    /// <summary>
-    /// The Address of the VREM server instance, inclusive port.
-    /// </summary>
-    public string VREMAddress;
 
     /// <summary>
     /// Whether each exhibit has its own spotlight.
@@ -47,16 +50,10 @@ namespace Unibas.DBIS.VREP.Core
     public int WallTimerCount;
 
     /// <summary>
-    /// Whether experimental, "playground" features are enabled.
+    /// Whether experimental features are enabled.
     /// Default: False
     /// </summary>
     public bool PlaygroundEnabled;
-
-    /// <summary>
-    /// Whether the server will be queried for exhibitions.
-    /// Default: False
-    /// </summary>
-    public bool RequestExhibitions;
 
     /// <summary>
     /// The ID of the exhibition to load.
@@ -67,12 +64,12 @@ namespace Unibas.DBIS.VREP.Core
     /// <summary>
     /// The file name of this settings file.
     /// </summary>
-    public const string FileName = "settings.json";
+    [NonSerialized] public const string FileName = "settings.json";
 
-    private bool _default;
+    [NonSerialized] private bool _default;
 
     /// <summary>
-    /// Returns whether this settings file is the default one.
+    /// Returns whether this settings object is a default configuration (unless you programatically changed attributes).
     /// </summary>
     /// <returns>True if this is the default config, false otherwise.</returns>
     public bool IsDefault()
@@ -82,23 +79,29 @@ namespace Unibas.DBIS.VREP.Core
 
     /// <summary>
     /// Loads the settings file.
-    /// In UnityEditor this is at Assets/settings.json, in standalone this should be a sibling of the executable.
+    /// In the UnityEditor this is at Assets/settings.json, in the standalone this should be a sibling of the executable.
+    /// Default settings are used if the settings file cannot be read.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The resulting Settings object.</returns>
     public static Settings LoadSettings()
     {
       Debug.Log("Settings path: " + GetPath());
+
       if (File.Exists(GetPath()))
       {
         var json = File.ReadAllText(GetPath());
         return JsonUtility.FromJson<Settings>(json);
       }
-      else
-      {
-        return CreateDefault();
-      }
+
+      return CreateDefault();
     }
 
+    /// <summary>
+    /// Loads the settings file from a provided path.
+    /// Default settings are used if the settings file cannot be read.
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns>The resulting Settings object.</returns>
     public static Settings LoadSettings(string path)
     {
       var filePath = Application.dataPath + "/" + path;
@@ -111,20 +114,33 @@ namespace Unibas.DBIS.VREP.Core
 
     private Settings()
     {
-      // no public constructor allowed
+      // Settings can only be loaded via LoadSettings or Default!
     }
 
+    /// <summary>
+    /// Creates default settings.
+    /// </summary>
+    /// <returns>The created default Settings object.</returns>
     private static Settings CreateDefault()
     {
       var s = new Settings {_default = true};
       return s;
     }
 
+    /// <summary>
+    /// Creates default settings.
+    /// </summary>
+    /// <returns>The created default Settings object.</returns>
     public static Settings Default()
     {
       return CreateDefault();
     }
 
+    /// <summary>
+    /// Obtains the path of the configuration file, depending on whether we're running from the editor or not.
+    /// For the actual deployment, the configuration file is assumed to be a sibling of the executable.
+    /// </summary>
+    /// <returns>The path to the configuration file.</returns>
     private static string GetPath()
     {
       if (Application.isEditor)
@@ -138,7 +154,7 @@ namespace Unibas.DBIS.VREP.Core
     }
 
     /// <summary>
-    /// Stores this settings file at the preferred location, if there isn't already one.
+    /// Stores this settings file at the preferred location unless the file already exists.
     /// </summary>
     public void StoreSettings()
     {
@@ -149,7 +165,7 @@ namespace Unibas.DBIS.VREP.Core
       }
       else
       {
-        Debug.Log("Will not override settings.");
+        Debug.Log("Configuration already exists, will not override settings.");
       }
     }
   }

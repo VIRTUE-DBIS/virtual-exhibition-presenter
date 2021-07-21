@@ -6,8 +6,12 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.LegacyObjects
 {
+  /// <summary>
+  /// Displayal object, GameObject representation of an Exhibit.
+  /// </summary>
   public class Displayal : MonoBehaviour
   {
+    // The corresponding exhibit for this displayal.
     private Exhibit _exhibitModel;
     public string id;
 
@@ -16,6 +20,9 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
     private readonly CuboidModel _anchor = new CuboidModel(1, 0.01f, .1f);
 
+    /// <summary>
+    /// Restores the original position and resets velocity for this displayal.
+    /// </summary>
     public void RestorePosition()
     {
       var t = transform;
@@ -28,6 +35,11 @@ namespace Unibas.DBIS.VREP.LegacyObjects
       }
     }
 
+    /// <summary>
+    /// Sets the exhibit model for this displayal object, also processing the text to display on the plaquette
+    /// and the image to load.
+    /// </summary>
+    /// <param name="exhibit"></param>
     public void SetExhibitModel(Exhibit exhibit)
     {
       _exhibitModel = exhibit;
@@ -70,7 +82,8 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
       if (VrepController.Instance.settings.PlaygroundEnabled)
       {
-        const float magicOffset = 0.5f; // TODO Find a fix so this works regardless of image dimensions.
+        // TODO Find a fix so this works regardless of image dimensions.
+        const float magicOffset = 0.5f;
 
         var anchor = ModelFactory.CreateCuboid(_anchor);
         var col = anchor.AddComponent<BoxCollider>();
@@ -87,6 +100,10 @@ namespace Unibas.DBIS.VREP.LegacyObjects
       }
     }
 
+    /// <summary>
+    /// Obtains the exhibit associated to this displayal.
+    /// </summary>
+    /// <returns>The associated exhibit model.</returns>
     public Exhibit GetExhibit()
     {
       return _exhibitModel;

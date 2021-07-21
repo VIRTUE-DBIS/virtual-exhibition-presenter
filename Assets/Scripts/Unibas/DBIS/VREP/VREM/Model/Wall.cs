@@ -10,13 +10,15 @@ namespace Unibas.DBIS.VREP.VREM.Model
   [Serializable]
   public class Wall
   {
-    public Vector3 color;
     public string direction;
-
+    public string texture;
+    public Vector3 color;
     public Exhibit[] exhibits;
 
-    public string texture;
-
+    /// <summary>
+    /// Obtains the WallOrientation enum/direction of this wall object.
+    /// </summary>
+    /// <returns></returns>
     public WallOrientation GetOrientation()
     {
       return (WallOrientation) Enum.Parse(typeof(WallOrientation), direction, true);

@@ -13,12 +13,17 @@ using Valve.VR.InteractionSystem;
 namespace Unibas.DBIS.VREP.World
 {
   /// <summary>
-  /// Static class for object generation.
+  /// Static class for Displayal/Room generation.
   /// </summary>
   public static class ObjectFactory
   {
     public static readonly ExhibitionBuildingSettings Settings = ExhibitionBuildingSettings.Instance;
 
+    /// <summary>
+    /// Derives a displayal GameObject from the prefab.
+    /// </summary>
+    /// <returns>The created displayal GameObject.</returns>
+    /// <exception cref="Exception">If a prefab could not be loaded.</exception>
     public static GameObject GetDisplayalPrefab()
     {
       var prefabName = VrepController.Instance.settings.PlaygroundEnabled
@@ -34,17 +39,29 @@ namespace Unibas.DBIS.VREP.World
       return prefab;
     }
 
+    /// <summary>
+    /// Calculates the absolute position of a room based on its relative position and size in the exhibition.
+    /// </summary>
+    /// <param name="room">The room to calculate the absolute position for.</param>
+    /// <returns>The absolute position of the room.</returns>
     public static Vector3 CalculateRoomPosition(Room room)
     {
       // This currently works only for 1 exhibition (with multiple rooms).
       // Rework this if multiple exhibitions should be loaded.
       float x = room.position.x, y = room.position.y, z = room.position.z;
-      var off = Settings.RoomOffset;
+      var off = Settings.RoomOffset; // Space between rooms.
       return new Vector3(x * room.size.x + x * off, y * room.size.y + y * off, z * room.size.z + z * off);
     }
 
+    /// <summary>
+    /// Builds a room, i.e., creating and building its walls and exhibits as well as adding textures, lighting,
+    /// teleports, etc.
+    /// </summary>
+    /// <param name="roomData">The room data that should be used to build this room (as received from VREM).</param>
+    /// <returns>The GameObject for the created room.</returns>
     public static GameObject BuildRoom(Room roomData)
     {
+      // Textures to use.
       Material[] mats =
       {
         TexturingUtility.LoadMaterialByName(roomData.floor),
@@ -55,15 +72,20 @@ namespace Unibas.DBIS.VREP.World
         GetMaterialForWallOrientation(WallOrientation.West, roomData)
       };
 
+      // Create room model.
       var modelData = new CuboidRoomModel(CalculateRoomPosition(roomData), roomData.size.x, roomData.size.y,
         mats[0], mats[1], mats[2], mats[3], mats[4], mats[5]);
+
+      // Create the actual GameObject for the room.
       var room = ModelFactory.CreateCuboidRoom(modelData);
 
+      // Add exhibition room component, containing the room model.
       var er = room.AddComponent<CuboidExhibitionRoom>();
       er.RoomModel = modelData;
       er.Model = room;
       er.RoomData = roomData;
 
+      // Add walls.
       var na = CreateAnchor(WallOrientation.North, room, modelData);
       var ea = CreateAnchor(WallOrientation.East, room, modelData);
       var sa = CreateAnchor(WallOrientation.South, room, modelData);
@@ -77,6 +99,7 @@ namespace Unibas.DBIS.VREP.World
       er.Walls = new List<ExhibitionWall>(new[] {nw, ew, sw, ww});
       er.Populate();
 
+      // Light.
       var light = new GameObject("RoomLight");
       var l = light.AddComponent<Light>();
       l.type = LightType.Point;
@@ -86,10 +109,11 @@ namespace Unibas.DBIS.VREP.World
       l.renderMode = LightRenderMode.ForcePixel;
 
       var t = l.transform;
-      t.parent = room.transform;
+      t.parent = room.transform; // Set room as parent for transform component.
       t.localPosition = new Vector3(0, 2.5f, 0);
       room.name = "Room";
 
+      // Teleport.
       var teleportArea = new GameObject("TeleportArea");
       var col = teleportArea.AddComponent<BoxCollider>();
       col.size = new Vector3(modelData.size, 0.01f, modelData.size);
@@ -103,6 +127,13 @@ namespace Unibas.DBIS.VREP.World
       return room;
     }
 
+    /// <summary>
+    /// Attaches an exhibition wall as defined in the room model to the corresponding GameObject of the room.
+    /// </summary>
+    /// <param name="orientation">The orientation of the wall.</param>
+    /// <param name="room">The room model object to take the data for the wall from.</param>
+    /// <param name="anchor">The GameObject to set as the anchor for the room.</param>
+    /// <returns>The created wall component (with a set anchor).</returns>
     private static ExhibitionWall CreateExhibitionWall(WallOrientation orientation, Room room, GameObject anchor)
     {
       var wall = anchor.AddComponent<ExhibitionWall>();
@@ -114,6 +145,13 @@ namespace Unibas.DBIS.VREP.World
       return wall;
     }
 
+    /// <summary>
+    /// Returns the material (wall texture) for a specific wall orientation (= for 1 wall) as defined in the room model.
+    /// </summary>
+    /// <param name="orientation">The orientation of the wall to get the material for.</param>
+    /// <param name="roomData">The room model object to take the data for the wall material from.</param>
+    /// <returns>The resulting Material object.</returns>
+    /// <exception cref="ArgumentException"></exception>
     private static Material GetMaterialForWallOrientation(WallOrientation orientation, Room roomData)
     {
       foreach (var wallData in roomData.walls)
@@ -130,6 +168,16 @@ namespace Unibas.DBIS.VREP.World
                                   roomData.position + ".");
     }
 
+    /// <summary>
+    /// Creates a GameObject for a wall to later act as a parent for the exhibits.
+    /// Placed at the bottom left corner of a wall, acting as 0/0/0 for relative exhibit coordinates
+    /// in the exhibition model from VREM.
+    /// </summary>
+    /// <param name="orientation">Wall orientation.</param>
+    /// <param name="room">GameObject for the room of the wall, acting as parent for the created anchor.</param>
+    /// <param name="model">The CuboidRoomModel holding details about size and textures of the room.</param>
+    /// <returns>The GameObject of the newly created anchor (with its parent set).</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     private static GameObject CreateAnchor(WallOrientation orientation, GameObject room, CuboidRoomModel model)
     {
       var anchor = new GameObject(orientation + "Anchor");
@@ -137,7 +185,7 @@ namespace Unibas.DBIS.VREP.World
 
       Vector3 pos;
       float a;
-      var sizeHalf = model.size / 2f;
+      var sizeHalf = model.size / 2f; // This probably only supports square rooms (with varying height).
 
       switch (orientation)
       {
@@ -165,6 +213,23 @@ namespace Unibas.DBIS.VREP.World
       anchor.transform.localPosition = pos;
 
       return anchor;
+    }
+
+    public static Vector3 CalculateRotation(WallOrientation orientation)
+    {
+      return orientation switch
+      {
+        WallOrientation.North => new Vector3(90, 180, 0),
+        WallOrientation.East => new Vector3(90, 0, 0),
+        WallOrientation.South => new Vector3(90, -180, 0),
+        WallOrientation.West => new Vector3(90, 90, 0),
+        _ => throw new ArgumentOutOfRangeException()
+      };
+    }
+
+    public static Vector3 CalculateRotation(string orientation)
+    {
+      return CalculateRotation((WallOrientation) Enum.Parse(typeof(WallOrientation), orientation, true));
     }
 
     private static ComplexCuboidModel GenerateButtonModel(float size, float border, float height)
@@ -198,26 +263,6 @@ namespace Unibas.DBIS.VREP.World
       buttonObj.name = "TeleportButton (Instance)";
 
       return buttonObj;
-    }
-
-
-    public static Vector3 CalculateRotation(WallOrientation orientation)
-    {
-      // TODO Fix rotations!
-
-      return orientation switch
-      {
-        WallOrientation.North => new Vector3(90, 180, 0),
-        WallOrientation.East => new Vector3(90, 0, 0),
-        WallOrientation.South => new Vector3(90, -180, 0),
-        WallOrientation.West => new Vector3(90, 90, 0),
-        _ => throw new ArgumentOutOfRangeException()
-      };
-    }
-
-    public static Vector3 CalculateRotation(string orientation)
-    {
-      return CalculateRotation((WallOrientation) Enum.Parse(typeof(WallOrientation), orientation, true));
     }
   }
 }

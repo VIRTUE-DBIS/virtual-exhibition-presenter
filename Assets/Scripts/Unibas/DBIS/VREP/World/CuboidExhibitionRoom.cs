@@ -38,7 +38,7 @@ namespace Unibas.DBIS.VREP.World
     public GameObject Model { get; set; }
 
     /// <summary>
-    /// A list of ExhibitionWalls, which form the walls of this room.
+    /// A list of ExhibitionWalls, representing the walls of this room.
     /// </summary>
     public List<ExhibitionWall> Walls { get; set; }
 
@@ -58,7 +58,7 @@ namespace Unibas.DBIS.VREP.World
 
     /// <summary>
     /// Handler for leaving this room.
-    /// Shall be called whenever the player leaves this room
+    /// Shall be called whenever the player leaves this room.
     /// </summary>
     public void OnRoomLeave()
     {
@@ -71,8 +71,8 @@ namespace Unibas.DBIS.VREP.World
     }
 
     /// <summary>
-    /// Handler for entering this room
-    /// Shall be called whenever the player enters this room
+    /// Handler for entering this room.
+    /// Shall be called whenever the player enters this room.
     /// </summary>
     public void OnRoomEnter()
     {
@@ -100,8 +100,8 @@ namespace Unibas.DBIS.VREP.World
     /// <summary>
     /// Returns the wall for the orientation.
     /// </summary>
-    /// <param name="orientation">The orientation for which the wall is requested</param>
-    /// <returns>The ExhibitionWall component for the specified orientation</returns>
+    /// <param name="orientation">The orientation for which the wall is requested.</param>
+    /// <returns>The ExhibitionWall component for the specified orientation.</returns>
     public ExhibitionWall GetWallForOrientation(WallOrientation orientation)
     {
       return Walls.Find(wall => wall.GetOrientation() == orientation);
@@ -124,11 +124,19 @@ namespace Unibas.DBIS.VREP.World
       _audioLoader.ReloadAudio(RoomData.GetURLEncodedAudioPath());
     }
 
+    /// <summary>
+    /// Gets the entry point of this room object.
+    /// </summary>
+    /// <returns>A 3D vector representing the entry point of this room.</returns>
     public Vector3 GetEntryPoint()
     {
       return transform.position + RoomData.entrypoint;
     }
 
+
+    /// <summary>
+    /// Restores all exhibits on all walls and resets the countdown for all of them.
+    /// </summary>
     public void RestoreWallExhibits()
     {
       Walls.ForEach(w => w.RestoreDisplayals());

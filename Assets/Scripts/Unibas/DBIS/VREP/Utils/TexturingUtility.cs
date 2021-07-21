@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Utils
 {
+  /// <summary>
+  /// Utility for loading textures/Material objects.
+  /// </summary>
   public static class TexturingUtility
   {
     public static string Translate(string name)
@@ -29,6 +32,12 @@ namespace Unibas.DBIS.VREP.Utils
       return material;
     }
 
+    /// <summary>
+    /// Loads a Material object by name (e.g., from a wall model of VREM).
+    /// </summary>
+    /// <param name="name">The name of the texture.</param>
+    /// <param name="translate">Whether to translate from a shorter/more intuitive name.</param>
+    /// <returns>The loaded Material according to the specified texture.</returns>
     public static Material LoadMaterialByName(string name, bool translate = false)
     {
       var material = name;
@@ -54,7 +63,7 @@ namespace Unibas.DBIS.VREP.Utils
       }
 
 
-      return null; // TODO: Return default material.
+      return null; // TODO Return default material.
     }
   }
 }

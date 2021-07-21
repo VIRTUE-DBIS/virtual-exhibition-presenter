@@ -4,6 +4,9 @@ using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Multimedia
 {
+  /// <summary>
+  /// Audio loader component for exhibits.
+  /// </summary>
   public class AudioLoader : MonoBehaviour
   {
     private AudioSource _audioSource;
@@ -16,6 +19,11 @@ namespace Unibas.DBIS.VREP.Multimedia
       _audioSource = gameObject.AddComponent<AudioSource>();
     }
 
+    /// <summary>
+    /// Loads an audio source from the provided URL.
+    /// </summary>
+    /// <param name="url">The full audio URL.</param>
+    /// <returns>The result yielded from the request.</returns>
     private IEnumerator LoadAudio(string url)
     {
       if (_loaded && _lastUrl.Equals(url))
@@ -62,11 +70,18 @@ namespace Unibas.DBIS.VREP.Multimedia
       }
     }
 
+    /// <summary>
+    /// Stops the audio which was previously loaded (and playing).
+    /// </summary>
     public void Stop()
     {
       _audioSource.Stop();
     }
 
+    /// <summary>
+    /// Reloads an audio source from the provided URL.
+    /// </summary>
+    /// <param name="url">The full audio source URL.</param>
     public void ReloadAudio(string url)
     {
       if (!string.IsNullOrEmpty(url))

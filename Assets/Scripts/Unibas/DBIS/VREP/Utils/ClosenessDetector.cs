@@ -5,6 +5,9 @@ using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Utils
 {
+  /// <summary>
+  /// Closeness detector component to load and play audio sources.
+  /// </summary>
   public class ClosenessDetector : MonoBehaviour
   {
     public string url;
@@ -14,17 +17,23 @@ namespace Unibas.DBIS.VREP.Utils
 
     public float maxDistance = 2;
 
-    // Use this for initialization.
+    /// <summary>
+    /// Add component to audio source.
+    /// </summary>
     private void Start()
     {
       _audioSource = gameObject.AddComponent<AudioSource>();
     }
 
+    /// <summary>
+    /// Play or stop audio if the camera is close enough to the object.
+    /// </summary>
     private void Update()
     {
       var cameraPosition = Camera.allCameras[0].transform.position;
       var objectPosition = gameObject.transform.position;
 
+      // Load audio if it hasn't been previously loaded/assigned.
       if (!string.IsNullOrEmpty(url) && _audioSource.clip == null && !_downloading)
       {
         _downloading = true;
@@ -43,6 +52,11 @@ namespace Unibas.DBIS.VREP.Utils
       }
     }
 
+    /// <summary>
+    /// Sends a request to load the specified audio file from VREM.
+    /// </summary>
+    /// <param name="audioURL">The URL of the audio file.</param>
+    /// <returns>The result yielded from the request.</returns>
     private IEnumerator LoadAudio(string audioURL)
     {
       using var request = UnityWebRequestMultimedia.GetAudioClip(audioURL, AudioType.OGGVORBIS);
@@ -63,6 +77,9 @@ namespace Unibas.DBIS.VREP.Utils
       }
     }
 
+    /// <summary>
+    /// Plays the audio file in this component.
+    /// </summary>
     public void Play()
     {
       if (_playing || AudioListener.pause || _audioSource == null || _audioSource.clip == null) return;
@@ -72,6 +89,9 @@ namespace Unibas.DBIS.VREP.Utils
       _playing = true;
     }
 
+    /// <summary>
+    /// Stops the audio file of this component.
+    /// </summary>
     public void Stop()
     {
       if (!_playing || !AudioListener.pause || _audioSource == null || _audioSource.clip == null) return;

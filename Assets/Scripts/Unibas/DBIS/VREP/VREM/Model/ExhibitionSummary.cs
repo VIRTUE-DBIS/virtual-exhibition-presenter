@@ -8,7 +8,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
   [Serializable]
   public class ExhibitionSummary
   {
-    public string objectId;
+    public string id;
     public string name;
   }
 }

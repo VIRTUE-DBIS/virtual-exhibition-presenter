@@ -2,6 +2,10 @@
 
 namespace Unibas.DBIS.VREP.Utils
 {
+  /// <summary>
+  /// Loads materials from the resource folders.
+  /// Currently not used.
+  /// </summary>
   public class TexturedMonoBehaviour : MonoBehaviour
   {
     /// <summary>

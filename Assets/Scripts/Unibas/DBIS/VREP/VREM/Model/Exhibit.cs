@@ -26,6 +26,11 @@ namespace Unibas.DBIS.VREP.VREM.Model
     public Vector3 position;
     public Vector3 size;
 
+    /// <summary>
+    /// Composes the URL where an exhibit's image file can be found via the VREM API.
+    /// Note that this relies on exhibition ID stored in the configuration of the controller.
+    /// </summary>
+    /// <returns>A string with the full path/URL to the image of the exhibit.</returns>
     public string GetURLEncodedPath()
     {
       return VrepController.Instance.settings.VREMAddress + "content/get/" +
@@ -33,6 +38,11 @@ namespace Unibas.DBIS.VREP.VREM.Model
              path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
     }
 
+    /// <summary>
+    /// Composes the URL where the audio for an exhibit can be found via the VREM API.
+    /// Note that this relies on exhibition ID stored in the configuration of the controller.
+    /// </summary>
+    /// <returns>A string with the full path/URL to the audio of the exhibit.</returns>
     public string GetURLEncodedAudioPath()
     {
       if (!string.IsNullOrEmpty(audio))

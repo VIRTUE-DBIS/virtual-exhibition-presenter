@@ -5,10 +5,19 @@ using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Multimedia
 {
+  /// <summary>
+  /// Image loader component for exhibits.
+  /// </summary>
   public class ImageLoader : MonoBehaviour
   {
     private MeshRenderer _renderer;
 
+    /// <summary>
+    /// Reloads an image from the provided URL. If the image is too large, it gets downscaled to reduce memory usage.
+    /// This allows larger exhibitions.
+    /// </summary>
+    /// <param name="url">The full image URL.</param>
+    /// <returns>The result yielded from the request.</returns>
     private IEnumerator LoadImage(string url)
     {
       if (_renderer == null)
@@ -50,6 +59,10 @@ namespace Unibas.DBIS.VREP.Multimedia
       GC.Collect();
     }
 
+    /// <summary>
+    /// Reloads an image from the provided URL.
+    /// </summary>
+    /// <param name="url">The full image URL.</param>
     public void ReloadImage(string url)
     {
       StartCoroutine(LoadImage(url));

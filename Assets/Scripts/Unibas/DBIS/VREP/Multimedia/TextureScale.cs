@@ -1,14 +1,13 @@
-// Taken from http://wiki.unity3d.com/index.php/TextureScale
-
-// Copyright to Eric Haines.
-
-// Only works on ARGB32, RGB24 and Alpha8 textures that are marked readable.
-
 namespace Unibas.DBIS.VREP.Multimedia
 {
   using System.Threading;
   using UnityEngine;
 
+  /// <summary>
+  /// Taken from http://wiki.unity3d.com/index.php/TextureScale
+  /// Copyright to Eric Haines.
+  /// Only works on ARGB32, RGB24 and Alpha8 textures that are marked readable.
+  /// </summary>
   public class TextureScale
   {
     public class ThreadData

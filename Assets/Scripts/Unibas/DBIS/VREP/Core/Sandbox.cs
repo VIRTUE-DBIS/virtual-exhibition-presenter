@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Core
 {
+  /// <summary>
+  /// Sandbox component to test things.
+  /// </summary>
   public class Sandbox : MonoBehaviour
   {
     public bool isEnabled;

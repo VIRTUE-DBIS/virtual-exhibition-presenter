@@ -4,12 +4,18 @@ using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP.Movement
 {
+  /// <summary>
+  /// Player teleporter component.
+  /// </summary>
   public class PlayerTeleporter : MonoBehaviour
   {
     public Vector3 destination = Vector3.zero;
 
     public float minDistance = 1f;
 
+    /// <summary>
+    /// Teleports a player to the destination set.
+    /// </summary>
     public void TeleportPlayer()
     {
       SteamVR_Fade.Start(Color.clear, 0.2f);

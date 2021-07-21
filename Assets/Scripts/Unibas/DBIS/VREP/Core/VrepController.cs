@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Core
 {
+  /// <summary>
+  /// Controller component for VirtualExhibitionManager.
+  /// </summary>
   public class VrepController : MonoBehaviour
   {
     private VremClient _vremClient;
@@ -17,6 +20,9 @@ namespace Unibas.DBIS.VREP.Core
     public static VrepController Instance;
     private ExhibitionManager _exhibitionManager;
 
+    /// <summary>
+    /// Upon awaking, the settings are loaded and the VREM host address is sanitized and set.
+    /// </summary>
     private void Awake()
     {
       if (Application.isEditor)
@@ -29,9 +35,14 @@ namespace Unibas.DBIS.VREP.Core
       }
 
       SanitizeHost();
+
+      // Set instance.
       Instance = this;
     }
 
+    /// <summary>
+    /// Fixes the server URL by adding the http:// prefix and/or trailing /.
+    /// </summary>
     private void SanitizeHost()
     {
       if (!settings.VREMAddress.EndsWith("/"))
@@ -39,21 +50,27 @@ namespace Unibas.DBIS.VREP.Core
         settings.VREMAddress += "/";
       }
 
-      // TODO: TLS support.
+      // TODO TLS support.
       if (!settings.VREMAddress.StartsWith("http://"))
       {
         settings.VREMAddress = "http://" + settings.VREMAddress;
       }
     }
 
+    /// <summary>
+    /// Write settings on termination if the file doesn't already exist.
+    /// </summary>
     private void OnApplicationQuit()
     {
       settings.StoreSettings();
     }
 
+    /// <summary>
+    /// Handles lobby start settings and loads the exhibition.
+    /// </summary>
     private void Start()
     {
-      // TODO: After what happens in Awake, this is not necessary.
+      // TODO After what happens in Awake, this is not necessary.
       settings ??= Settings.LoadSettings() ?? Settings.Default();
 
       var go = GameObject.FindWithTag("Player");
@@ -68,20 +85,26 @@ namespace Unibas.DBIS.VREP.Core
         lby.SetActive(false);
       }
 
-      Debug.Log("Starting ExMan");
+      Debug.Log("Starting Exhibition manager.");
       _vremClient = gameObject.AddComponent<VremClient>();
 
       LoadAndCreateExhibition();
     }
 
+    /// <summary>
+    /// Creates and loads the exhibition specified in the configuration.
+    /// </summary>
     public void LoadAndCreateExhibition()
     {
       _vremClient.serverUrl = settings.VREMAddress;
 
       _vremClient.RequestExhibition(settings.ExhibitionId, ParseExhibition);
-      Debug.Log("Requested ex");
+      Debug.Log("Requested exhibition.");
     }
 
+    /// <summary>
+    /// Restores exhibits upon pressing F12.
+    /// </summary>
     private void Update()
     {
       if (Input.GetKey(KeyCode.F12))
@@ -90,6 +113,11 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
+    /// <summary>
+    /// Parses an exhibition in JSON format loaded from VREM and calls the exhibition manager to actually
+    /// generate the loaded/parsed exhibition.
+    /// </summary>
+    /// <param name="json">The JSON string to parse.</param>
     private void ParseExhibition(string json)
     {
       if (json == null)
@@ -101,9 +129,13 @@ namespace Unibas.DBIS.VREP.Core
       }
 
       Debug.Log(json);
+
+      // Actual parsing to Exhibition model object.
       var ex = JsonUtility.FromJson<Exhibition>(json);
+
       // TODO Create lobby.
 
+      // Create exhibition manager and generate the exhibition.
       _exhibitionManager = new ExhibitionManager(ex);
       _exhibitionManager.GenerateExhibition();
 

@@ -29,13 +29,22 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public GameObject Anchor { get; set; }
 
+    /// <summary>
+    /// Holds all displayals of this wall.
+    /// </summary>
     public List<Displayal> displayals = new List<Displayal>();
 
+    /// <summary>
+    /// Restores the position of every displayal on this wall.
+    /// </summary>
     public void RestoreDisplayals()
     {
       displayals.ForEach(d => d.RestorePosition());
     }
 
+    /// <summary>
+    /// Creates and attaches the exhibits defined in this wall's data to the wall (or rather it's anchor).
+    /// </summary>
     public void AttachExhibits()
     {
       var prefab = ObjectFactory.GetDisplayalPrefab();
@@ -78,6 +87,10 @@ namespace Unibas.DBIS.VREP.World
       }
     }
 
+    /// <summary>
+    /// Returns the orientation of this wall.
+    /// </summary>
+    /// <returns>The wall's orientation as WallOrientation enum object.</returns>
     public WallOrientation GetOrientation()
     {
       return WallData.GetOrientation();

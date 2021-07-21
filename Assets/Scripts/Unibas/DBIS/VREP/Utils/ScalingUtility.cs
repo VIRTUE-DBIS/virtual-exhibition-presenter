@@ -2,6 +2,9 @@
 
 namespace Unibas.DBIS.VREP.Utils
 {
+  /// <summary>
+  /// Utility class for scaling vectors from meters to plane scale and back.
+  /// </summary>
   public static class ScalingUtility
   {
     /// <summary>

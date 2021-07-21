@@ -6,22 +6,27 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Core
 {
+  /// <summary>
+  /// Exhibition manager to create and load exhibitions from model exhibitions to actual VR exhibitions.
+  /// </summary>
   public class ExhibitionManager
   {
     private Exhibition _exhibition;
+    private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
 
     public ExhibitionManager(Exhibition exhibition)
     {
       _exhibition = exhibition;
     }
 
-    private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
-
     public CuboidExhibitionRoom GetRoomByIndex(int index)
     {
       return _rooms[index];
     }
 
+    /// <summary>
+    /// Restores all exhibits of the currently loaded exhibition.
+    /// </summary>
     public void RestoreExhibits()
     {
       _rooms.ForEach(r => r.RestoreWallExhibits());
@@ -64,6 +69,10 @@ namespace Unibas.DBIS.VREP.Core
       return _exhibition.rooms[GetPreviousRoomIndex(pos)];
     }
 
+    /// <summary>
+    /// Creates and loads the exhibition from the Exhibition model object currently stored.
+    /// This includes building all rooms with their walls and generating displayals from exhibits.
+    /// </summary>
     public void GenerateExhibition()
     {
       foreach (var room in _exhibition.rooms)
@@ -109,6 +118,12 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
+    /// <summary>
+    /// Attaches teleporters to a previously generated CuboidExhibitionRoom for an exhibition.
+    /// To properly navigate rooms, this includes one forward teleporter into the next room
+    /// and one backward teleporter to the previous room.
+    /// </summary>
+    /// <param name="room">The CuboidExhibitionRoom to generate the teleporters for.</param>
     private void CreateAndAttachTeleporters(CuboidExhibitionRoom room)
     {
       var index = GetRoomIndex(room.RoomData);
@@ -134,14 +149,15 @@ namespace Unibas.DBIS.VREP.Core
         backTpBtn.OnTeleportStart = room.OnRoomLeave;
         backTpBtn.OnTeleportEnd = prev.OnRoomEnter;
 
-        // Back teleporter.
+        // Forward teleporter.
         var nextTpBtn = SteamVRTeleportButton.Create(room.gameObject, nextPos, nd, model,
           Resources.Load<Sprite>("Sprites/UI/chevron-right"));
 
         nextTpBtn.OnTeleportStart = room.OnRoomLeave;
         nextTpBtn.OnTeleportEnd = next.OnRoomEnter;
       }
-      
+
+      // If we start in the lobby, also allow the user to teleport back to the lobby.
       if (VrepController.Instance.settings.StartInLobby)
       {
         var lobbyTpBtn = SteamVRTeleportButton.Create(room.gameObject, new Vector3(0, 0, .2f),
