@@ -13,7 +13,7 @@ namespace Unibas.DBIS.VREP.Core
     /// <summary>
     /// The Address of the VREM server instance, inclusive port.
     /// </summary>
-    public string VREMAddress;
+    public string VremAddress;
 
     /// <summary>
     /// Whether the player starts in the lobby.

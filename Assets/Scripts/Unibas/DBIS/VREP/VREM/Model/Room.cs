@@ -30,7 +30,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     {
       if (!string.IsNullOrEmpty(ambient))
       {
-        return VrepController.Instance.settings.VREMAddress + "/content/get/" +
+        return VrepController.Instance.settings.VremAddress + "/content/get/" +
                ambient.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
 

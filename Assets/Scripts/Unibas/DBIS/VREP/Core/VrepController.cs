@@ -45,15 +45,15 @@ namespace Unibas.DBIS.VREP.Core
     /// </summary>
     private void SanitizeHost()
     {
-      if (!settings.VREMAddress.EndsWith("/"))
+      if (!settings.VremAddress.EndsWith("/"))
       {
-        settings.VREMAddress += "/";
+        settings.VremAddress += "/";
       }
 
       // TODO TLS support.
-      if (!settings.VREMAddress.StartsWith("http://"))
+      if (!settings.VremAddress.StartsWith("http://"))
       {
-        settings.VREMAddress = "http://" + settings.VREMAddress;
+        settings.VremAddress = "http://" + settings.VremAddress;
       }
     }
 
@@ -96,7 +96,7 @@ namespace Unibas.DBIS.VREP.Core
     /// </summary>
     public void LoadAndCreateExhibition()
     {
-      _vremClient.serverUrl = settings.VREMAddress;
+      _vremClient.serverUrl = settings.VremAddress;
 
       _vremClient.RequestExhibition(settings.ExhibitionId, ParseExhibition);
       Debug.Log("Requested exhibition.");

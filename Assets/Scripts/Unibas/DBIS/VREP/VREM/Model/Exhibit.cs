@@ -33,7 +33,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     /// <returns>A string with the full path/URL to the image of the exhibit.</returns>
     public string GetURLEncodedPath()
     {
-      return VrepController.Instance.settings.VREMAddress + "content/get/" +
+      return VrepController.Instance.settings.VremAddress + "content/get/" +
              VrepController.Instance.settings.ExhibitionId + "%2F" +
              path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
     }
@@ -47,7 +47,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     {
       if (!string.IsNullOrEmpty(audio))
       {
-        return VrepController.Instance.settings.VREMAddress + "content/get/" +
+        return VrepController.Instance.settings.VremAddress + "content/get/" +
                VrepController.Instance.settings.ExhibitionId + "%2F" +
                audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
