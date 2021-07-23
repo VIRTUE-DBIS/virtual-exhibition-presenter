@@ -1,23 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
+using Unibas.DBIS.VREP.World;
 using UnityEngine;
-using World;
 
-namespace DefaultNamespace.VREM.Model {
+namespace Unibas.DBIS.VREP.VREM.Model
+{
+  /// <summary>
+  /// ch.unibas.dmi.dbis.vrem.model.exhibition.Wall
+  /// </summary>
   [Serializable]
-  public class Wall {
-    
-    public Vector3 color;
+  public class Wall
+  {
     public string direction;
-
+    public string texture;
+    public Vector3 color;
     public Exhibit[] exhibits;
 
-    public string texture; // NONE -> debug: colors
-
+    /// <summary>
+    /// Obtains the WallOrientation enum/direction of this wall object.
+    /// </summary>
+    /// <returns></returns>
     public WallOrientation GetOrientation()
     {
       return (WallOrientation) Enum.Parse(typeof(WallOrientation), direction, true);
     }
-    
   }
 }

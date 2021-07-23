@@ -1,41 +1,25 @@
-namespace World
+namespace Unibas.DBIS.VREP.World
 {
-    
+  /// <summary>
+  /// Store various settings for building exhibitions.
+  /// </summary>
+  [System.Serializable]
+  public class ExhibitionBuildingSettings
+  {
     /// <summary>
-    /// Class to store various exhibition building related settings.
-    /// 
+    /// Positive offset between the wall and the displayal.
     /// </summary>
-    [System.Serializable]
-    public class ExhibitionBuildingSettings
-    {
+    public float WallOffset => 0.125f;
 
-        private float _wallOffset = 0.125f; // experimentally found
+    public float RoomOffset => 2f;
 
-        /// <summary>
-        /// Positive offset between the wall and the displayal.
-        /// </summary>
-        public float WallOffset
-        {
-            get { return _wallOffset; }
-        }
+    public bool useStandardDisplayalPrefab = true;
 
-        private float _roomOffset = 2f;
+    public string standardDisplayalPrefabName = "Displayal";
+    public string throwableDisplayalPrefabName = "ThrowableDisplayal";
 
-        public float RoomOffset
-        {
-            get { return _roomOffset; }
-        }
+    private static ExhibitionBuildingSettings instance;
 
-        public bool UseStandardDisplayalPrefab = true;
-
-        public string StandardDisplayalPrefabName = "Displayal";
-
-
-        private static ExhibitionBuildingSettings _instance = null;
-
-        public static ExhibitionBuildingSettings Instance
-        {
-            get { return _instance ?? (_instance = new ExhibitionBuildingSettings()); }
-        }
-    }
+    public static ExhibitionBuildingSettings Instance => instance ??= new ExhibitionBuildingSettings();
+  }
 }

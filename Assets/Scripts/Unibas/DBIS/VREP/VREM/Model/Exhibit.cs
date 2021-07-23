@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unibas.DBIS.VREP;
+using Unibas.DBIS.VREP.Core;
 using UnityEngine;
+using Valve.Newtonsoft.Json;
 
-namespace DefaultNamespace.VREM.Model {
-  
+namespace Unibas.DBIS.VREP.VREM.Model
+{
   /// <summary>
-  /// ch.unibas.dmi.dbis.vrem.model.Ehibit
+  /// ch.unibas.dmi.dbis.vrem.model.exhibition.Exhibit
   /// </summary>
   [Serializable]
-  public class Exhibit {
-    public string id;
+  public class Exhibit
+  {
+    [JsonProperty("_id")] public string id;
     public string name;
     public string type;
     public string path;
@@ -19,26 +21,38 @@ namespace DefaultNamespace.VREM.Model {
     public string audio;
     public bool light;
 
-    public Dictionary<string, string> metadata;
+    public Dictionary<string, string> Metadata;
 
     public Vector3 position;
     public Vector3 size;
 
-    public string GetURLEncodedPath() {
-      return VREPController.Instance.Settings.VREMAddress+"content/get/"+path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+    /// <summary>
+    /// Composes the URL where an exhibit's image file can be found via the VREM API.
+    /// Note that this relies on exhibition ID stored in the configuration of the controller.
+    /// </summary>
+    /// <returns>A string with the full path/URL to the image of the exhibit.</returns>
+    public string GetURLEncodedPath()
+    {
+      return VrepController.Instance.settings.VremAddress + "content/get/" +
+             VrepController.Instance.settings.ExhibitionId + "%2F" +
+             path.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
     }
 
-    public string GetURLEncodedAudioPath() {
-      if (!string.IsNullOrEmpty(audio)) {
-        //return "https://upload.wikimedia.org/wikipedia/commons/7/7b/FurElise.ogg";
-        return VREPController.Instance.Settings.VREMAddress+"content/get/"+ audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
-      }
-      else
+    /// <summary>
+    /// Composes the URL where the audio for an exhibit can be found via the VREM API.
+    /// Note that this relies on exhibition ID stored in the configuration of the controller.
+    /// </summary>
+    /// <returns>A string with the full path/URL to the audio of the exhibit.</returns>
+    public string GetURLEncodedAudioPath()
+    {
+      if (!string.IsNullOrEmpty(audio))
       {
-        return null;
+        return VrepController.Instance.settings.VremAddress + "content/get/" +
+               VrepController.Instance.settings.ExhibitionId + "%2F" +
+               audio.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
-    }
-    
 
+      return null;
+    }
   }
 }

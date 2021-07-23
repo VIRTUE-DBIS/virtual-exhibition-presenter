@@ -1,12 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.Utils;
+using Unibas.DBIS.VREP.World;
 using UnityEngine;
-using World;
 
-namespace DefaultNamespace.VREM.Model {
+namespace Unibas.DBIS.VREP.VREM.Model
+{
+  /// <summary>
+  /// ch.unibas.dmi.dbis.vrem.model.exhibition.Room
+  /// </summary>
   [Serializable]
-  public class Room {
-
+  public class Room
+  {
     public string text;
     public Vector3 size;
     public Vector3 position;
@@ -18,33 +24,26 @@ namespace DefaultNamespace.VREM.Model {
 
     public string ambient;
 
-    public Exhibit[] exhibits;    
-    
-    
-    public string GetURLEncodedAudioPath() {
+    public Exhibit[] exhibits;
+
+    public string GetURLEncodedAudioPath()
+    {
       if (!string.IsNullOrEmpty(ambient))
       {
-        return ServerSettings.SERVER_ID+"content/get/"+ ambient.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
+        return VrepController.Instance.settings.VremAddress + "/content/get/" +
+               ambient.Substring(0).Replace("/", "%2F").Replace(" ", "%20");
       }
-      else
-      {
-        return null;
-      }
-      
+
+      return null;
     }
 
     public Wall GetWall(WallOrientation orientation)
     {
-      foreach (var wall in walls)
-      {
-        WallOrientation wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wall.direction, true);
-        if (wor.Equals(orientation))
-        {
-          return wall;
-        }
-      }
-
-      return null;
+      return (from wall in walls
+          let wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wall.direction, true)
+          where wor.Equals(orientation)
+          select wall)
+        .FirstOrDefault();
     }
   }
 }

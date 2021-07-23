@@ -3,58 +3,69 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class ImageLoader : MonoBehaviour {
+namespace Unibas.DBIS.VREP.Multimedia
+{
+  /// <summary>
+  /// Image loader component for exhibits.
+  /// </summary>
+  public class ImageLoader : MonoBehaviour
+  {
+    private MeshRenderer _renderer;
 
-	private MeshRenderer _renderer;
+    /// <summary>
+    /// Reloads an image from the provided URL. If the image is too large, it gets downscaled to reduce memory usage.
+    /// This allows larger exhibitions.
+    /// </summary>
+    /// <param name="url">The full image URL.</param>
+    /// <returns>The result yielded from the request.</returns>
+    private IEnumerator LoadImage(string url)
+    {
+      if (_renderer == null)
+      {
+        _renderer = GetComponent<MeshRenderer>();
+      }
 
-	// Use this for initialization
-	void Start () {
-	}
-		
-	private IEnumerator LoadImage(string url)
-	{
-		if (_renderer == null)
-		{
-			_renderer = GetComponent<MeshRenderer>();
-		}
-		Texture2D tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-		var hasError = false;
-		using (var request = UnityWebRequestTexture.GetTexture(url))
-		{
-			yield return request.SendWebRequest();
-			if (!(request.isNetworkError || request.isHttpError))
-			{
-				tex = DownloadHandlerTexture.GetContent(request);
-			}
-			else
-			{
-				Debug.LogError(request.error);
-				Debug.LogError(request.url);
-				Debug.LogError(request.GetResponseHeaders());
-				hasError = true;
-			}
-		}
+      var tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
+      var hasError = false;
 
-		if (hasError)
-		{
-			_renderer.material.mainTexture = Resources.Load<Texture>("Textures/not-available");
-		}
-		else
-		{
-			_renderer.material.mainTexture = tex;
-		}
-		GC.Collect();
-	}
+      // Do NOT use UnityWebRequestTexture here or you will run out of memory quickly if you load many images.
+      using (var request = UnityWebRequest.Get(url))
+      {
+        yield return request.SendWebRequest();
+        if (!(request.result == UnityWebRequest.Result.ConnectionError ||
+              request.result == UnityWebRequest.Result.ProtocolError))
+        {
+          tex.LoadImage(request.downloadHandler.data);
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="url"></param>
-	public void ReloadImage(string url)
-	{
-		StartCoroutine(LoadImage(url));
-	}
-	
+          // Rescale so we don't run out of memory upon loading huge images.
+          // TODO This should only be a temporary resolution; consider adjusting this based on the exhibits size vector.
+          if (tex.height > 1024 || tex.width > 1024)
+          {
+            var resize = 1024.0 / Math.Max(tex.height, tex.width);
+            TextureScale.Bilinear(tex, (int) (tex.width * resize), (int) (tex.height * resize));
+          }
+        }
+        else
+        {
+          Debug.LogError(request.error);
+          Debug.LogError(request.url);
+          Debug.LogError(request.GetResponseHeaders());
+          hasError = true;
+        }
+      }
+
+      _renderer.material.mainTexture = hasError ? Resources.Load<Texture>("Textures/not-available") : tex;
+
+      GC.Collect();
+    }
+
+    /// <summary>
+    /// Reloads an image from the provided URL.
+    /// </summary>
+    /// <param name="url">The full image URL.</param>
+    public void ReloadImage(string url)
+    {
+      StartCoroutine(LoadImage(url));
+    }
+  }
 }
-
-

@@ -1,46 +1,41 @@
-﻿using UnityEngine;
-using World;
-using Wall = DefaultNamespace.VREM.Model.Wall;
+﻿using Unibas.DBIS.VREP.VREM.Model;
+using Unibas.DBIS.VREP.World;
+using UnityEngine;
 
-namespace DefaultNamespace {
-  public class Sandbox : MonoBehaviour {
+namespace Unibas.DBIS.VREP.Core
+{
+  /// <summary>
+  /// Sandbox component to test things.
+  /// </summary>
+  public class Sandbox : MonoBehaviour
+  {
+    public bool isEnabled;
 
-    public bool Enabled;
-    
-    void Start() {
-      if (Enabled) {
+    private void Start()
+    {
+      if (isEnabled)
+      {
         TestObjectFactory();
       }
-      
     }
 
-    private void TestObjectFactory() {
-      var nw = new VREM.Model.Wall();
-      nw.direction = "NORTH";
-      nw.texture = "NBricks";
-      var ew = new VREM.Model.Wall();
-      ew.direction = "EAST";
-      ew.texture = "LimeBricks";
-      var sw = new VREM.Model.Wall();
-      sw.direction = "SOUTH";
-      sw.texture = "NConcrete";
-      var ww = new VREM.Model.Wall();
-      ww.direction = "WEST";
-      ww.texture = "MarbleBricks";
+    private static void TestObjectFactory()
+    {
+      var nw = new Wall {direction = "NORTH", texture = "NBricks"};
+      var ew = new Wall {direction = "EAST", texture = "LimeBricks"};
+      var sw = new Wall {direction = "SOUTH", texture = "NConcrete"};
+      var ww = new Wall {direction = "WEST", texture = "MarbleBricks"};
 
-      var room = new VREM.Model.Room();
-      room.floor = "MarbleTiles";
-      room.size = new Vector3(10,5,10);
-      room.position = new Vector3(10,-10,10);
-      room.ceiling = "NFabric";
-      room.walls = new[] {
-        nw, ew, sw, ww
+      var room = new Room
+      {
+        floor = "MarbleTiles",
+        size = new Vector3(10, 5, 10),
+        position = new Vector3(10, -10, 10),
+        ceiling = "NFabric",
+        walls = new[] {nw, ew, sw, ww}
       };
 
       ObjectFactory.BuildRoom(room);
     }
-    
   }
-  
-  
 }

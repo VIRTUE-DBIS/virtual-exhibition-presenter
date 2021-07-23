@@ -1,115 +1,112 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DefaultNamespace.VREM.Model;
-using Unibas.DBIS.DynamicModelling;
+﻿using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
-using Unibas.DBIS.VREP;
+using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
 
-public class Displayal : MonoBehaviour
+namespace Unibas.DBIS.VREP.LegacyObjects
 {
+  /// <summary>
+  /// Displayal object, GameObject representation of an Exhibit.
+  /// </summary>
+  public class Displayal : MonoBehaviour
+  {
+    // The corresponding exhibit for this displayal.
     private Exhibit _exhibitModel;
-
-
     public string id;
 
-    public Vector3 OriginalPosition;
-    public Quaternion OriginalRotation;
-    
-    private CuboidModel _anchor = new CuboidModel(1,0.01f,.1f);
-    
+    public Vector3 originalPosition;
+    public Quaternion originalRotation;
 
-    public void RestorePosition() {
-        transform.localPosition = OriginalPosition;
-        transform.localRotation = OriginalRotation;
-        var rigid = GetComponent<Rigidbody>();
-        if (rigid != null)
-        {
-            rigid.velocity = Vector3.zero;
-        }
+    private readonly CuboidModel _anchor = new CuboidModel(1, 0.01f, .1f);
+
+    /// <summary>
+    /// Restores the original position and resets velocity for this displayal.
+    /// </summary>
+    public void RestorePosition()
+    {
+      var t = transform;
+      t.localPosition = originalPosition;
+      t.localRotation = originalRotation;
+      var rigid = GetComponent<Rigidbody>();
+      if (rigid != null)
+      {
+        rigid.velocity = Vector3.zero;
+      }
     }
-    
+
+    /// <summary>
+    /// Sets the exhibit model for this displayal object, also processing the text to display on the plaquette
+    /// and the image to load.
+    /// </summary>
+    /// <param name="exhibit"></param>
     public void SetExhibitModel(Exhibit exhibit)
     {
-        _exhibitModel = exhibit;
-        id = _exhibitModel.id;
-        name = "Displayal (" + id + ")";
-        var tp = transform.Find("TitlePlaquette");
-        if (tp != null)
+      _exhibitModel = exhibit;
+      id = _exhibitModel.id;
+      name = "Displayal (" + id + ")";
+
+      var tp = transform.Find("TitlePlaquette");
+      if (tp != null)
+      {
+        if (string.IsNullOrEmpty(exhibit.name))
         {
-            if (string.IsNullOrEmpty(exhibit.name))
-            {
-                tp.gameObject.SetActive(false);
-            }
-            else
-            {
-                tp.GetComponent<Plaquette>().text.text = exhibit.name;
-            }
+          tp.gameObject.SetActive(false);
         }
         else
         {
-            Debug.LogError("no tp");
+          tp.GetComponent<Plaquette>().text.text = exhibit.name;
         }
+      }
+      else
+      {
+        Debug.LogError("no tp");
+      }
 
-        var dp = transform.Find("DescriptionPlaquette");
-        if (dp != null)
+      var dp = transform.Find("DescriptionPlaquette");
+      if (dp != null)
+      {
+        if (string.IsNullOrEmpty(exhibit.description))
         {
-            if (string.IsNullOrEmpty(exhibit.description))
-            {
-                dp.gameObject.SetActive(false);
-            }
-            else
-            {
-                dp.GetComponent<Plaquette>().text.text = exhibit.description;
-            }
+          dp.gameObject.SetActive(false);
         }
         else
         {
-            Debug.LogError("no dp");
+          dp.GetComponent<Plaquette>().text.text = exhibit.description;
         }
+      }
+      else
+      {
+        Debug.LogError("no dp");
+      }
 
-        if (VREPController.Instance.Settings.PlaygroundEnabled)
-        {
-            var magicOffset = 0.17f;
-            var t = gameObject.AddComponent<Throwable>();
-            t.attachmentFlags = Hand.AttachmentFlags.VelocityMovement | Hand.AttachmentFlags.TurnOffGravity;
-                //Hand.AttachmentFlags.VelocityMovement  Hand.AttachmentFlags.TurnOffGravity;
-            t.releaseVelocityStyle = ReleaseStyle.AdvancedEstimation;
-            
-            // Fix non-convex meshcollider since unity5 not allowed...
-            var plane = transform.Find("Plane");
-            plane.GetComponent<MeshCollider>().convex = true;
-            var back = transform.Find("Back");
-            back.GetComponent<MeshCollider>().convex = true;
-            
-            var anch = ModelFactory.CreateCuboid(_anchor);
-            var col = anch.AddComponent<BoxCollider>();
-            col.center = new Vector3(_anchor.Width / 2, _anchor.Height / 2, _anchor.Depth/2);
-            col.size = new Vector3(_anchor.Width, _anchor.Height, _anchor.Depth);
-            anch.name = "Anchor (" + id + ")";
-            anch.transform.parent = transform.parent;
-            anch.transform.localPosition = new Vector3(_exhibitModel.position.x-_anchor.Width/2, _exhibitModel.position.y-(_exhibitModel.size.y/2+magicOffset), -_anchor.Depth); //0.2 is magic number for frame
-            anch.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        }
+      if (VrepController.Instance.settings.PlaygroundEnabled)
+      {
+        // TODO Find a fix so this works regardless of image dimensions.
+        const float magicOffset = 0.5f;
+
+        var anchor = ModelFactory.CreateCuboid(_anchor);
+        var col = anchor.AddComponent<BoxCollider>();
+
+        col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
+        col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
+
+        anchor.name = "Anchor (" + id + ")";
+        anchor.transform.parent = transform.parent;
+        anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.width / 2,
+          _exhibitModel.position.y - (_exhibitModel.size.y / 2 + magicOffset),
+          -_anchor.depth);
+        anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
+      }
     }
 
+    /// <summary>
+    /// Obtains the exhibit associated to this displayal.
+    /// </summary>
+    /// <returns>The associated exhibit model.</returns>
     public Exhibit GetExhibit()
     {
-        return _exhibitModel;
+      return _exhibitModel;
     }
-
-
-    Renderer m_Renderer;
-
-    // Use this for initialization
-    void Start()
-    {
-        m_Renderer = GetComponent<Renderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+  }
 }

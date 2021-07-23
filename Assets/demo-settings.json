@@ -1,12 +1,9 @@
 {
+  "VremAddress": "http://127.0.0.1:4545",
   "StartInLobby": false,
-  "VREMAddress": "http://127.0.0.1:4568",
   "SpotsEnabled": false,
   "FloorLogoEnabled": true,
   "CeilingLogoEnabled": true,
   "PlaygroundEnabled": true,
-  "RequestExhibitions": false,
-  "exhibitionIds": [
-    "5c2e1a53f3b1ef84a9174879"
-  ]
+  "ExhibitionId": "5c2e1a53f3b1ef84a9174879"
 }

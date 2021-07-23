@@ -1,20 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Plaquette : MonoBehaviour
+namespace Unibas.DBIS.VREP.LegacyObjects
 {
+  /// <summary>
+  /// Plaquette component describing the title of an image.
+  /// </summary>
+  public class Plaquette : MonoBehaviour
+  {
     public Text text;
 
     public Font font;
 
-    // Use this for initialization
-    void Start()
+    /// <summary>
+    /// Sets the text font if a font has been provided.
+    /// </summary>
+    private void Start()
     {
-        if (font != null)
-        {
-            text.font = font;
-        }
+      if (font != null)
+      {
+        text.font = font;
+      }
     }
+  }
 }
