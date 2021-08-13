@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
 using UnityEngine.Networking;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.VREM
 {
@@ -15,6 +18,7 @@ namespace Unibas.DBIS.VREP.VREM
     private string _response;
 
     private const string LoadExhibitionAction = "exhibitions/load/";
+    private const string GenerateExhibitionAction = "generate/som/";
     private const string ListExhibitionsAction = "exhibitions/list";
 
     private Action<string> _responseProcessor;
@@ -41,9 +45,25 @@ namespace Unibas.DBIS.VREP.VREM
     {
       SanitizeServerUrl();
 
-      Debug.Log("[VREMClient] Requesting " + serverUrl + LoadExhibitionAction + _suffix + ".");
+      Debug.Log("[VREMClient] Requesting " + serverUrl + GenerateExhibitionAction + _suffix + ".");
 
-      using var request = UnityWebRequest.Get(serverUrl + LoadExhibitionAction + _suffix);
+      // using var request = UnityWebRequest.Get(serverUrl + GenerateExhibitionAction + _suffix);
+      var request = new UnityWebRequest(serverUrl + GenerateExhibitionAction, "POST");
+
+      var genConfig = new GenerationConfig(
+        GenerationType.SEMANTIC_SOM,
+        new List<string>(),
+        1,
+        16,
+        0
+      );
+
+      var json = JsonConvert.SerializeObject(genConfig);
+
+      request.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(json));
+      request.SetRequestHeader("Content-Type", "application/json");
+      request.downloadHandler = new DownloadHandlerBuffer();
+      
       yield return request.SendWebRequest();
 
       if (!(request.result == UnityWebRequest.Result.ConnectionError ||
