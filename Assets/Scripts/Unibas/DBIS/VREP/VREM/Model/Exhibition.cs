@@ -12,7 +12,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     [JsonProperty("_id")] public string id;
     public string name;
     public string description;
-    
+
     public Room[] rooms;
   }
 }

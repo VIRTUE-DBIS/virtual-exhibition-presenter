@@ -1,6 +1,8 @@
 ﻿using System;
+using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.VREM.Model
 {
@@ -12,7 +14,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
   {
     public string direction;
     public string texture;
-    public Vector3 color;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 color;
     public Exhibit[] exhibits;
 
     /// <summary>
@@ -21,7 +23,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     /// <returns></returns>
     public WallOrientation GetOrientation()
     {
-      return (WallOrientation) Enum.Parse(typeof(WallOrientation), direction, true);
+      return (WallOrientation)Enum.Parse(typeof(WallOrientation), direction, true);
     }
   }
 }

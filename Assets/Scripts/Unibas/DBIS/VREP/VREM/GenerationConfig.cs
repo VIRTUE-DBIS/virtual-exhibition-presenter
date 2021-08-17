@@ -20,10 +20,10 @@ namespace Unibas.DBIS.VREP.VREM
   public class GenerationConfig
   {
     public GenerationType genType;
-    public List<String> idList;
     public int height;
-    public int width;
+    public List<String> idList;
     public int seed;
+    public int width;
 
     public GenerationConfig(GenerationType genType, List<String> idList, int height, int width, int seed)
     {

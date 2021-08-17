@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.Utils;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
 
@@ -21,10 +22,10 @@ namespace Unibas.DBIS.VREP.VREM.Model
     public string audio;
     public bool light;
 
-    public Dictionary<string, string> Metadata;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 position;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 size;
 
-    public Vector3 position;
-    public Vector3 size;
+    public Dictionary<string, string> Metadata;
 
     /// <summary>
     /// Composes the URL where an exhibit's image file can be found via the VREM API.

@@ -13,15 +13,16 @@ namespace Unibas.DBIS.VREP.VREM
   /// </summary>
   public class VremClient : MonoBehaviour
   {
+    private const string LoadExhibitionAction = "exhibitions/load/";
+    private const string GenerateExhibitionAction = "generate/";
+    private const string ListExhibitionsAction = "exhibitions/list";
     public string serverUrl;
-    private string _suffix;
+
+    private bool _error;
     private string _response;
 
-    private const string LoadExhibitionAction = "exhibitions/load/";
-    private const string GenerateExhibitionAction = "generate/som/";
-    private const string ListExhibitionsAction = "exhibitions/list";
-
     private Action<string> _responseProcessor;
+    private string _suffix;
 
     /// <summary>
     /// Requests an exhibition and calls the processor, once the exhibition is loaded.
@@ -63,7 +64,7 @@ namespace Unibas.DBIS.VREP.VREM
       request.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(json));
       request.SetRequestHeader("Content-Type", "application/json");
       request.downloadHandler = new DownloadHandlerBuffer();
-      
+
       yield return request.SendWebRequest();
 
       if (!(request.result == UnityWebRequest.Result.ConnectionError ||
@@ -125,8 +126,6 @@ namespace Unibas.DBIS.VREP.VREM
         serverUrl += "/";
       }
     }
-
-    private bool _error;
 
     /// <summary>
     /// Checks whether this VremClient instance has encountered an error.

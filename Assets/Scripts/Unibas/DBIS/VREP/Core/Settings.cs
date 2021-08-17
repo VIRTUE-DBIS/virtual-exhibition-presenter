@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.Core
 {
@@ -90,7 +91,7 @@ namespace Unibas.DBIS.VREP.Core
       if (File.Exists(GetPath()))
       {
         var json = File.ReadAllText(GetPath());
-        return JsonUtility.FromJson<Settings>(json);
+        return JsonConvert.DeserializeObject<Settings>(json);
       }
 
       return CreateDefault();
@@ -109,7 +110,7 @@ namespace Unibas.DBIS.VREP.Core
       if (!File.Exists(filePath)) return CreateDefault();
 
       var json = File.ReadAllText(filePath);
-      return JsonUtility.FromJson<Settings>(json);
+      return JsonConvert.DeserializeObject<Settings>(json);
     }
 
     private Settings()
@@ -123,7 +124,7 @@ namespace Unibas.DBIS.VREP.Core
     /// <returns>The created default Settings object.</returns>
     private static Settings CreateDefault()
     {
-      var s = new Settings {_default = true};
+      var s = new Settings { _default = true };
       return s;
     }
 
@@ -160,7 +161,7 @@ namespace Unibas.DBIS.VREP.Core
     {
       if (!File.Exists(GetPath()))
       {
-        var json = JsonUtility.ToJson(this, true);
+        var json = JsonConvert.SerializeObject(this);
         File.WriteAllText(GetPath(), json);
       }
       else

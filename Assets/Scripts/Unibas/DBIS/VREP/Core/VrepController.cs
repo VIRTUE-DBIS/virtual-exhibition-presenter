@@ -1,7 +1,11 @@
-﻿using Unibas.DBIS.VREP.VREM;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unibas.DBIS.VREP.VREM;
 using Unibas.DBIS.VREP.VREM.Model;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
+using UnityEngine.Networking;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.Core
 {
@@ -131,7 +135,9 @@ namespace Unibas.DBIS.VREP.Core
       Debug.Log(json);
 
       // Actual parsing to Exhibition model object.
-      var ex = JsonUtility.FromJson<Exhibition>(json);
+      var ex = JsonConvert.DeserializeObject<Exhibition>(json);
+
+      StartCoroutine(TestExReq(ex));
 
       // TODO Create lobby.
 
@@ -147,6 +153,32 @@ namespace Unibas.DBIS.VREP.Core
       {
         GameObject.Find("Room").gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled =
           true;
+      }
+    }
+
+    private IEnumerator TestExReq(Exhibition ex)
+    {
+      var request = new UnityWebRequest("http://localhost:4545/exhibitions/test", "POST");
+
+      // TODO It would be better to also use JsonConverter here, but we'd need a custom implementation of Vector3 since the class is not annotated as [Serializable].
+
+      // var json = JsonUtility.ToJson(ex);
+      var json = JsonConvert.SerializeObject(ex);
+
+      request.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(json));
+      request.SetRequestHeader("Content-Type", "application/json");
+      request.downloadHandler = new DownloadHandlerBuffer();
+
+      yield return request.SendWebRequest();
+
+      if (!(request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError))
+      {
+      }
+      else
+      {
+        Debug.LogError(request.error);
+        // TODO Error, handle it!
       }
     }
   }

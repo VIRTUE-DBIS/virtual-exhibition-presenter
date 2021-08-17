@@ -4,6 +4,7 @@ using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.VREM.Model
 {
@@ -14,9 +15,9 @@ namespace Unibas.DBIS.VREP.VREM.Model
   public class Room
   {
     public string text;
-    public Vector3 size;
-    public Vector3 position;
-    public Vector3 entrypoint;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 size;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 position;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 entrypoint;
     public Wall[] walls;
 
     public string floor;
@@ -40,7 +41,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     public Wall GetWall(WallOrientation orientation)
     {
       return (from wall in walls
-          let wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wall.direction, true)
+          let wor = (WallOrientation)Enum.Parse(typeof(WallOrientation), wall.direction, true)
           where wor.Equals(orientation)
           select wall)
         .FirstOrDefault();
