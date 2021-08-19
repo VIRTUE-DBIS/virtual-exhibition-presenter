@@ -11,12 +11,12 @@ namespace Unibas.DBIS.VREP.Core
   /// </summary>
   public class ExhibitionManager
   {
-    private Exhibition _exhibition;
+    public Exhibition exhibition;
     private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
 
     public ExhibitionManager(Exhibition exhibition)
     {
-      _exhibition = exhibition;
+      this.exhibition = exhibition;
     }
 
     public CuboidExhibitionRoom GetRoomByIndex(int index)
@@ -34,19 +34,19 @@ namespace Unibas.DBIS.VREP.Core
 
     private int GetNextRoomIndex(int pos)
     {
-      return (pos + 1) % _exhibition.rooms.Length;
+      return (pos + 1) % exhibition.rooms.Length;
     }
 
     private int GetPreviousRoomIndex(int pos)
     {
-      return (pos - 1 + _exhibition.rooms.Length) % _exhibition.rooms.Length;
+      return (pos - 1 + exhibition.rooms.Length) % exhibition.rooms.Length;
     }
 
     private int GetRoomIndex(Room room)
     {
-      for (var i = 0; i < _exhibition.rooms.Length; i++)
+      for (var i = 0; i < exhibition.rooms.Length; i++)
       {
-        if (room.Equals(_exhibition.rooms[i]))
+        if (room.Equals(exhibition.rooms[i]))
         {
           return i;
         }
@@ -59,14 +59,14 @@ namespace Unibas.DBIS.VREP.Core
     {
       var pos = GetRoomIndex(room);
 
-      return _exhibition.rooms[GetNextRoomIndex(pos)];
+      return exhibition.rooms[GetNextRoomIndex(pos)];
     }
 
     private Room GetPrevious(Room room)
     {
       var pos = GetRoomIndex(room);
 
-      return _exhibition.rooms[GetPreviousRoomIndex(pos)];
+      return exhibition.rooms[GetPreviousRoomIndex(pos)];
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ namespace Unibas.DBIS.VREP.Core
     /// </summary>
     public void GenerateExhibition()
     {
-      foreach (var room in _exhibition.rooms)
+      foreach (var room in exhibition.rooms)
       {
         var roomGameObject = ObjectFactory.BuildRoom(room);
         var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
@@ -140,7 +140,7 @@ namespace Unibas.DBIS.VREP.Core
       var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f, null,
         TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"));
 
-      if (_exhibition.rooms.Length > 1)
+      if (exhibition.rooms.Length > 1)
       {
         // Back teleporter.
         var backTpBtn = SteamVRTeleportButton.Create(room.gameObject, backPos, pd, model,

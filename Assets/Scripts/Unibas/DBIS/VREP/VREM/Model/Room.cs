@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Utils;
@@ -14,18 +15,20 @@ namespace Unibas.DBIS.VREP.VREM.Model
   [Serializable]
   public class Room
   {
+    [JsonProperty("_id")] public string id;
     public string text;
-    [JsonConverter(typeof(Vec3Conv))] public Vector3 size;
-    [JsonConverter(typeof(Vec3Conv))] public Vector3 position;
-    [JsonConverter(typeof(Vec3Conv))] public Vector3 entrypoint;
-    public Wall[] walls;
 
     public string floor;
     public string ceiling;
-
     public string ambient;
 
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 size;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 position;
+    [JsonConverter(typeof(Vec3Conv))] public Vector3 entrypoint;
+
     public Exhibit[] exhibits;
+    public Wall[] walls;
+    public Dictionary<string, string> metadata;
 
     public string GetURLEncodedAudioPath()
     {

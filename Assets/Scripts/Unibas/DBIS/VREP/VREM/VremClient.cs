@@ -29,12 +29,18 @@ namespace Unibas.DBIS.VREP.VREM
     /// </summary>
     /// <param name="exhibitionId">The ID of the exhibition.</param>
     /// <param name="processor">An Action which processes VREM's response (e.g., VrepController.ParseExhibition())</param>
-    public void RequestExhibition(string exhibitionId, Action<string> processor)
+    public void RequestExhibition(string exhibitionId, GenerationConfig genConfig, Action<string> processor)
     {
       // TODO Refactor Action to a proper interface.
       _suffix = exhibitionId;
       _responseProcessor = processor;
-      StartCoroutine(DoExhibitionRequest());
+      StartCoroutine(DoExhibitionRequest(genConfig));
+    }
+
+    public void RequestRoom(GenerationConfig conf, Action<string> processor)
+    {
+      _responseProcessor = processor;
+      StartCoroutine(DoRoomRequestFromEx(conf));
     }
 
     /// <summary>
@@ -42,22 +48,15 @@ namespace Unibas.DBIS.VREP.VREM
     /// Invoked via Coroutine.
     /// </summary>
     /// <returns>The result yielded from the request.</returns>
-    private IEnumerator DoExhibitionRequest()
+    private IEnumerator DoExhibitionRequest(GenerationConfig genConfig)
     {
       SanitizeServerUrl();
 
       Debug.Log("[VREMClient] Requesting " + serverUrl + GenerateExhibitionAction + _suffix + ".");
 
-      // using var request = UnityWebRequest.Get(serverUrl + GenerateExhibitionAction + _suffix);
+      // using var request = UnityWebRequest.Get(serverUrl + LoadExhibitionAction + _suffix);
+      // yield return request.SendWebRequest(); 
       var request = new UnityWebRequest(serverUrl + GenerateExhibitionAction, "POST");
-
-      var genConfig = new GenerationConfig(
-        GenerationType.SEMANTIC_SOM,
-        new List<string>(),
-        1,
-        16,
-        0
-      );
 
       var json = JsonConvert.SerializeObject(genConfig);
 
@@ -79,6 +78,31 @@ namespace Unibas.DBIS.VREP.VREM
         // TODO Error, handle it!
         _error = true;
         _responseProcessor.Invoke(null);
+      }
+    }
+
+    private IEnumerator DoRoomRequestFromEx(GenerationConfig genConfig)
+    {
+      var request = new UnityWebRequest("http://localhost:4545/generate", "POST");
+
+      var json = JsonConvert.SerializeObject(genConfig);
+
+      request.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(json));
+      request.SetRequestHeader("Content-Type", "application/json");
+      request.downloadHandler = new DownloadHandlerBuffer();
+
+      yield return request.SendWebRequest();
+
+      if (!(request.result == UnityWebRequest.Result.ConnectionError ||
+            request.result == UnityWebRequest.Result.ProtocolError))
+      {
+        _response = request.downloadHandler.text;
+        _responseProcessor?.Invoke(_response);
+      }
+      else
+      {
+        Debug.LogError(request.error);
+        // TODO Error, handle it!
       }
     }
 

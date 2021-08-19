@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unibas.DBIS.VREP.VREM;
 using Unibas.DBIS.VREP.VREM.Model;
@@ -6,6 +7,7 @@ using Unibas.DBIS.VREP.World;
 using UnityEngine;
 using UnityEngine.Networking;
 using Valve.Newtonsoft.Json;
+using Valve.Newtonsoft.Json.Utilities;
 
 namespace Unibas.DBIS.VREP.Core
 {
@@ -95,6 +97,11 @@ namespace Unibas.DBIS.VREP.Core
       LoadAndCreateExhibition();
     }
 
+    public void Continue()
+    {
+      AddRoomToExhibition();
+    }
+
     /// <summary>
     /// Creates and loads the exhibition specified in the configuration.
     /// </summary>
@@ -102,8 +109,42 @@ namespace Unibas.DBIS.VREP.Core
     {
       _vremClient.serverUrl = settings.VremAddress;
 
-      _vremClient.RequestExhibition(settings.ExhibitionId, ParseExhibition);
-      Debug.Log("Requested exhibition.");
+      Debug.Log("Requesting exhibition.");
+
+      var genConfig = new GenerationConfig(
+        GenerationObject.EXHIBITION,
+        GenerationType.SEMANTIC_SOM,
+        new List<string>(),
+        1,
+        16,
+        0
+      );
+
+      _vremClient.RequestExhibition(settings.ExhibitionId, genConfig, ParseExhibition);
+    }
+
+    public void AddRoomToExhibition()
+    {
+      var listJson = _exhibitionManager.exhibition.rooms[0].metadata["som.ids"];
+      var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
+      var firstList = fullList.map[0];
+      List<String> idList = new List<string>();
+
+      foreach (IdDoublePair t in firstList)
+      {
+        idList.Add(t.id);
+      }
+
+      var genConfig = new GenerationConfig(
+        GenerationObject.ROOM,
+        GenerationType.SEMANTIC_SOM,
+        idList,
+        1,
+        16,
+        0
+      );
+
+      _vremClient.RequestRoom(genConfig, ParseRoom);
     }
 
     /// <summary>
@@ -114,6 +155,28 @@ namespace Unibas.DBIS.VREP.Core
       if (Input.GetKey(KeyCode.F12))
       {
         _exhibitionManager.RestoreExhibits();
+      }
+    }
+
+    private void ParseRoom(string json)
+    {
+      // Actual parsing to Room model object.
+      var room = JsonConvert.DeserializeObject<Room>(json);
+
+      _exhibitionManager.exhibition.rooms = new[] { _exhibitionManager.exhibition.rooms[0], room };
+
+      _exhibitionManager.exhibition.rooms[1].position = new Vector3(0.0f, 1.0f, 0.0f);
+
+      _exhibitionManager.GenerateExhibition();
+
+      if (Instance.settings.StartInLobby)
+      {
+        GameObject.Find("Lobby").GetComponent<Lobby>().ActivateRoomTrigger(_exhibitionManager);
+      }
+      else
+      {
+        GameObject.Find("Room").gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled =
+          true;
       }
     }
 
@@ -137,49 +200,12 @@ namespace Unibas.DBIS.VREP.Core
       // Actual parsing to Exhibition model object.
       var ex = JsonConvert.DeserializeObject<Exhibition>(json);
 
-      StartCoroutine(TestExReq(ex));
-
       // TODO Create lobby.
 
       // Create exhibition manager and generate the exhibition.
       _exhibitionManager = new ExhibitionManager(ex);
-      _exhibitionManager.GenerateExhibition();
 
-      if (Instance.settings.StartInLobby)
-      {
-        GameObject.Find("Lobby").GetComponent<Lobby>().ActivateRoomTrigger(_exhibitionManager);
-      }
-      else
-      {
-        GameObject.Find("Room").gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled =
-          true;
-      }
-    }
-
-    private IEnumerator TestExReq(Exhibition ex)
-    {
-      var request = new UnityWebRequest("http://localhost:4545/exhibitions/test", "POST");
-
-      // TODO It would be better to also use JsonConverter here, but we'd need a custom implementation of Vector3 since the class is not annotated as [Serializable].
-
-      // var json = JsonUtility.ToJson(ex);
-      var json = JsonConvert.SerializeObject(ex);
-
-      request.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(json));
-      request.SetRequestHeader("Content-Type", "application/json");
-      request.downloadHandler = new DownloadHandlerBuffer();
-
-      yield return request.SendWebRequest();
-
-      if (!(request.result == UnityWebRequest.Result.ConnectionError ||
-            request.result == UnityWebRequest.Result.ProtocolError))
-      {
-      }
-      else
-      {
-        Debug.LogError(request.error);
-        // TODO Error, handle it!
-      }
+      Continue();
     }
   }
 }

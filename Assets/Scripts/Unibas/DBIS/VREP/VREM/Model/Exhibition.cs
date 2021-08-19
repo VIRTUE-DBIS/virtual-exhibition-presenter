@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.VREM.Model
@@ -14,5 +15,6 @@ namespace Unibas.DBIS.VREP.VREM.Model
     public string description;
 
     public Room[] rooms;
+    public Dictionary<string, string> metadata;
   }
 }

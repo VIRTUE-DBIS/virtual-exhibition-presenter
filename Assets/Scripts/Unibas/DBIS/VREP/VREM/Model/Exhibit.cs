@@ -25,7 +25,7 @@ namespace Unibas.DBIS.VREP.VREM.Model
     [JsonConverter(typeof(Vec3Conv))] public Vector3 position;
     [JsonConverter(typeof(Vec3Conv))] public Vector3 size;
 
-    public Dictionary<string, string> Metadata;
+    public Dictionary<string, string> metadata;
 
     /// <summary>
     /// Composes the URL where an exhibit's image file can be found via the VREM API.
