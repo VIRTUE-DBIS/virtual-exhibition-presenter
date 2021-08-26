@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.VREM.Model;
 using Unibas.DBIS.VREP.World;
@@ -9,161 +11,36 @@ namespace Unibas.DBIS.VREP.Core
   /// <summary>
   /// Exhibition manager to create and load exhibitions from model exhibitions to actual VR exhibitions.
   /// </summary>
-  public class ExhibitionManager
+  public class ExhibitionManager : MonoBehaviour
   {
     public Exhibition exhibition;
     private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
 
-    public ExhibitionManager(Exhibition exhibition)
+    public void DestroyCurrentExhibition()
     {
-      this.exhibition = exhibition;
-    }
-
-    public CuboidExhibitionRoom GetRoomByIndex(int index)
-    {
-      return _rooms[index];
-    }
-
-    /// <summary>
-    /// Restores all exhibits of the currently loaded exhibition.
-    /// </summary>
-    public void RestoreExhibits()
-    {
-      _rooms.ForEach(r => r.RestoreWallExhibits());
-    }
-
-    private int GetNextRoomIndex(int pos)
-    {
-      return (pos + 1) % exhibition.rooms.Length;
-    }
-
-    private int GetPreviousRoomIndex(int pos)
-    {
-      return (pos - 1 + exhibition.rooms.Length) % exhibition.rooms.Length;
-    }
-
-    private int GetRoomIndex(Room room)
-    {
-      for (var i = 0; i < exhibition.rooms.Length; i++)
+      if (_rooms.Any())
       {
-        if (room.Equals(exhibition.rooms[i]))
-        {
-          return i;
-        }
+        _rooms.ForEach(Destroy);
       }
-
-      return -1;
     }
 
-    private Room GetNext(Room room)
+    public async Task LoadNewExhibition(Exhibition ex)
     {
-      var pos = GetRoomIndex(room);
+      DestroyCurrentExhibition();
 
-      return exhibition.rooms[GetNextRoomIndex(pos)];
-    }
+      exhibition = ex;
 
-    private Room GetPrevious(Room room)
-    {
-      var pos = GetRoomIndex(room);
-
-      return exhibition.rooms[GetPreviousRoomIndex(pos)];
-    }
-
-    /// <summary>
-    /// Creates and loads the exhibition from the Exhibition model object currently stored.
-    /// This includes building all rooms with their walls and generating displayals from exhibits.
-    /// </summary>
-    public void GenerateExhibition()
-    {
       foreach (var room in exhibition.rooms)
       {
-        var roomGameObject = ObjectFactory.BuildRoom(room);
-        var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
-        _rooms.Add(exhibitionRoom);
-
-        if (VrepController.Instance.settings.CeilingLogoEnabled)
-        {
-          var pref = Resources.Load<GameObject>("Objects/unibas");
-          var logo = Object.Instantiate(pref, exhibitionRoom.transform, false);
-
-          logo.name = "UnibasLogo";
-          logo.transform.localPosition = new Vector3(-1.493f, room.size.y - .01f, 3.35f); // manually found values
-          logo.transform.localRotation = Quaternion.Euler(new Vector3(90, 180));
-          logo.transform.localScale = Vector3.one * 10000;
-        }
-
-        if (VrepController.Instance.settings.WallTimerCount > 0)
-        {
-          var obj = new GameObject("Timer");
-          obj.transform.SetParent(exhibitionRoom.transform, false);
-          obj.transform.localPosition =
-            new Vector3(-room.size.x / 2 + 0.2f, room.size.y - 0.2f, room.size.z / 2); // manually found values
-          obj.transform.localScale = Vector3.one * 0.05f;
-
-          var textMesh = obj.AddComponent<TextMesh>();
-          textMesh.fontSize = 150;
-
-          var timer = obj.AddComponent<Countdown>();
-          timer.countdown = textMesh;
-          timer.initTime = VrepController.Instance.settings.WallTimerCount;
-
-          obj.transform.GetComponent<MeshRenderer>().enabled = false;
-        }
-      }
-
-      // For teleporting, each room needs to be created.
-      foreach (var room in _rooms)
-      {
-        CreateAndAttachTeleporters(room);
+        await LoadRoom(room);
       }
     }
 
-    /// <summary>
-    /// Attaches teleporters to a previously generated CuboidExhibitionRoom for an exhibition.
-    /// To properly navigate rooms, this includes one forward teleporter into the next room
-    /// and one backward teleporter to the previous room.
-    /// </summary>
-    /// <param name="room">The CuboidExhibitionRoom to generate the teleporters for.</param>
-    private void CreateAndAttachTeleporters(CuboidExhibitionRoom room)
+    public async Task LoadRoom(Room room)
     {
-      var index = GetRoomIndex(room.RoomData);
-      var next = _rooms[GetNextRoomIndex(index)];
-      var prev = _rooms[GetPreviousRoomIndex(index)];
-
-      var nd = next.GetEntryPoint();
-      var pd = prev.GetEntryPoint();
-
-      var backPos = new Vector3(-.25f, 0, .2f);
-      var nextPos = new Vector3(.25f, 0, .2f);
-
-      // TODO Configurable TPBtnModel.
-      var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, .02f, 1f, null,
-        TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"));
-
-      if (exhibition.rooms.Length > 1)
-      {
-        // Back teleporter.
-        var backTpBtn = SteamVRTeleportButton.Create(room.gameObject, backPos, pd, model,
-          Resources.Load<Sprite>("Sprites/UI/chevron-left"));
-
-        backTpBtn.OnTeleportStart = room.OnRoomLeave;
-        backTpBtn.OnTeleportEnd = prev.OnRoomEnter;
-
-        // Forward teleporter.
-        var nextTpBtn = SteamVRTeleportButton.Create(room.gameObject, nextPos, nd, model,
-          Resources.Load<Sprite>("Sprites/UI/chevron-right"));
-
-        nextTpBtn.OnTeleportStart = room.OnRoomLeave;
-        nextTpBtn.OnTeleportEnd = next.OnRoomEnter;
-      }
-
-      // If we start in the lobby, also allow the user to teleport back to the lobby.
-      if (VrepController.Instance.settings.StartInLobby)
-      {
-        var lobbyTpBtn = SteamVRTeleportButton.Create(room.gameObject, new Vector3(0, 0, .2f),
-          VrepController.Instance.lobbySpawn, model, "Lobby");
-        lobbyTpBtn.OnTeleportStart = room.OnRoomLeave;
-      }
+      var roomGameObject = await ObjectFactory.BuildRoom(room);
+      var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
+      _rooms.Add(exhibitionRoom);
     }
   }
 }

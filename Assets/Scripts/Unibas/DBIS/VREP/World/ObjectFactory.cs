@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
@@ -59,22 +60,20 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     /// <param name="roomData">The room data that should be used to build this room (as received from VREM).</param>
     /// <returns>The GameObject for the created room.</returns>
-    public static GameObject BuildRoom(Room roomData)
+    public async static Task<GameObject> BuildRoom(Room roomData)
     {
-      // Textures to use.
-      Material[] mats =
-      {
+      // Create room model.
+      var modelData = new CuboidRoomModel(
+        CalculateRoomPosition(roomData),
+        roomData.size.x,
+        roomData.size.y,
         TexturingUtility.LoadMaterialByName(roomData.floor),
         TexturingUtility.LoadMaterialByName(roomData.ceiling),
         GetMaterialForWallOrientation(WallOrientation.North, roomData),
         GetMaterialForWallOrientation(WallOrientation.East, roomData),
         GetMaterialForWallOrientation(WallOrientation.South, roomData),
         GetMaterialForWallOrientation(WallOrientation.West, roomData)
-      };
-
-      // Create room model.
-      var modelData = new CuboidRoomModel(CalculateRoomPosition(roomData), roomData.size.x, roomData.size.y,
-        mats[0], mats[1], mats[2], mats[3], mats[4], mats[5]);
+      );
 
       // Create the actual GameObject for the room.
       var room = ModelFactory.CreateCuboidRoom(modelData);
@@ -96,8 +95,10 @@ namespace Unibas.DBIS.VREP.World
       var sw = CreateExhibitionWall(WallOrientation.South, roomData, sa);
       var ww = CreateExhibitionWall(WallOrientation.West, roomData, wa);
 
-      er.Walls = new List<ExhibitionWall>(new[] {nw, ew, sw, ww});
-      er.Populate();
+      er.Walls = new List<ExhibitionWall>(new[] { nw, ew, sw, ww });
+
+      // Add exhibits to walls (this is expensive!).
+      await er.Populate();
 
       // Light.
       var light = new GameObject("RoomLight");
@@ -156,7 +157,7 @@ namespace Unibas.DBIS.VREP.World
     {
       foreach (var wallData in roomData.walls)
       {
-        var wor = (WallOrientation) Enum.Parse(typeof(WallOrientation), wallData.direction, true);
+        var wor = (WallOrientation)Enum.Parse(typeof(WallOrientation), wallData.direction, true);
         if (!wor.Equals(orientation)) continue;
 
         Debug.Log("Material " + wallData.texture + " for room " + roomData.position);
@@ -229,7 +230,7 @@ namespace Unibas.DBIS.VREP.World
 
     public static Vector3 CalculateRotation(string orientation)
     {
-      return CalculateRotation((WallOrientation) Enum.Parse(typeof(WallOrientation), orientation, true));
+      return CalculateRotation((WallOrientation)Enum.Parse(typeof(WallOrientation), orientation, true));
     }
 
     private static ComplexCuboidModel GenerateButtonModel(float size, float border, float height)

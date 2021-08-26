@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.LegacyObjects;
@@ -45,12 +46,14 @@ namespace Unibas.DBIS.VREP.World
     /// <summary>
     /// Creates and attaches the exhibits defined in this wall's data to the wall (or rather it's anchor).
     /// </summary>
-    public void AttachExhibits()
+    public async Task AttachExhibits()
     {
       var prefab = ObjectFactory.GetDisplayalPrefab();
 
       foreach (var e in WallData.exhibits)
       {
+        await Task.Delay(100);
+        
         var displayal = Instantiate(prefab, Anchor.transform, true);
         displayal.name = "Displayal (" + e.name + ")";
 
@@ -78,12 +81,12 @@ namespace Unibas.DBIS.VREP.World
         image.ReloadImage(e.GetURLEncodedPath());
         displayal.transform.localScale = ScalingUtility.ConvertMeters2PlaneScaleSize(e.size.x, e.size.y);
 
-        if (e.audio == null) continue;
-
-        Debug.Log("Added audio to display object.");
-
-        var closenessDetector = displayal.AddComponent<ClosenessDetector>();
-        closenessDetector.url = e.GetURLEncodedAudioPath();
+        if (e.audio != null)
+        {
+          var closenessDetector = displayal.AddComponent<ClosenessDetector>();
+          closenessDetector.url = e.GetURLEncodedAudioPath();
+          Debug.Log("Added audio to display object.");
+        }
       }
     }
 

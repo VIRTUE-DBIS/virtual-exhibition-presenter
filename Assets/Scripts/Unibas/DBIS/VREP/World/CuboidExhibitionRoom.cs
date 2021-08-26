@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Multimedia;
 using Unibas.DBIS.VREP.VREM.Model;
@@ -50,10 +51,10 @@ namespace Unibas.DBIS.VREP.World
     /// <summary>
     /// Populates this room (walls load their exhibits).
     /// </summary>
-    public void Populate()
+    public async Task Populate()
     {
       PopulateRoom(); // Not yet implemented.
-      PopulateWalls();
+      await PopulateWalls();
     }
 
     /// <summary>
@@ -92,9 +93,12 @@ namespace Unibas.DBIS.VREP.World
     /// <summary>
     /// Induces the walls to place their exhibits.
     /// </summary>
-    public void PopulateWalls()
+    public async Task PopulateWalls()
     {
-      Walls.ForEach(ew => ew.AttachExhibits());
+      foreach (var w in Walls)
+      {
+        await w.AttachExhibits();
+      }
     }
 
     /// <summary>

@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unibas.DBIS.VREP.VREM;
 using Unibas.DBIS.VREP.VREM.Model;
-using Unibas.DBIS.VREP.World;
 using UnityEngine;
 using UnityEngine.Networking;
 using Valve.Newtonsoft.Json;
-using Valve.Newtonsoft.Json.Utilities;
 
 namespace Unibas.DBIS.VREP.Core
 {
-  /// <summary>
-  /// Controller component for VirtualExhibitionManager.
-  /// </summary>
   public class VrepController : MonoBehaviour
   {
-    private VremClient _vremClient;
+    public static VrepController Instance;
 
     public Vector3 lobbySpawn = new Vector3(0, -9, 0);
+    public ExhibitionManager exhibitionManager;
 
     public Settings settings;
     public string settingsPath;
 
-    public static VrepController Instance;
-    private ExhibitionManager _exhibitionManager;
+    private VrepController()
+    {
+    }
 
-    /// <summary>
-    /// Upon awaking, the settings are loaded and the VREM host address is sanitized and set.
-    /// </summary>
     private void Awake()
     {
       if (Application.isEditor)
@@ -40,95 +33,53 @@ namespace Unibas.DBIS.VREP.Core
         settings = Settings.LoadSettings();
       }
 
-      SanitizeHost();
-
-      // Set instance.
       Instance = this;
     }
 
-    /// <summary>
-    /// Fixes the server URL by adding the http:// prefix and/or trailing /.
-    /// </summary>
-    private void SanitizeHost()
+    private async void Start()
     {
-      if (!settings.VremAddress.EndsWith("/"))
+      // Fix URL.
+      SanitizeHost();
+
+      // Create exhibition manager.
+      exhibitionManager = gameObject.AddComponent<ExhibitionManager>();
+
+      // Reset player to lobby.
+      if (settings.StartInLobby)
       {
-        settings.VremAddress += "/";
+        ResetPlayerToLobby();
       }
-
-      // TODO TLS support.
-      if (!settings.VremAddress.StartsWith("http://"))
-      {
-        settings.VremAddress = "http://" + settings.VremAddress;
-      }
-    }
-
-    /// <summary>
-    /// Write settings on termination if the file doesn't already exist.
-    /// </summary>
-    private void OnApplicationQuit()
-    {
-      settings.StoreSettings();
-    }
-
-    /// <summary>
-    /// Handles lobby start settings and loads the exhibition.
-    /// </summary>
-    private void Start()
-    {
-      // TODO After what happens in Awake, this is not necessary.
-      settings ??= Settings.LoadSettings() ?? Settings.Default();
-
-      var go = GameObject.FindWithTag("Player");
-      if (go != null && settings.StartInLobby)
-      {
-        go.transform.position = new Vector3(0, -9.9f, 0);
-      }
-
-      var lby = GameObject.Find("Lobby");
-      if (lby != null && !settings.StartInLobby)
-      {
-        lby.SetActive(false);
-      }
-
-      Debug.Log("Starting Exhibition manager.");
-      _vremClient = gameObject.AddComponent<VremClient>();
-
-      LoadAndCreateExhibition();
-    }
-
-    public void Continue()
-    {
-      AddRoomToExhibition();
-    }
-
-    /// <summary>
-    /// Creates and loads the exhibition specified in the configuration.
-    /// </summary>
-    public void LoadAndCreateExhibition()
-    {
-      _vremClient.serverUrl = settings.VremAddress;
-
-      Debug.Log("Requesting exhibition.");
 
       var genConfig = new GenerationConfig(
         GenerationObject.EXHIBITION,
-        GenerationType.SEMANTIC_SOM,
+        GenerationType.VISUAL_SOM,
         new List<string>(),
-        1,
+        3,
         16,
         0
       );
 
-      _vremClient.RequestExhibition(settings.ExhibitionId, genConfig, ParseExhibition);
+      var ex = VremClient.Instance.Generate<Exhibition>(genConfig);
+
+      Debug.Log("Waiting for request to complete.");
+
+      await ex;
+
+      Debug.Log("Parsed exhibition.");
+
+      await exhibitionManager.LoadNewExhibition(ex.Result);
+
+      Debug.Log("Loaded exhibition.");
+
+      GenerateRoomForExhibition();
     }
 
-    public void AddRoomToExhibition()
+    public async void GenerateRoomForExhibition()
     {
-      var listJson = _exhibitionManager.exhibition.rooms[0].metadata["som.ids"];
+      var listJson = exhibitionManager.exhibition.rooms[0].metadata["som.ids"];
       var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
       var firstList = fullList.map[0];
-      List<String> idList = new List<string>();
+      List<string> idList = new List<string>();
 
       foreach (IdDoublePair t in firstList)
       {
@@ -137,75 +88,46 @@ namespace Unibas.DBIS.VREP.Core
 
       var genConfig = new GenerationConfig(
         GenerationObject.ROOM,
-        GenerationType.SEMANTIC_SOM,
+        GenerationType.VISUAL_SOM,
         idList,
-        1,
+        3,
         16,
         0
       );
 
-      _vremClient.RequestRoom(genConfig, ParseRoom);
+      var room = await VremClient.Instance.Generate<Room>(genConfig);
+      room.position = new Vector3(0.0f, 1.0f, 0.0f);
+
+      await exhibitionManager.LoadRoom(room);
     }
 
-    /// <summary>
-    /// Restores exhibits upon pressing F12.
-    /// </summary>
-    private void Update()
+    public void LoadExhibition()
     {
-      if (Input.GetKey(KeyCode.F12))
-      {
-        _exhibitionManager.RestoreExhibits();
-      }
     }
 
-    private void ParseRoom(string json)
+    public void ResetPlayerToLobby()
     {
-      // Actual parsing to Room model object.
-      var room = JsonConvert.DeserializeObject<Room>(json);
+      var go = GameObject.FindWithTag("Player");
+      var lby = GameObject.Find("Lobby");
 
-      _exhibitionManager.exhibition.rooms = new[] { _exhibitionManager.exhibition.rooms[0], room };
-
-      _exhibitionManager.exhibition.rooms[1].position = new Vector3(0.0f, 1.0f, 0.0f);
-
-      _exhibitionManager.GenerateExhibition();
-
-      if (Instance.settings.StartInLobby)
+      if (go != null && lby != null)
       {
-        GameObject.Find("Lobby").GetComponent<Lobby>().ActivateRoomTrigger(_exhibitionManager);
-      }
-      else
-      {
-        GameObject.Find("Room").gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled =
-          true;
+        go.transform.position = new Vector3(0, -9.9f, 0);
+        lby.SetActive(true);
       }
     }
 
-    /// <summary>
-    /// Parses an exhibition in JSON format loaded from VREM and calls the exhibition manager to actually
-    /// generate the loaded/parsed exhibition.
-    /// </summary>
-    /// <param name="json">The JSON string to parse.</param>
-    private void ParseExhibition(string json)
+    private void SanitizeHost()
     {
-      if (json == null)
+      if (!settings.VremAddress.EndsWith("/"))
       {
-        Debug.LogError("Couldn't load exhibition from backend.");
-        Debug.Log("Loading placeholder instead.");
-        var jtf = Resources.Load<TextAsset>("Configs/placeholder-exhibition");
-        json = jtf.text;
+        settings.VremAddress += "/";
       }
 
-      Debug.Log(json);
-
-      // Actual parsing to Exhibition model object.
-      var ex = JsonConvert.DeserializeObject<Exhibition>(json);
-
-      // TODO Create lobby.
-
-      // Create exhibition manager and generate the exhibition.
-      _exhibitionManager = new ExhibitionManager(ex);
-
-      Continue();
+      if (!settings.VremAddress.StartsWith("http://"))
+      {
+        settings.VremAddress = "http://" + settings.VremAddress;
+      }
     }
   }
 }
