@@ -144,7 +144,7 @@ namespace Unibas.DBIS.VREP.World
       wall.WallModel = null;
       wall.WallData = (from w in room.Walls
           let wor = orientation
-          where wor.Equals(orientation)
+          where w.Direction.Equals(wor)
           select w)
         .FirstOrDefault();
 
