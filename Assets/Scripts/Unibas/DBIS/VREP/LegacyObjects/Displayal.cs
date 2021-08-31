@@ -1,7 +1,7 @@
-﻿using Unibas.DBIS.DynamicModelling;
+﻿using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
+using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
-using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.LegacyObjects
@@ -43,19 +43,19 @@ namespace Unibas.DBIS.VREP.LegacyObjects
     public void SetExhibitModel(Exhibit exhibit)
     {
       _exhibitModel = exhibit;
-      id = _exhibitModel.id;
+      id = _exhibitModel.Id;
       name = "Displayal (" + id + ")";
 
       var tp = transform.Find("TitlePlaquette");
       if (tp != null)
       {
-        if (string.IsNullOrEmpty(exhibit.name))
+        if (string.IsNullOrEmpty(exhibit.Name))
         {
           tp.gameObject.SetActive(false);
         }
         else
         {
-          tp.GetComponent<Plaquette>().text.text = exhibit.name;
+          tp.GetComponent<Plaquette>().text.text = exhibit.Name;
         }
       }
       else
@@ -66,13 +66,13 @@ namespace Unibas.DBIS.VREP.LegacyObjects
       var dp = transform.Find("DescriptionPlaquette");
       if (dp != null)
       {
-        if (string.IsNullOrEmpty(exhibit.description))
+        if (string.IsNullOrEmpty(exhibit.Description))
         {
           dp.gameObject.SetActive(false);
         }
         else
         {
-          dp.GetComponent<Plaquette>().text.text = exhibit.description;
+          dp.GetComponent<Plaquette>().text.text = exhibit.Description;
         }
       }
       else
@@ -93,8 +93,8 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
         anchor.name = "Anchor (" + id + ")";
         anchor.transform.parent = transform.parent;
-        anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.width / 2,
-          _exhibitModel.position.y - (_exhibitModel.size.y / 2 + magicOffset),
+        anchor.transform.localPosition = new Vector3(_exhibitModel.Position.X - _anchor.width / 2,
+          _exhibitModel.Position.Y - (_exhibitModel.Size.Y / 2 + magicOffset),
           -_anchor.depth);
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.VREM;
-using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
-using UnityEngine.Networking;
 using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.Core
@@ -50,24 +50,15 @@ namespace Unibas.DBIS.VREP.Core
         ResetPlayerToLobby();
       }
 
-      var genConfig = new GenerationConfig(
-        GenerationObject.EXHIBITION,
-        GenerationType.VISUAL_SOM,
-        new List<string>(),
-        3,
-        16,
-        0
-      );
+      Debug.Log("Making generation request.");
 
-      var ex = VremClient.Instance.Generate<Exhibition>(genConfig);
-
-      Debug.Log("Waiting for request to complete.");
-
-      await ex;
+      var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, new List<string>(), 1, 16, 0);
+      var ex = await new GenerationApi(new Configuration().BasePath = "http://localhost:4545")
+        .PostApiGenerateExhibitionAsync(genReq);
 
       Debug.Log("Parsed exhibition.");
 
-      await exhibitionManager.LoadNewExhibition(ex.Result);
+      await exhibitionManager.LoadNewExhibition(ex);
 
       Debug.Log("Loaded exhibition.");
 
@@ -76,7 +67,7 @@ namespace Unibas.DBIS.VREP.Core
 
     public async void GenerateRoomForExhibition()
     {
-      var listJson = exhibitionManager.exhibition.rooms[0].metadata["som.ids"];
+      var listJson = exhibitionManager.exhibition.Rooms[0].Metadata["som.ids"];
       var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
       var firstList = fullList.map[0];
       List<string> idList = new List<string>();
@@ -85,18 +76,12 @@ namespace Unibas.DBIS.VREP.Core
       {
         idList.Add(t.id);
       }
+      
+      var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, new List<string>(), 1, 16, 0);
+      var room = await new GenerationApi(new Configuration().BasePath = "http://localhost:4545")
+        .PostApiGenerateRoomAsync(genReq);
 
-      var genConfig = new GenerationConfig(
-        GenerationObject.ROOM,
-        GenerationType.VISUAL_SOM,
-        idList,
-        3,
-        16,
-        0
-      );
-
-      var room = await VremClient.Instance.Generate<Room>(genConfig);
-      room.position = new Vector3(0.0f, 1.0f, 0.0f);
+      room.Position = new Vector3f(0.0f, 1.0f, 0.0f);
 
       await exhibitionManager.LoadRoom(room);
     }

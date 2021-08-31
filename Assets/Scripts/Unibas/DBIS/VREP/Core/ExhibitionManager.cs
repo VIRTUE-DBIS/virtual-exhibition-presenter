@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Unibas.DBIS.VREP.Utils;
-using Unibas.DBIS.VREP.VREM.Model;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
@@ -30,7 +29,7 @@ namespace Unibas.DBIS.VREP.Core
 
       exhibition = ex;
 
-      foreach (var room in exhibition.rooms)
+      foreach (var room in exhibition.Rooms)
       {
         await LoadRoom(room);
       }

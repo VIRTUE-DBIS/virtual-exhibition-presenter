@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Multimedia;
 using Unibas.DBIS.VREP.Utils;
-using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.World
@@ -50,14 +50,14 @@ namespace Unibas.DBIS.VREP.World
     {
       var prefab = ObjectFactory.GetDisplayalPrefab();
 
-      foreach (var e in WallData.exhibits)
+      foreach (var e in WallData.Exhibits)
       {
         await Task.Delay(100);
-        
-        var displayal = Instantiate(prefab, Anchor.transform, true);
-        displayal.name = "Displayal (" + e.name + ")";
 
-        var pos = new Vector3(e.position.x, e.position.y, -ExhibitionBuildingSettings.Instance.WallOffset);
+        var displayal = Instantiate(prefab, Anchor.transform, true);
+        displayal.name = "Displayal (" + e.Name + ")";
+
+        var pos = new Vector3(e.Position.X, e.Position.Y, -ExhibitionBuildingSettings.Instance.WallOffset);
         displayal.transform.localPosition = pos;
 
         // Non-90° as they would tip over otherwise (exhibits stand on the little bar below).
@@ -66,7 +66,7 @@ namespace Unibas.DBIS.VREP.World
           : Quaternion.Euler(90, 0, 180);
         displayal.transform.localRotation = rot; // Required due to prefab orientation.
 
-        if (!VrepController.Instance.settings.SpotsEnabled || !e.light)
+        if (!VrepController.Instance.settings.SpotsEnabled || !e.Light)
         {
           displayal.transform.Find("Directional light").gameObject.SetActive(false);
         }
@@ -78,13 +78,13 @@ namespace Unibas.DBIS.VREP.World
         displayals.Add(disp);
 
         var image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>();
-        image.ReloadImage(e.GetURLEncodedPath());
-        displayal.transform.localScale = ScalingUtility.ConvertMeters2PlaneScaleSize(e.size.x, e.size.y);
+        image.ReloadImage(e.Path);
+        displayal.transform.localScale = ScalingUtility.ConvertMeters2PlaneScaleSize(e.Size.X, e.Size.Y);
 
-        if (e.audio != null)
+        if (e.Audio != null)
         {
           var closenessDetector = displayal.AddComponent<ClosenessDetector>();
-          closenessDetector.url = e.GetURLEncodedAudioPath();
+          closenessDetector.url = e.Path;
           Debug.Log("Added audio to display object.");
         }
       }
@@ -94,9 +94,9 @@ namespace Unibas.DBIS.VREP.World
     /// Returns the orientation of this wall.
     /// </summary>
     /// <returns>The wall's orientation as WallOrientation enum object.</returns>
-    public WallOrientation GetOrientation()
+    public Wall.DirectionEnum GetOrientation()
     {
-      return WallData.GetOrientation();
+      return WallData.Direction;
     }
   }
 }

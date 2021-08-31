@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
+using RestSharp.Extensions;
 using Unibas.DBIS.VREP.VREM;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -22,7 +25,7 @@ namespace Unibas.DBIS.VREP.Multimedia
       }
 
       var tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-      
+
       // TODO Load N/A image here if we have an empty array.
       tex.LoadImage(imageData);
 
@@ -43,9 +46,9 @@ namespace Unibas.DBIS.VREP.Multimedia
     /// <param name="url">The full image URL.</param>
     public async void ReloadImage(string url)
     {
-      var handler = await VremClient.Instance.GetRequest(url);
+      var req = await new ContentApi(new Configuration().BasePath = "http://localhost:4545").GetApiContentWithPathAsync(url);
 
-      AddImage(handler.data);
+      AddImage(req.ReadAsBytes());
     }
   }
 }

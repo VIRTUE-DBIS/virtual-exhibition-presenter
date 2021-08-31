@@ -40,15 +40,15 @@ namespace Unibas.DBIS.VREP.World
     /// Currently only supports 1 room!
     /// </summary>
     /// <param name="manager">The ExhibitionManager object holding room details.</param>
-    public void ActivateRoomTrigger(ExhibitionManagerBu manager)
+    public void ActivateRoomTrigger(ExhibitionManager manager)
     {
-      var room = manager.GetRoomByIndex(0);
+      /*var room = manager.GetRoomByIndex(0);
 
       if (room == null) return;
 
       _text.OnTeleportEnd = room.OnRoomEnter;
       _next.OnTeleportEnd = room.OnRoomEnter;
-      _wall.OnTeleportEnd = room.OnRoomEnter;
+      _wall.OnTeleportEnd = room.OnRoomEnter;*/
     }
   }
 }
