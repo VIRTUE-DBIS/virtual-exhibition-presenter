@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
@@ -9,6 +10,7 @@ namespace Unibas.DBIS.VREP.Core
   /// Settings class; serialized from/to JSON.
   /// </summary>
   [Serializable]
+  [SuppressMessage("ReSharper", "InconsistentNaming")]
   public class Settings
   {
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
@@ -53,38 +54,53 @@ namespace Unibas.DBIS.VREP.Core
       // Set default generation API settings.
       Configuration.Default.BasePath = settings.VremAddress;
 
-      Debug.Log("Making generation request.");
+      Debug.Log("Generating exhibition...");
 
-      var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, new List<string>(), 1, 16, 0);
-      var ex = await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
+      await GenerateExhibition();
 
-      Debug.Log("Parsed exhibition.");
+      Debug.Log("Generating room...");
 
-      await exhibitionManager.LoadNewExhibition(ex);
-
-      Debug.Log("Loaded exhibition.");
-
-      GenerateRoomForExhibition();
+      await GenerateRoomForExhibition();
     }
 
-    public async void GenerateRoomForExhibition()
+    public async Task GenerateExhibition()
     {
-      var listJson = exhibitionManager.exhibition.Rooms[0].Metadata["som.ids"];
+      var genReq = new GenerationRequest(
+        GenerationRequest.GenTypeEnum.VISUALSOM,
+        new List<string>(),
+        1,
+        16,
+        0
+      );
+
+      var ex = await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
+
+      exhibitionManager.Exhibition = ex;
+
+      // It's safe to already continue here.
+      exhibitionManager.LoadExhibition();
+    }
+
+    public async Task GenerateRoomForExhibition()
+    {
+      var listJson = exhibitionManager.Exhibition.Rooms[0].Metadata[MetadataType.SOM_IDS.ToString()];
       var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
       var firstList = fullList.map[0];
-      List<string> idList = new List<string>();
+      var idList = new List<string>();
 
       foreach (IdDoublePair t in firstList)
       {
         idList.Add(t.id);
       }
 
-      var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, new List<string>(), 1, 16, 0);
+      var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, idList, 1, 16, 0);
       var room = await new GenerationApi().PostApiGenerateRoomAsync(genReq);
 
       room.Position = new Vector3f(0.0f, 1.0f, 0.0f);
 
       await exhibitionManager.LoadRoom(room);
+
+      // new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
     }
 
     public void LoadExhibition()

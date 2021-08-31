@@ -12,7 +12,7 @@ namespace Unibas.DBIS.VREP.Core
   /// </summary>
   public class ExhibitionManager : MonoBehaviour
   {
-    public Exhibition exhibition;
+    public Exhibition Exhibition;
     private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
 
     public void DestroyCurrentExhibition()
@@ -25,11 +25,16 @@ namespace Unibas.DBIS.VREP.Core
 
     public async Task LoadNewExhibition(Exhibition ex)
     {
+      Exhibition = ex;
+
+      await LoadExhibition();
+    }
+
+    public async Task LoadExhibition()
+    {
       DestroyCurrentExhibition();
 
-      exhibition = ex;
-
-      foreach (var room in exhibition.Rooms)
+      foreach (var room in Exhibition.Rooms)
       {
         await LoadRoom(room);
       }
