@@ -47,13 +47,13 @@ namespace Unibas.DBIS.VREP.Multimedia
       newColors = new Color[newWidth * newHeight];
       if (useBilinear)
       {
-        ratioX = 1.0f / ((float) newWidth / (tex.width - 1));
-        ratioY = 1.0f / ((float) newHeight / (tex.height - 1));
+        ratioX = 1.0f / ((float)newWidth / (tex.width - 1));
+        ratioY = 1.0f / ((float)newHeight / (tex.height - 1));
       }
       else
       {
-        ratioX = ((float) tex.width) / newWidth;
-        ratioY = ((float) tex.height) / newHeight;
+        ratioX = ((float)tex.width) / newWidth;
+        ratioY = ((float)tex.height) / newHeight;
       }
 
       w = tex.width;
@@ -121,17 +121,17 @@ namespace Unibas.DBIS.VREP.Multimedia
 
     public static void BilinearScale(System.Object obj)
     {
-      ThreadData threadData = (ThreadData) obj;
+      ThreadData threadData = (ThreadData)obj;
       for (var y = threadData.start; y < threadData.end; y++)
       {
-        int yFloor = (int) Mathf.Floor(y * ratioY);
+        int yFloor = (int)Mathf.Floor(y * ratioY);
         var y1 = yFloor * w;
         var y2 = (yFloor + 1) * w;
         var yw = y * w2;
 
         for (var x = 0; x < w2; x++)
         {
-          int xFloor = (int) Mathf.Floor(x * ratioX);
+          int xFloor = (int)Mathf.Floor(x * ratioX);
           var xLerp = x * ratioX - xFloor;
 
           newColors[yw + x] = ColorLerpUnclamped(
@@ -148,15 +148,15 @@ namespace Unibas.DBIS.VREP.Multimedia
 
     public static void PointScale(System.Object obj)
     {
-      ThreadData threadData = (ThreadData) obj;
+      ThreadData threadData = (ThreadData)obj;
       for (var y = threadData.start; y < threadData.end; y++)
       {
-        var thisY = (int) (ratioY * y) * w;
+        var thisY = (int)(ratioY * y) * w;
         var yw = y * w2;
 
         for (var x = 0; x < w2; x++)
         {
-          newColors[yw + x] = texColors[(int) (thisY + ratioX * x)];
+          newColors[yw + x] = texColors[(int)(thisY + ratioX * x)];
         }
       }
 

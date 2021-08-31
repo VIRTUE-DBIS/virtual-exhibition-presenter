@@ -226,7 +226,7 @@ namespace Unibas.DBIS.VREP.World
     {
       var co = new GameObject("Canvas");
       var canvas = co.AddComponent<Canvas>();
-      var rt = (RectTransform) canvas.transform;
+      var rt = (RectTransform)canvas.transform;
 
       // rt.sizeDelta = new Vector2(512, 512);
       co.transform.localScale = new Vector3((GetButtonSize() - 2 * GetButtonBorder()) / rt.rect.width,

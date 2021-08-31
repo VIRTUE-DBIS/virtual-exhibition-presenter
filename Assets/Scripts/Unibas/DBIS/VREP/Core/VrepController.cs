@@ -50,11 +50,13 @@ namespace Unibas.DBIS.VREP.Core
         ResetPlayerToLobby();
       }
 
+      // Set default generation API settings.
+      Configuration.Default.BasePath = settings.VremAddress;
+
       Debug.Log("Making generation request.");
 
       var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, new List<string>(), 1, 16, 0);
-      var ex = await new GenerationApi(new Configuration().BasePath = "http://localhost:4545")
-        .PostApiGenerateExhibitionAsync(genReq);
+      var ex = await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
 
       Debug.Log("Parsed exhibition.");
 
@@ -76,10 +78,9 @@ namespace Unibas.DBIS.VREP.Core
       {
         idList.Add(t.id);
       }
-      
+
       var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, new List<string>(), 1, 16, 0);
-      var room = await new GenerationApi(new Configuration().BasePath = "http://localhost:4545")
-        .PostApiGenerateRoomAsync(genReq);
+      var room = await new GenerationApi().PostApiGenerateRoomAsync(genReq);
 
       room.Position = new Vector3f(0.0f, 1.0f, 0.0f);
 
