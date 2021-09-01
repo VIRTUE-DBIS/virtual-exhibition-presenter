@@ -5,7 +5,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
-using Unibas.DBIS.VREP.Core.Generation;
+using Unibas.DBIS.VREP.Generation;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
 

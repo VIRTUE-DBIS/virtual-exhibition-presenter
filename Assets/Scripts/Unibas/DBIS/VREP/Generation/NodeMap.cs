@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Unibas.DBIS.VREP.Core.Generation
+namespace Unibas.DBIS.VREP.Generation
 {
   [Serializable]
   public class NodeMap

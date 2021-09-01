@@ -52,7 +52,7 @@ namespace Unibas.DBIS.VREP.World
 
       foreach (var e in WallData.Exhibits)
       {
-        await Task.Delay(100);
+        await Task.Yield();
 
         var displayal = Instantiate(prefab, Anchor.transform, true);
         displayal.name = "Displayal (" + e.Name + ")";
@@ -65,6 +65,14 @@ namespace Unibas.DBIS.VREP.World
           ? Quaternion.Euler(92.5f, 0, 180) // Slightly more than 90° or it would fall down.
           : Quaternion.Euler(90, 0, 180);
         displayal.transform.localRotation = rot; // Required due to prefab orientation.
+
+        // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
+        if (e.Metadata.ContainsKey(MetadataType.SomIds.GetKey()))
+        {
+          // TODO Attach controls here.
+          // var json = e.Metadata[MetadataType.SomIds.GetKey()];
+          // var ids = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
+        }
 
         if (!VrepController.Instance.settings.SpotsEnabled || !e.Light)
         {

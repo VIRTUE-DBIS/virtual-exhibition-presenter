@@ -17,6 +17,7 @@ namespace Unibas.DBIS.VREP.Core
 
   public enum MetadataType
   {
+    Generated,
     SomIds,
     Seed
   }
