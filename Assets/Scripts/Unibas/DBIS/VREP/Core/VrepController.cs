@@ -83,7 +83,7 @@ namespace Unibas.DBIS.VREP.Core
 
     public async Task GenerateRoomForExhibition()
     {
-      var listJson = exhibitionManager.Exhibition.Rooms[0].Metadata[MetadataType.SOM_IDS.ToString()];
+      var listJson = exhibitionManager.Exhibition.Rooms[0].Metadata[MetadataType.SomIds.GetKey()];
       var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
       var firstList = fullList.map[0];
       var idList = new List<string>();
@@ -100,7 +100,7 @@ namespace Unibas.DBIS.VREP.Core
 
       await exhibitionManager.LoadRoom(room);
 
-      // new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
+      new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
     }
 
     public void LoadExhibition()
