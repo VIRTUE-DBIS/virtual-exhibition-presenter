@@ -1,10 +1,11 @@
 {
   "dependencies": {
     "ch.unibas.dmi.dbis.vrem.client": {
-      "version": "file:Vrem-Client",
+      "version": "ssh://git@github.com/simonpeterhans/vrem-unity-interface.git#main",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "f502a401e87766a4f86ff5968173f99a942257a1"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
