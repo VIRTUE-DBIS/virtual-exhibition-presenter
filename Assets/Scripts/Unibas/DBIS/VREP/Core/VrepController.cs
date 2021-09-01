@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
-using Unibas.DBIS.VREP.VREM;
+using Unibas.DBIS.VREP.Core.Config;
+using Unibas.DBIS.VREP.Core.Generation;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
 
@@ -39,9 +41,6 @@ namespace Unibas.DBIS.VREP.Core
 
     private async void Start()
     {
-      // Fix URL.
-      SanitizeHost();
-
       // Create exhibition manager.
       exhibitionManager = gameObject.AddComponent<ExhibitionManager>();
 
@@ -51,34 +50,48 @@ namespace Unibas.DBIS.VREP.Core
         ResetPlayerToLobby();
       }
 
-      // Set default generation API settings.
+      // VREM Client settings.
       Configuration.Default.BasePath = settings.VremAddress;
 
-      Debug.Log("Generating exhibition...");
-
-      await GenerateExhibition();
-
-      Debug.Log("Generating room...");
-
-      await GenerateRoomForExhibition();
+      await LoadInitialExhibition();
     }
 
-    public async Task GenerateExhibition()
+    public async Task LoadInitialExhibition()
+    {
+      Exhibition ex;
+
+      switch (settings.ExhibitionMode)
+      {
+        case Mode.Generation:
+          ex = await GenerateExhibition();
+          break;
+        case Mode.Static:
+          ex = await LoadExhibitionById();
+          break;
+        default:
+          Debug.LogError("Invalid exhibition mode specified!");
+          throw new ArgumentOutOfRangeException();
+      }
+
+      await exhibitionManager.LoadNewExhibition(ex);
+    }
+
+    public async Task<Exhibition> LoadExhibitionById()
+    {
+      return await new ExhibitionApi().GetApiExhibitionsLoadIdWithIdAsync(settings.ExhibitionId);
+    }
+
+    public async Task<Exhibition> GenerateExhibition()
     {
       var genReq = new GenerationRequest(
         GenerationRequest.GenTypeEnum.VISUALSOM,
         new List<string>(),
-        1,
-        16,
-        0
+        settings.GenerationSettings.Height,
+        settings.GenerationSettings.Width,
+        settings.GenerationSettings.Seed
       );
 
-      var ex = await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
-
-      exhibitionManager.Exhibition = ex;
-
-      // It's safe to already continue here.
-      exhibitionManager.LoadExhibition();
+      return await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
     }
 
     public async Task GenerateRoomForExhibition()
@@ -103,10 +116,6 @@ namespace Unibas.DBIS.VREP.Core
       new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
     }
 
-    public void LoadExhibition()
-    {
-    }
-
     public void ResetPlayerToLobby()
     {
       var go = GameObject.FindWithTag("Player");
@@ -116,19 +125,6 @@ namespace Unibas.DBIS.VREP.Core
       {
         go.transform.position = new Vector3(0, -9.9f, 0);
         lby.SetActive(true);
-      }
-    }
-
-    private void SanitizeHost()
-    {
-      if (!settings.VremAddress.EndsWith("/"))
-      {
-        settings.VremAddress += "/";
-      }
-
-      if (!settings.VremAddress.StartsWith("http://"))
-      {
-        settings.VremAddress = "http://" + settings.VremAddress;
       }
     }
   }

@@ -4,19 +4,40 @@ using System.IO;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
 
-namespace Unibas.DBIS.VREP.Core
+namespace Unibas.DBIS.VREP.Core.Config
 {
+  public enum Mode
+  {
+    Static,
+    Generation
+  }
+
+  [Serializable]
+  [SuppressMessage("ReSharper", "InconsistentNaming")]
+  public class GenerationSettings
+  {
+    public int Height = 1;
+
+    public int Width = 16;
+
+    public int Seed = 0;
+  }
+
   /// <summary>
   /// Settings class; serialized from/to JSON.
   /// </summary>
   [Serializable]
-  [SuppressMessage("ReSharper", "InconsistentNaming")]
   public class Settings
   {
     /// <summary>
     /// The Address of the VREM server instance, inclusive port.
     /// </summary>
     public string VremAddress;
+
+    /// <summary>
+    /// Whether in each room a timer is placed on the wall, counting down provided seconds.
+    /// </summary>
+    public int WallTimerCount;
 
     /// <summary>
     /// Whether the player starts in the lobby.
@@ -48,21 +69,20 @@ namespace Unibas.DBIS.VREP.Core
     public bool CeilingLogoEnabled = true;
 
     /// <summary>
-    /// Whether in each room a timer is placed on the wall, counting down provided seconds.
-    /// </summary>
-    public int WallTimerCount;
-
-    /// <summary>
     /// Whether experimental features are enabled.
     /// Default: False
     /// </summary>
     public bool PlaygroundEnabled;
+
+    public Mode ExhibitionMode = Mode.Static;
 
     /// <summary>
     /// The ID of the exhibition to load.
     /// Default: Empty
     /// </summary>
     public string ExhibitionId;
+
+    public GenerationSettings GenerationSettings = new GenerationSettings();
 
     /// <summary>
     /// The file name of this settings file.
@@ -168,7 +188,7 @@ namespace Unibas.DBIS.VREP.Core
       }
       else
       {
-        Debug.Log("Configuration already exists, will not override settings.");
+        Debug.Log("Configuration already exists, not overriding settings.");
       }
     }
   }
