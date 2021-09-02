@@ -65,15 +65,7 @@ namespace Unibas.DBIS.VREP.World
           ? Quaternion.Euler(92.5f, 0, 180) // Slightly more than 90° or it would fall down.
           : Quaternion.Euler(90, 0, 180);
         displayal.transform.localRotation = rot; // Required due to prefab orientation.
-
-        // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
-        if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
-        {
-          // TODO Attach controls here.
-          // var json = e.Metadata[MetadataType.SomIds.GetKey()];
-          // var ids = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
-        }
-
+        
         if (!VrepController.Instance.settings.SpotsEnabled || !e.Light)
         {
           displayal.transform.Find("Directional light").gameObject.SetActive(false);
@@ -94,6 +86,23 @@ namespace Unibas.DBIS.VREP.World
           var closenessDetector = displayal.AddComponent<ClosenessDetector>();
           closenessDetector.url = e.Audio;
           Debug.Log("Added audio to display object.");
+        }
+        
+        // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
+        if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
+        {
+          // TODO Attach controls here.
+          var go = SteamVRGenerateButton.Create(
+            displayal,
+            new Vector3(0.5f, 0.0f, 8.0f),
+            new Vector3(),
+            new SteamVRGenerateButton.GenerateButtonModel(1.0f, 0.01f, 2.0f, null,
+              TexturingUtility.LoadMaterialByName("NMetal"), TexturingUtility.LoadMaterialByName("NPlastic"), false),
+            "Test"
+          );
+          go.transform.localRotation = Quaternion.Euler(90.0f, 180.0f, 0.0f);
+          // var json = e.Metadata[MetadataType.SomIds.GetKey()];
+          // var ids = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
         }
       }
     }
