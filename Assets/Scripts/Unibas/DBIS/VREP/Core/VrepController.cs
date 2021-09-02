@@ -5,9 +5,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
-using Unibas.DBIS.VREP.Generation;
 using UnityEngine;
-using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.Core
 {
@@ -41,6 +39,9 @@ namespace Unibas.DBIS.VREP.Core
 
     private async void Start()
     {
+      // Clean address.
+      SanitizeHost();
+
       // Create exhibition manager.
       exhibitionManager = gameObject.AddComponent<ExhibitionManager>();
 
@@ -94,7 +95,7 @@ namespace Unibas.DBIS.VREP.Core
       return await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
     }
 
-    public async Task GenerateRoomForExhibition()
+    /*public async Task GenerateRoomForExhibition()
     {
       var listJson = exhibitionManager.Exhibition.Rooms[0].Metadata[MetadataType.SomIds.GetKey()];
       var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
@@ -114,7 +115,7 @@ namespace Unibas.DBIS.VREP.Core
       await exhibitionManager.LoadRoom(room);
 
       new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
-    }
+    }*/
 
     public void ResetPlayerToLobby()
     {
@@ -125,6 +126,24 @@ namespace Unibas.DBIS.VREP.Core
       {
         go.transform.position = new Vector3(0, -9.9f, 0);
         lby.SetActive(true);
+      }
+    }
+
+    /// <summary>
+    /// Fixes the server URL by adding the http:// prefix and/or trailing /.
+    /// </summary>
+    private void SanitizeHost()
+    {
+      // Add trailing /.
+      if (!settings.VremAddress.EndsWith("/"))
+      {
+        settings.VremAddress += "/";
+      }
+
+      // TODO TLS support.
+      if (!settings.VremAddress.StartsWith("http://"))
+      {
+        settings.VremAddress = "http://" + settings.VremAddress;
       }
     }
   }

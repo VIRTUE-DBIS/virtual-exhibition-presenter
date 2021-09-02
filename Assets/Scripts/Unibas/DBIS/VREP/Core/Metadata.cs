@@ -17,8 +17,9 @@ namespace Unibas.DBIS.VREP.Core
 
   public enum MetadataType
   {
-    Generated,
-    SomIds,
-    Seed
+    Generated, // Per room (bool), set by VREM (could be set via VREP).
+    Predecessor, // Per room (refers room ID), set by VREP.
+    MemberIds, // Per exhibit (list of IdDoublePairs), set by VREM.
+    Seed // Per room (int), set by VREM (could be set via VREP).
   }
 }

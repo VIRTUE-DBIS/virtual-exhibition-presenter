@@ -20,7 +20,7 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
-    private static void TestObjectFactory()
+    private static async void TestObjectFactory()
     {
       var nw = new Wall { Direction = Wall.DirectionEnum.NORTH, Texture = "NBricks" };
       var ew = new Wall { Direction = Wall.DirectionEnum.EAST, Texture = "LimeBricks" };
@@ -36,7 +36,7 @@ namespace Unibas.DBIS.VREP.Core
         Walls = new List<Wall> { nw, ew, sw, ww }
       };
 
-      ObjectFactory.BuildRoom(room);
+      await ObjectFactory.BuildRoom(room);
     }
   }
 }

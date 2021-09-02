@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unibas.DBIS.VREP.Core;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -37,6 +38,7 @@ namespace Unibas.DBIS.VREP.Utils
       if (!string.IsNullOrEmpty(url) && _audioSource.clip == null && !_downloading)
       {
         _downloading = true;
+
         StartCoroutine(LoadAudio(url));
       }
 
@@ -59,6 +61,11 @@ namespace Unibas.DBIS.VREP.Utils
     /// <returns>The result yielded from the request.</returns>
     private IEnumerator LoadAudio(string audioURL)
     {
+      // Unfortunately, there is no easy way to convert a byte array to an audio file.
+      // Therefore, we do not use the generated VREM client to access the API here.
+
+      audioURL = VrepController.Instance.settings.VremAddress + "api/content/" + audioURL.Replace("/", "%2F");
+
       using var request = UnityWebRequestMultimedia.GetAudioClip(audioURL, AudioType.OGGVORBIS);
 
       yield return request.SendWebRequest();

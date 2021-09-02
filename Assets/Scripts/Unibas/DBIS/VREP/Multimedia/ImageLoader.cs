@@ -1,6 +1,5 @@
 ﻿using System;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
-using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using RestSharp.Extensions;
 using UnityEngine;
 
@@ -42,8 +41,7 @@ namespace Unibas.DBIS.VREP.Multimedia
     /// <param name="url">The full image URL.</param>
     public async void ReloadImage(string url)
     {
-      var req =
-        await new ContentApi(new Configuration().BasePath = "http://localhost:4545").GetApiContentWithPathAsync(url);
+      var req = await new ContentApi().GetApiContentWithPathAsync(url);
 
       AddImage(req.ReadAsBytes());
     }

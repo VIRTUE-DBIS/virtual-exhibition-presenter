@@ -67,7 +67,7 @@ namespace Unibas.DBIS.VREP.World
         displayal.transform.localRotation = rot; // Required due to prefab orientation.
 
         // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
-        if (e.Metadata.ContainsKey(MetadataType.SomIds.GetKey()))
+        if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
         {
           // TODO Attach controls here.
           // var json = e.Metadata[MetadataType.SomIds.GetKey()];
@@ -92,7 +92,7 @@ namespace Unibas.DBIS.VREP.World
         if (e.Audio != null)
         {
           var closenessDetector = displayal.AddComponent<ClosenessDetector>();
-          closenessDetector.url = e.Path;
+          closenessDetector.url = e.Audio;
           Debug.Log("Added audio to display object.");
         }
       }
