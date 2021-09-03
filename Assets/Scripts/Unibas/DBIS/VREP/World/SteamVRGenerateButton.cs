@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Movement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +37,9 @@ namespace Unibas.DBIS.VREP.World
       }
     }
 
+    public GenerationRequest.GenTypeEnum type;
+    public List<string> ids;
+
     public Vector3 destination;
 
     [SerializeField] public GenerateButtonModel model;
@@ -50,8 +56,8 @@ namespace Unibas.DBIS.VREP.World
     public Action OnTeleportStart;
     public Action OnTeleportEnd;
 
-    public static SteamVRGenerateButton Create(GameObject parent, Vector3 position, Vector3 destination,
-      GenerateButtonModel model, string text)
+    public static SteamVRGenerateButton Create(GenerationRequest.GenTypeEnum type, List<string> idList,
+      GameObject parent, Vector3 position, Vector3 destination, GenerateButtonModel model, string text)
     {
       var go = new GameObject("GenerateButton");
       var tp = go.AddComponent<SteamVRGenerateButton>();
@@ -62,6 +68,9 @@ namespace Unibas.DBIS.VREP.World
       tp.destination = destination;
       tp.model = model;
       tp.text = text;
+
+      tp.type = type;
+      tp.ids = idList;
 
       return tp;
     }
@@ -180,6 +189,8 @@ namespace Unibas.DBIS.VREP.World
     public void ButtonPress()
     {
       Debug.Log("Pressed.");
+      VrepController.Instance.GenerateAndLoadExhibition(type, ids);
+
       // OnTeleportStart?.Invoke();
       // teleporter.TeleportPlayer();
       // OnTeleportEnd?.Invoke();

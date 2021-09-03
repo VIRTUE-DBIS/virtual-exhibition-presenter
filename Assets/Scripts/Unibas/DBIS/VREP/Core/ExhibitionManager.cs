@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Unibas.DBIS.VREP.Core
 {
@@ -13,13 +14,35 @@ namespace Unibas.DBIS.VREP.Core
   public class ExhibitionManager : MonoBehaviour
   {
     public Exhibition Exhibition;
-    private List<CuboidExhibitionRoom> _rooms = new List<CuboidExhibitionRoom>();
+
+    public Dictionary<string, CuboidExhibitionRoom> RoomMap = new Dictionary<string, CuboidExhibitionRoom>();
 
     public void DestroyCurrentExhibition()
     {
-      if (_rooms.Any())
+      var rooms = RoomMap.Values;
+
+      rooms.ForEach(r => Destroy(r.gameObject));
+    }
+
+    public void DeactivateAllRooms()
+    {
+      var rooms = RoomMap.Values;
+
+      rooms.ForEach(r => r.gameObject.SetActive(false));
+    }
+
+    public void ActivateAllRooms()
+    {
+      var rooms = RoomMap.Values;
+
+      rooms.ForEach(r => r.gameObject.SetActive(true));
+    }
+
+    public void ActivateRoomById(string id)
+    {
+      if (RoomMap.ContainsKey(id))
       {
-        _rooms.ForEach(Destroy);
+        RoomMap[id].gameObject.SetActive(true);
       }
     }
 
@@ -44,7 +67,12 @@ namespace Unibas.DBIS.VREP.Core
     {
       var roomGameObject = await ObjectFactory.BuildRoom(room);
       var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
-      _rooms.Add(exhibitionRoom);
+
+      // Add room to map.
+      RoomMap[room.Id] = exhibitionRoom;
+
+      // Disable room by default (don't do this if it turns out to be of no use).
+      // roomGameObject.SetActive(false);
     }
   }
 }

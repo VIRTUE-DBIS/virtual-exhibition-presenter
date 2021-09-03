@@ -64,7 +64,7 @@ namespace Unibas.DBIS.VREP.Core
       switch (settings.ExhibitionMode)
       {
         case Mode.Generation:
-          ex = await GenerateExhibition();
+          ex = await GenerateExhibition(GenerationRequest.GenTypeEnum.VISUALSOM);
           break;
         case Mode.Static:
           ex = await LoadExhibitionById();
@@ -82,17 +82,25 @@ namespace Unibas.DBIS.VREP.Core
       return await new ExhibitionApi().GetApiExhibitionsLoadIdWithIdAsync(settings.ExhibitionId);
     }
 
-    public async Task<Exhibition> GenerateExhibition()
+    public async Task<Exhibition> GenerateExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
     {
+      idList ??= new List<string>();
+
       var genReq = new GenerationRequest(
-        GenerationRequest.GenTypeEnum.VISUALSOM,
-        new List<string>(),
+        type,
+        idList,
         settings.GenerationSettings.Height,
         settings.GenerationSettings.Width,
         settings.GenerationSettings.Seed
       );
 
       return await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
+    }
+
+    public async void GenerateAndLoadExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
+    {
+      var id = await GenerateExhibition(type, idList);
+      await exhibitionManager.LoadNewExhibition(id);
     }
 
     /*public async Task GenerateRoomForExhibition()

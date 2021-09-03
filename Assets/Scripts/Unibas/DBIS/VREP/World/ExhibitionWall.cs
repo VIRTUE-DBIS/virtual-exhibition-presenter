@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.Generation;
 using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Multimedia;
 using Unibas.DBIS.VREP.Utils;
@@ -91,8 +93,14 @@ namespace Unibas.DBIS.VREP.World
         // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
         if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
         {
+          var json = e.Metadata[MetadataType.MemberIds.GetKey()];
+          var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
+          var ids = idDoublePairs.Select(it => it.id).ToList();
+          
           // TODO Attach controls here.
           var go = SteamVRGenerateButton.Create(
+            GenerationRequest.GenTypeEnum.VISUALSOM,
+            ids,
             displayal,
             new Vector3(0.5f, 0.0f, 8.0f),
             new Vector3(),
@@ -101,8 +109,7 @@ namespace Unibas.DBIS.VREP.World
             "Test"
           );
           go.transform.localRotation = Quaternion.Euler(90.0f, 180.0f, 0.0f);
-          // var json = e.Metadata[MetadataType.SomIds.GetKey()];
-          // var ids = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
+
         }
       }
     }
