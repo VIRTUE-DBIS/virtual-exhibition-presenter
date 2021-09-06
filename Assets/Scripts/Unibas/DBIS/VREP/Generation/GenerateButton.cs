@@ -12,10 +12,10 @@ namespace Unibas.DBIS.VREP.Generation
 
     public Vector3 destination; // Use room here?
 
-    public void ButtonPress()
+    public async void ButtonPress()
     {
       Debug.Log("Pressed.");
-      VrepController.Instance.GenerateAndLoadExhibition(type, ids);
+      await VrepController.Instance.GenerateAndLoadRoomForExhibition(type, ids);
     }
   }
 }

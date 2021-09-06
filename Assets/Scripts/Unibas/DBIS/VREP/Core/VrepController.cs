@@ -53,6 +53,7 @@ namespace Unibas.DBIS.VREP.Core
 
       // VREM Client settings.
       Configuration.Default.BasePath = settings.VremAddress;
+      Configuration.Default.Timeout = 3600_000;
 
       await LoadInitialExhibition();
     }
@@ -82,19 +83,24 @@ namespace Unibas.DBIS.VREP.Core
       return await new ExhibitionApi().GetApiExhibitionsLoadIdWithIdAsync(settings.ExhibitionId);
     }
 
-    public async Task<Exhibition> GenerateExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
+    public GenerationRequest CreateGenerationRequest(GenerationRequest.GenTypeEnum type, List<string> idList = null)
     {
       idList ??= new List<string>();
 
-      var genReq = new GenerationRequest(
+      // TODO If the ID list is too short w.r.t. height/width, adjust height/width accordingly.
+
+      return new GenerationRequest(
         type,
         idList,
         settings.GenerationSettings.Height,
         settings.GenerationSettings.Width,
         settings.GenerationSettings.Seed
       );
+    }
 
-      return await new GenerationApi().PostApiGenerateExhibitionAsync(genReq);
+    public async Task<Exhibition> GenerateExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
+    {
+      return await new GenerationApi().PostApiGenerateExhibitionAsync(CreateGenerationRequest(type, idList));
     }
 
     public async void GenerateAndLoadExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
@@ -103,27 +109,16 @@ namespace Unibas.DBIS.VREP.Core
       await exhibitionManager.LoadNewExhibition(id);
     }
 
-    /*public async Task GenerateRoomForExhibition()
+    public async Task GenerateAndLoadRoomForExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
     {
-      var listJson = exhibitionManager.Exhibition.Rooms[0].Metadata[MetadataType.SomIds.GetKey()];
-      var fullList = JsonConvert.DeserializeObject<NodeMap>(listJson);
-      var firstList = fullList.map[0];
-      var idList = new List<string>();
-
-      foreach (IdDoublePair t in firstList)
-      {
-        idList.Add(t.id);
-      }
-
-      var genReq = new GenerationRequest(GenerationRequest.GenTypeEnum.VISUALSOM, idList, 1, 16, 0);
-      var room = await new GenerationApi().PostApiGenerateRoomAsync(genReq);
+      var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
 
       room.Position = new Vector3f(0.0f, 1.0f, 0.0f);
 
       await exhibitionManager.LoadRoom(room);
 
-      new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
-    }*/
+      // new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
+    }
 
     public void ResetPlayerToLobby()
     {

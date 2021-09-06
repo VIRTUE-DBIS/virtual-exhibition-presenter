@@ -10,7 +10,6 @@ using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Multimedia;
 using Unibas.DBIS.VREP.Utils;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Unibas.DBIS.VREP.World
 {
@@ -47,8 +46,10 @@ namespace Unibas.DBIS.VREP.World
       displayals.ForEach(d => d.RestorePosition());
     }
 
-    private GameObject CreateDisplayalFromExhibit(Exhibit e)
+    private async Task<GameObject> CreateDisplayalFromExhibit(Exhibit e)
     {
+      await Task.Yield();
+
       var displayalPrefab = ObjectFactory.GetDisplayalPrefab();
 
       var displayal = Instantiate(displayalPrefab, Anchor.transform, true);
@@ -97,9 +98,12 @@ namespace Unibas.DBIS.VREP.World
       var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
       var ids = idDoublePairs.Select(it => it.id).ToList();
 
+      var localScale = displayal.transform.localScale;
       var types = Enum.GetValues(typeof(GenerationRequest.GenTypeEnum));
       var offset = 2.0f;
       var shift = types.Length / 2;
+      var xFactor = 0.2f / localScale.x;
+      var zFactor = 0.2f / localScale.z;
 
       foreach (GenerationRequest.GenTypeEnum method in types)
       {
@@ -107,9 +111,13 @@ namespace Unibas.DBIS.VREP.World
         genButton.name = "Generation Button (" + method.GetName() + ")";
 
         genButton.transform.localRotation = Quaternion.Euler(90.0f, 0.0f, 180.0f);
-        // TODO Adjust local position based on exhibit height.
-        genButton.transform.localPosition = new Vector3(offset * ((int)method - shift - 1), 0.0f, 10.0f);
-        genButton.transform.localScale = new Vector3(0.75f, 0.75f, 1.0f);
+        genButton.transform.localPosition =
+          new Vector3(offset * ((int)method - shift - 1) * xFactor, 0.0f, 7.5f * zFactor);
+        genButton.transform.localScale = new Vector3(
+          0.75f * xFactor,
+          0.75f * zFactor, // Y/Z inverted due to different prefab orientation...
+          0.01f
+        );
 
         // Button.
         GenerateButton genButtonComponent = genButton.GetComponent<GenerateButton>();
@@ -128,9 +136,7 @@ namespace Unibas.DBIS.VREP.World
     {
       foreach (var e in WallData.Exhibits)
       {
-        await Task.Yield();
-
-        var displayal = CreateDisplayalFromExhibit(e);
+        var displayal = await CreateDisplayalFromExhibit(e);
 
         // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
         if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))

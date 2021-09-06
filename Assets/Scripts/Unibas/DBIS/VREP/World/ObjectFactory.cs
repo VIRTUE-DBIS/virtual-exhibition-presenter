@@ -73,7 +73,7 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     /// <param name="roomData">The room data that should be used to build this room (as received from VREM).</param>
     /// <returns>The GameObject for the created room.</returns>
-    public async static Task<GameObject> BuildRoom(Room roomData)
+    public static async Task<GameObject> BuildRoom(Room roomData)
     {
       // Create room model.
       var modelData = new CuboidRoomModel(
