@@ -170,7 +170,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onHandClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4532750761326365865}
+        m_TargetAssemblyTypeName: Unibas.DBIS.VREP.Generation.GenerateButton, Assembly-CSharp
+        m_MethodName: ButtonPress
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5909041947721237539
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,7 +209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5909041947721237539}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0049999957, y: 0.005000116, z: 0.0050000018}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8264449367823958482}
@@ -252,7 +264,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5909041947721237539}
-  m_Text: Hello World
+  m_Text: Test
   m_OffsetZ: 0
   m_CharacterSize: 0.05
   m_LineSpacing: 1
@@ -359,7 +371,7 @@ GameObject:
   - component: {fileID: 4532750761326365865}
   - component: {fileID: 3688521999265350482}
   m_Layer: 0
-  m_Name: GenerateButton
+  m_Name: GenerationButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -394,336 +406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6322200617ce460a93f14df707c12b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  ids:
-  - i_50
-  - i_8307
-  - i_2337
-  - i_6759
-  - i_6435
-  - i_1751
-  - i_1672
-  - i_3217
-  - i_8998
-  - i_5802
-  - i_4476
-  - i_8408
-  - i_8112
-  - i_1412
-  - i_2805
-  - i_1274
-  - i_3949
-  - i_6836
-  - i_4905
-  - i_5312
-  - i_3166
-  - i_3416
-  - i_6241
-  - i_9401
-  - i_4776
-  - i_3219
-  - i_4782
-  - i_4914
-  - i_4500
-  - i_8049
-  - i_2481
-  - i_6969
-  - i_5805
-  - i_2815
-  - i_4042
-  - i_873
-  - i_5248
-  - i_5255
-  - i_7022
-  - i_7134
-  - i_1411
-  - i_9703
-  - i_6183
-  - i_608
-  - i_9674
-  - i_4649
-  - i_5642
-  - i_3496
-  - i_9695
-  - i_4836
-  - i_269
-  - i_4330
-  - i_3857
-  - i_7706
-  - i_3197
-  - i_3517
-  - i_4995
-  - i_5199
-  - i_4037
-  - i_8050
-  - i_3895
-  - i_5964
-  - i_9301
-  - i_6082
-  - i_2590
-  - i_4110
-  - i_7731
-  - i_9967
-  - i_918
-  - i_3171
-  - i_3854
-  - i_4732
-  - i_5615
-  - i_7317
-  - i_7035
-  - i_2536
-  - i_6625
-  - i_2993
-  - i_9049
-  - i_2892
-  - i_2666
-  - i_2556
-  - i_2866
-  - i_6740
-  - i_8350
-  - i_5591
-  - i_6482
-  - i_9690
-  - i_1223
-  - i_7917
-  - i_7811
-  - i_8587
-  - i_764
-  - i_4368
-  - i_795
-  - i_2103
-  - i_2558
-  - i_8576
-  - i_7156
-  - i_7379
-  - i_6630
-  - i_9385
-  - i_3327
-  - i_303
-  - i_4771
-  - i_1116
-  - i_8251
-  - i_9675
-  - i_6058
-  - i_2349
-  - i_9531
-  - i_7047
-  - i_4750
-  - i_2661
-  - i_8766
-  - i_1555
-  - i_8718
-  - i_5924
-  - i_5259
-  - i_4859
-  - i_7554
-  - i_4988
-  - i_2044
-  - i_110
-  - i_8788
-  - i_7835
-  - i_8170
-  - i_9704
-  - i_9369
-  - i_2676
-  - i_1861
-  - i_6468
-  - i_6747
-  - i_778
-  - i_296
-  - i_9854
-  - i_4277
-  - i_7490
-  - i_440
-  - i_839
-  - i_1177
-  - i_3587
-  - i_9339
-  - i_6305
-  - i_6756
-  - i_5020
-  - i_2905
-  - i_2148
-  - i_9603
-  - i_4866
-  - i_7890
-  - i_791
-  - i_5311
-  - i_5629
-  - i_7608
-  - i_3126
-  - i_1024
-  - i_1187
-  - i_8167
-  - i_2798
-  - i_8847
-  - i_6655
-  - i_6271
-  - i_2477
-  - i_2789
-  - i_950
-  - i_2927
-  - i_8951
-  - i_8406
-  - i_6760
-  - i_2845
-  - i_9510
-  - i_9041
-  - i_9235
-  - i_9362
-  - i_5653
-  - i_5359
-  - i_6830
-  - i_2153
-  - i_8504
-  - i_740
-  - i_2550
-  - i_9160
-  - i_9601
-  - i_1601
-  - i_5635
-  - i_5597
-  - i_819
-  - i_3094
-  - i_7836
-  - i_6821
-  - i_585
-  - i_2565
-  - i_3117
-  - i_3679
-  - i_7903
-  - i_7452
-  - i_3026
-  - i_1617
-  - i_6043
-  - i_6330
-  - i_3590
-  - i_5871
-  - i_2056
-  - i_2794
-  - i_148
-  - i_9864
-  - i_3931
-  - i_9329
-  - i_6124
-  - i_1485
-  - i_6948
-  - i_1517
-  - i_9398
-  - i_3163
-  - i_5763
-  - i_8764
-  - i_862
-  - i_4280
-  - i_3772
-  - i_4306
-  - i_4372
-  - i_9670
-  - i_6536
-  - i_2819
-  - i_2324
-  - i_9148
-  - i_9749
-  - i_350
-  - i_5559
-  - i_7436
-  - i_1491
-  - i_8300
-  - i_3686
-  - i_85
-  - i_9903
-  - i_8733
-  - i_5613
-  - i_9152
-  - i_8380
-  - i_8648
-  - i_9871
-  - i_9819
-  - i_7274
-  - i_963
-  - i_1516
-  - i_5789
-  - i_9709
-  - i_1368
-  - i_8907
-  - i_9653
-  - i_9278
-  - i_5921
-  - i_8874
-  - i_8415
-  - i_6752
-  - i_4234
-  - i_6690
-  - i_3972
-  - i_1492
-  - i_6750
-  - i_1296
-  - i_5436
-  - i_1980
-  - i_1645
-  - i_4445
-  - i_4629
-  - i_1081
-  - i_520
-  - i_9067
-  - i_1514
-  - i_7017
-  - i_1905
-  - i_2297
-  - i_3716
-  - i_4211
-  - i_5775
-  - i_6373
-  - i_9225
-  - i_1506
-  - i_9138
-  - i_6306
-  - i_241
-  - i_4169
-  - i_9083
-  - i_8550
-  - i_3336
-  - i_592
-  - i_5883
-  - i_8475
-  - i_6486
-  - i_7517
-  - i_8566
-  - i_6063
-  - i_7974
-  - i_1670
-  - i_2629
-  - i_6639
-  - i_2444
-  - i_5415
-  - i_849
-  - i_3643
-  - i_703
-  - i_4759
-  - i_1893
-  - i_6789
-  - i_582
-  - i_176
-  - i_7520
-  - i_4321
-  - i_9772
-  - i_9933
-  - i_2192
+  type: 5
+  ids: []
   destination: {x: 0, y: 0, z: 0}
-  model:
-    size: 1
-    border: 0.01
-    height: 0
-    pedestalMaterial: {fileID: 0}
-    plateMaterial: {fileID: 2100000, guid: 2067f760c18509c4693e2190b898fe2a, type: 2}
-    buttonMaterial: {fileID: 2100000, guid: 190ae71093c17bb4682fd48babadaa4c, type: 2}
-    hasPedestal: 0
-  text: Test
-  image: {fileID: 0}
-  uiElement: {fileID: 0}
-  pedestal: {fileID: 0}
-  button: {fileID: 4219694086127687318}
-  teleporter: {fileID: 3688521999265350482}
 --- !u!114 &3688521999265350482
 MonoBehaviour:
   m_ObjectHideFlags: 0

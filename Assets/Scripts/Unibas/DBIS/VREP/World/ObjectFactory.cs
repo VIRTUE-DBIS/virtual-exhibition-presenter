@@ -41,6 +41,18 @@ namespace Unibas.DBIS.VREP.World
       return prefab;
     }
 
+    public static GameObject GetGenerationButtonPrefab()
+    {
+      var prefab = Resources.Load("Prefabs/GenerationButton", typeof(GameObject)) as GameObject;
+
+      if (prefab == null)
+      {
+        throw new Exception($"Could not load '{Settings.standardDisplayalPrefabName}' as Resource.");
+      }
+
+      return prefab;
+    }
+
     /// <summary>
     /// Calculates the absolute position of a room based on its relative position and size in the exhibition.
     /// </summary>
