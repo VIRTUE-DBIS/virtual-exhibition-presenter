@@ -77,7 +77,8 @@ namespace Unibas.DBIS.VREP.World
     {
       // Create room model.
       var modelData = new CuboidRoomModel(
-        CalculateRoomPosition(roomData),
+        // CalculateRoomPosition(roomData),
+        new Vector3(roomData.Position.X, roomData.Position.Y, roomData.Position.Z),
         roomData.Size.X,
         roomData.Size.Y,
         TexturingUtility.LoadMaterialByName(roomData.Floor),
