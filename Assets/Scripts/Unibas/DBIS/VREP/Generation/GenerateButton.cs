@@ -15,7 +15,8 @@ namespace Unibas.DBIS.VREP.Generation
     public async void ButtonPress()
     {
       Debug.Log("Pressed.");
-      await VrepController.Instance.GenerateAndLoadRoomForExhibition(type, ids);
+      var parent = transform.parent.gameObject;
+      await VrepController.Instance.GenerateAndLoadRoomForExhibition(parent, type, ids);
     }
   }
 }

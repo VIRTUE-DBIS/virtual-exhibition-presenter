@@ -68,7 +68,7 @@ namespace Unibas.DBIS.VREP.Core
       var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
 
       // Disable all other rooms by default (don't do this if it turns out to be of no use).
-      RoomMap.Values.ForEach(r => r.gameObject.SetActive(false));
+      // RoomMap.Values.ForEach(r => r.gameObject.SetActive(false));
 
       // Add room to map.
       RoomMap[room.Id] = exhibitionRoom;

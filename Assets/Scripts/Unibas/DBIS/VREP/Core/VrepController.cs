@@ -5,6 +5,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
+using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Core
@@ -109,15 +110,26 @@ namespace Unibas.DBIS.VREP.Core
       await exhibitionManager.LoadNewExhibition(id);
     }
 
-    public async Task GenerateAndLoadRoomForExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
+    public async Task GenerateAndLoadRoomForExhibition(GameObject parent, GenerationRequest.GenTypeEnum type,
+      List<string> idList = null)
     {
       var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
 
-      room.Position = new Vector3f(0.0f, 1.0f, 0.0f);
+      // Get position of exhibit associated with the button and normalize the direction.
+      var displayalPos = parent.transform.position;
+      var displayalPosNorm = new Vector3(displayalPos.x, 0.0f, displayalPos.z).normalized;
+
+      // Use room data coordinates (NOT the actual Unity ones, i.e., before the transformation).
+      var oldRoomPos = parent.GetComponentInParent<CuboidExhibitionRoom>().RoomData.Position;
+
+      // New position: x/z in direction of the (normalized) button pressed to generate the room, y (height) simply +1.0.
+      room.Position = new Vector3f(
+        displayalPosNorm.x + oldRoomPos.X,
+        oldRoomPos.Y + 1.0f,
+        displayalPosNorm.z + oldRoomPos.Z
+      );
 
       await exhibitionManager.LoadRoom(room);
-
-      // new ExhibitionApi().PostApiExhibitionsSave(exhibitionManager.Exhibition);
     }
 
     public void ResetPlayerToLobby()
