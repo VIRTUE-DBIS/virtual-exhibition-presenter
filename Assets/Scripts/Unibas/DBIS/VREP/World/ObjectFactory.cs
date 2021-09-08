@@ -54,20 +54,6 @@ namespace Unibas.DBIS.VREP.World
     }
 
     /// <summary>
-    /// Calculates the absolute position of a room based on its relative position and size in the exhibition.
-    /// </summary>
-    /// <param name="room">The room to calculate the absolute position for.</param>
-    /// <returns>The absolute position of the room.</returns>
-    public static Vector3 CalculateRoomPosition(Room room)
-    {
-      // This currently works only for 1 exhibition (with multiple rooms).
-      // Rework this if multiple exhibitions should be loaded.
-      float x = room.Position.X, y = room.Position.Y, z = room.Position.Z;
-      var off = Settings.RoomOffset; // Space between rooms.
-      return new Vector3(x * room.Size.X + x * off, y * room.Size.Y + y * off, z * room.Size.Z + z * off);
-    }
-
-    /// <summary>
     /// Builds a room, i.e., creating and building its walls and exhibits as well as adding textures, lighting,
     /// teleports, etc.
     /// </summary>
@@ -77,7 +63,6 @@ namespace Unibas.DBIS.VREP.World
     {
       // Create room model.
       var modelData = new CuboidRoomModel(
-        // CalculateRoomPosition(roomData),
         new Vector3(roomData.Position.X, roomData.Position.Y, roomData.Position.Z),
         roomData.Size.X,
         roomData.Size.Y,

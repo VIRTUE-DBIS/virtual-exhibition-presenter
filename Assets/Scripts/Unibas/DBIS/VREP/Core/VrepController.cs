@@ -5,6 +5,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
+using Unibas.DBIS.VREP.Generation;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
@@ -110,29 +111,12 @@ namespace Unibas.DBIS.VREP.Core
       await exhibitionManager.LoadNewExhibition(id);
     }
 
-    public async Task GenerateAndLoadRoomForExhibition(GameObject parent, GenerationRequest.GenTypeEnum type,
+    public async Task GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type,
       List<string> idList = null)
     {
       var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
 
-      // Get position of exhibit associated with the button and normalize the direction.
-      var roomPos = parent.GetComponentInParent<CuboidExhibitionRoom>().gameObject.transform.position;
-      var displayalRelativePos = parent.transform.position - roomPos; // TODO Try with localPosition.
-      var displayalPosNorm = new Vector3(displayalRelativePos.x, 0.0f, displayalRelativePos.z).normalized;
-
-      // Use room data coordinates (NOT the actual Unity ones, i.e., before the transformation).
-      var oldRoomPos = parent.GetComponentInParent<CuboidExhibitionRoom>().RoomData.Position;
-      var oldRoomSize = parent.GetComponentInParent<CuboidExhibitionRoom>().RoomData.Size;
-      
-      var angle = Mathf.Atan2(displayalRelativePos.z, displayalRelativePos.x);
-      var radius = 30.0f;
-      
-      // New position: x/z in direction of the (normalized) button pressed to generate the room, y (height) simply +1.0.
-      room.Position = new Vector3f(
-        oldRoomPos.X + (float)Math.Cos(angle) * radius,
-        oldRoomPos.Y + 15.0f,
-        oldRoomPos.Z + (float)Math.Sin(angle) * radius
-      );
+      SetGeneratedPosition(origin, room);
 
       await exhibitionManager.LoadRoom(room);
     }
@@ -147,6 +131,32 @@ namespace Unibas.DBIS.VREP.Core
         go.transform.position = new Vector3(0, -9.9f, 0);
         lby.SetActive(true);
       }
+    }
+
+    private static void SetGeneratedPosition(GameObject origin, Room room)
+    {
+      const float heightIncrement = 15.0f;
+
+      var cuboidRoom = origin.GetComponentInParent<CuboidExhibitionRoom>();
+
+      // Get position relative position of exhibit.
+      var roomPos = cuboidRoom.gameObject.transform.position;
+      var displayalPos = origin.transform.position - roomPos;
+
+      // Use room data coordinates (NOT the actual Unity ones, i.e., before the transformation).
+      var originRoomPos = cuboidRoom.RoomData.Position;
+      var originRoomSize = cuboidRoom.RoomData.Size;
+
+      var angle = Mathf.Atan2(displayalPos.z, displayalPos.x);
+      var radius = (float)Math.Sqrt(Math.Pow(0.5 * originRoomSize.X, 2.0) + Math.Pow(0.5 * originRoomSize.Z, 2.0));
+      radius += (float)Math.Sqrt(Math.Pow(0.5 * room.Size.X, 2.0) + Math.Pow(0.5 * room.Size.Z, 2.0));
+
+      // New position: x/z in direction of the (normalized) button pressed to generate the room, y (height) simply +1.0.
+      room.Position = new Vector3f(
+        originRoomPos.X + (float)Math.Cos(angle) * radius,
+        originRoomPos.Y + heightIncrement,
+        originRoomPos.Z + (float)Math.Sin(angle) * radius
+      );
     }
 
     /// <summary>
