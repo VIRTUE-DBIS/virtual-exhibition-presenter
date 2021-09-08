@@ -6,6 +6,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
 using Unibas.DBIS.VREP.LegacyObjects;
+using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
@@ -122,15 +123,39 @@ namespace Unibas.DBIS.VREP.Core
       SetPositionForGeneratedRoom(origin, room);
 
       var displayal = origin.GetComponent<Displayal>();
-      
+
       // Teleport info.
-      room.Metadata[MetadataType.Predecessor.GetKey()] = displayal.id; // Or use room ID here instead?
+      room.Metadata[MetadataType.Predecessor.GetKey()] = displayal.id;
 
       // Check out GameObject.Find() and label rooms accordingly (IDs) in order to be able to easily teleport around.
 
       await exhibitionManager.LoadRoom(room);
 
+      // TODO Move this into LoadRoom (also needed to load an exhibition!).
+      TpSetup(origin, room);
+
       // TODO Teleport player into new room once it's ready.
+    }
+
+    private void TpSetup(GameObject origin, Room room)
+    {
+      var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, 0.02f, 1.0f, null,
+        TexturingUtility.LoadMaterialByName("NMetal"),
+        TexturingUtility.LoadMaterialByName("NPlastic"));
+
+      var oldRoom = origin.GetComponentInParent<CuboidExhibitionRoom>().gameObject;
+      var newRoom = GameObject.Find(ObjectFactory.RoomNamePrefix + room.Id);
+
+      var backTpBtn = SteamVRTeleportButton.Create(
+        newRoom,
+        Vector3.zero,
+        oldRoom.transform.position,
+        model,
+        "my text"
+      );
+
+      // backTpBtn.OnTeleportStart = room.OnRoomLeave;
+      // backTpBtn.OnTeleportEnd = prev.OnRoomEnter;
     }
 
     public void ResetPlayerToLobby()

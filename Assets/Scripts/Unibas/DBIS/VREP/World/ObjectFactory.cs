@@ -19,6 +19,8 @@ namespace Unibas.DBIS.VREP.World
   /// </summary>
   public static class ObjectFactory
   {
+    public const string RoomNamePrefix = "Room ";
+
     public static readonly ExhibitionBuildingSettings Settings = ExhibitionBuildingSettings.Instance;
 
     /// <summary>
@@ -111,7 +113,7 @@ namespace Unibas.DBIS.VREP.World
       var t = l.transform;
       t.parent = room.transform; // Set room as parent for transform component.
       t.localPosition = new Vector3(0, 2.5f, 0);
-      room.name = "Room " + roomData.Id;
+      room.name = RoomNamePrefix + roomData.Id;
 
       // Teleport.
       var teleportArea = new GameObject("TeleportArea");
