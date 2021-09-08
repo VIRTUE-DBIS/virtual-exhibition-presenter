@@ -124,38 +124,51 @@ namespace Unibas.DBIS.VREP.Core
 
       var displayal = origin.GetComponent<Displayal>();
 
-      // Teleport info.
+      // Teleport info, necessary for restoring generated exhibitions.
       room.Metadata[MetadataType.Predecessor.GetKey()] = displayal.id;
-
-      // Check out GameObject.Find() and label rooms accordingly (IDs) in order to be able to easily teleport around.
 
       await exhibitionManager.LoadRoom(room);
 
-      // TODO Move this into LoadRoom (also needed to load an exhibition!).
-      TpSetup(origin, room);
+      GeneratedTpSetup(room);
 
-      // TODO Teleport player into new room once it's ready.
+      TpPlayerToRoom(room);
     }
 
-    private void TpSetup(GameObject origin, Room room)
+    public void TpPlayerToRoom(Room room)
     {
-      var model = new SteamVRTeleportButton.TeleportButtonModel(0.1f, 0.02f, 1.0f, null,
+      var go = GameObject.FindWithTag("Player");
+
+      if (go != null)
+      {
+        go.transform.position = new Vector3(room.Position.X, room.Position.Y, room.Position.Z);
+      }
+    }
+
+    public void GeneratedTpSetup(Room room)
+    {
+      var model = new SteamVRTeleportButton.TeleportButtonModel(0.2f, 0.02f, 1.0f, null,
         TexturingUtility.LoadMaterialByName("NMetal"),
         TexturingUtility.LoadMaterialByName("NPlastic"));
 
-      var oldRoom = origin.GetComponentInParent<CuboidExhibitionRoom>().gameObject;
-      var newRoom = GameObject.Find(ObjectFactory.RoomNamePrefix + room.Id);
+      var exhibitId = room.Metadata[MetadataType.Predecessor.GetKey()];
+
+      var origin = GameObject.Find(Displayal.NamePrefix + exhibitId);
+
+      var oldRoom = origin.GetComponentInParent<CuboidExhibitionRoom>();
+
+      var newRoomGo = GameObject.Find(ObjectFactory.RoomNamePrefix + room.Id);
+      var newRoom = newRoomGo.GetComponent<CuboidExhibitionRoom>();
 
       var backTpBtn = SteamVRTeleportButton.Create(
-        newRoom,
+        newRoomGo,
         Vector3.zero,
         oldRoom.transform.position,
         model,
-        "my text"
+        "1 Layer Down"
       );
 
-      // backTpBtn.OnTeleportStart = room.OnRoomLeave;
-      // backTpBtn.OnTeleportEnd = prev.OnRoomEnter;
+      backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
+      backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
     }
 
     public void ResetPlayerToLobby()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
@@ -67,7 +68,14 @@ namespace Unibas.DBIS.VREP.World
         _audioLoader.Stop();
       }
 
-      gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
+      try
+      {
+        gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
+      }
+      catch (Exception e)
+      {
+        Debug.Log("No timer to disable was found.");
+      }
     }
 
     /// <summary>
@@ -77,7 +85,15 @@ namespace Unibas.DBIS.VREP.World
     public void OnRoomEnter()
     {
       LoadAmbientAudio();
-      gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
+
+      try
+      {
+        gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
+      }
+      catch (Exception e)
+      {
+        Debug.Log("No timer to enable was found.");
+      }
     }
 
     /// <summary>
