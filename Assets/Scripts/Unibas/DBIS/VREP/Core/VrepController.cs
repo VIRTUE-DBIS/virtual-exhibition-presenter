@@ -108,7 +108,10 @@ namespace Unibas.DBIS.VREP.Core
     public async void GenerateAndLoadExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
     {
       var id = await GenerateExhibition(type, idList);
+
       await exhibitionManager.LoadNewExhibition(id);
+
+      // TODO Teleport player into center of the generated exhibition (room).
     }
 
     public async Task GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type,
@@ -116,9 +119,14 @@ namespace Unibas.DBIS.VREP.Core
     {
       var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
 
-      SetGeneratedPosition(origin, room);
+      SetPositionForGeneratedRoom(origin, room);
+
+      // TODO Add teleporter stuff here to meta so that it gets generated in the room loader.
+      // Check out GameObject.Find() and label rooms accordingly (IDs) in order to be able to easily teleport around.
 
       await exhibitionManager.LoadRoom(room);
+
+      // TODO Teleport player into new room once it's ready.
     }
 
     public void ResetPlayerToLobby()
@@ -133,7 +141,7 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
-    private static void SetGeneratedPosition(GameObject origin, Room room)
+    private static void SetPositionForGeneratedRoom(GameObject origin, Room room)
     {
       const float heightIncrement = 15.0f;
 
@@ -148,10 +156,12 @@ namespace Unibas.DBIS.VREP.Core
       var originRoomSize = cuboidRoom.RoomData.Size;
 
       var angle = Mathf.Atan2(displayalPos.z, displayalPos.x);
-      var radius = (float)Math.Sqrt(Math.Pow(0.5 * originRoomSize.X, 2.0) + Math.Pow(0.5 * originRoomSize.Z, 2.0));
-      radius += (float)Math.Sqrt(Math.Pow(0.5 * room.Size.X, 2.0) + Math.Pow(0.5 * room.Size.Z, 2.0));
+      var radius = (float)(
+        Math.Sqrt(Math.Pow(0.5 * originRoomSize.X, 2.0) + Math.Pow(0.5 * originRoomSize.Z, 2.0)) +
+        Math.Sqrt(Math.Pow(0.5 * room.Size.X, 2.0) + Math.Pow(0.5 * room.Size.Z, 2.0))
+      );
 
-      // New position: x/z in direction of the (normalized) button pressed to generate the room, y (height) simply +1.0.
+      // New position: x/z in direction of the button pressed to generate the room.
       room.Position = new Vector3f(
         originRoomPos.X + (float)Math.Cos(angle) * radius,
         originRoomPos.Y + heightIncrement,
