@@ -53,7 +53,6 @@ namespace Unibas.DBIS.VREP.World
       var displayalPrefab = ObjectFactory.GetDisplayalPrefab();
 
       var displayal = Instantiate(displayalPrefab, Anchor.transform, true);
-      displayal.name = "Displayal (" + e.Name + ")";
 
       var pos = new Vector3(e.Position.X, e.Position.Y, -ExhibitionBuildingSettings.Instance.WallOffset);
       displayal.transform.localPosition = pos;

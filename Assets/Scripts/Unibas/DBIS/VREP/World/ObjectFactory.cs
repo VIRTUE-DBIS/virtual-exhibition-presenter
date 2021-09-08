@@ -111,7 +111,7 @@ namespace Unibas.DBIS.VREP.World
       var t = l.transform;
       t.parent = room.transform; // Set room as parent for transform component.
       t.localPosition = new Vector3(0, 2.5f, 0);
-      room.name = "Room";
+      room.name = "Room " + roomData.Id;
 
       // Teleport.
       var teleportArea = new GameObject("TeleportArea");

@@ -5,7 +5,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
-using Unibas.DBIS.VREP.Generation;
+using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
@@ -117,11 +117,15 @@ namespace Unibas.DBIS.VREP.Core
     public async Task GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type,
       List<string> idList = null)
     {
-      var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
+      Room room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
 
       SetPositionForGeneratedRoom(origin, room);
 
-      // TODO Add teleporter stuff here to meta so that it gets generated in the room loader.
+      var displayal = origin.GetComponent<Displayal>();
+      
+      // Teleport info.
+      room.Metadata[MetadataType.Predecessor.GetKey()] = displayal.id; // Or use room ID here instead?
+
       // Check out GameObject.Find() and label rooms accordingly (IDs) in order to be able to easily teleport around.
 
       await exhibitionManager.LoadRoom(room);

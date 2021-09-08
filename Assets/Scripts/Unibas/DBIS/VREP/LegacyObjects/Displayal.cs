@@ -11,6 +11,8 @@ namespace Unibas.DBIS.VREP.LegacyObjects
   /// </summary>
   public class Displayal : MonoBehaviour
   {
+    public const string NamePrefix = "Displayal ";
+
     // The corresponding exhibit for this displayal.
     private Exhibit _exhibitModel;
     public string id;
@@ -44,7 +46,7 @@ namespace Unibas.DBIS.VREP.LegacyObjects
     {
       _exhibitModel = exhibit;
       id = _exhibitModel.Id;
-      name = "Displayal (" + id + ")";
+      name = NamePrefix + id;
 
       var tp = transform.Find("TitlePlaquette");
       if (tp != null)
