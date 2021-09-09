@@ -72,7 +72,7 @@ namespace Unibas.DBIS.VREP.World
       {
         gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
       }
-      catch (Exception e)
+      catch (Exception)
       {
         Debug.Log("No timer to disable was found.");
       }
@@ -90,7 +90,7 @@ namespace Unibas.DBIS.VREP.World
       {
         gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
       }
-      catch (Exception e)
+      catch (Exception)
       {
         Debug.Log("No timer to enable was found.");
       }

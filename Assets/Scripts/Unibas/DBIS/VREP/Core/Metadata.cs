@@ -19,7 +19,9 @@ namespace Unibas.DBIS.VREP.Core
   {
     Generated, // Per room (bool), set by VREM (could be set via VREP).
     Predecessor, // Per room (refers room ID), set by VREP.
+    Seed, // Per room (int), set by VREM (could be set via VREP).
+
     MemberIds, // Per exhibit (list of IdDoublePairs), set by VREM.
-    Seed // Per room (int), set by VREM (could be set via VREP).
+    References // Per exhibit, set by VREP.
   }
 }

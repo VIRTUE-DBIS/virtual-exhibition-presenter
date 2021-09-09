@@ -111,14 +111,12 @@ namespace Unibas.DBIS.VREP.Core
       var id = await GenerateExhibition(type, idList);
 
       await exhibitionManager.LoadNewExhibition(id);
-
-      // TODO Teleport player into center of the generated exhibition (room).
     }
 
-    public async Task GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type,
+    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type,
       List<string> idList = null)
     {
-      Room room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
+      var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
 
       SetPositionForGeneratedRoom(origin, room);
 
@@ -129,12 +127,12 @@ namespace Unibas.DBIS.VREP.Core
 
       await exhibitionManager.LoadRoom(room);
 
-      GeneratedTpSetup(room);
-
       TpPlayerToRoom(room);
+
+      return room;
     }
 
-    public void TpPlayerToRoom(Room room)
+    public static void TpPlayerToRoom(Room room)
     {
       var go = GameObject.FindWithTag("Player");
 
@@ -144,8 +142,13 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
-    public void GeneratedTpSetup(Room room)
+    public static void GeneratedTpSetup(Room room)
     {
+      if (!room.Metadata.ContainsKey(MetadataType.Predecessor.GetKey()))
+      {
+        return;
+      }
+
       var model = new SteamVRTeleportButton.TeleportButtonModel(0.2f, 0.02f, 1.0f, null,
         TexturingUtility.LoadMaterialByName("NMetal"),
         TexturingUtility.LoadMaterialByName("NPlastic"));

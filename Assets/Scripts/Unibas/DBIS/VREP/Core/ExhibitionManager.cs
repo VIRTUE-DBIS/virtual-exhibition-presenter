@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
@@ -72,6 +73,17 @@ namespace Unibas.DBIS.VREP.Core
 
       // Add room to map.
       RoomMap[room.Id] = exhibitionRoom;
+
+      VrepController.GeneratedTpSetup(room);
+    }
+
+    public async void Update()
+    {
+      // Could be used to save exhibitions via hotkey.
+      if (Input.GetKeyDown(KeyCode.F8))
+      {
+        await new ExhibitionApi().PostApiExhibitionsSaveAsync(Exhibition);
+      }
     }
   }
 }

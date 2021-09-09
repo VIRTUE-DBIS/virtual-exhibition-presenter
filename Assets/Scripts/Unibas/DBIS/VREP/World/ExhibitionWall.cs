@@ -93,9 +93,18 @@ namespace Unibas.DBIS.VREP.World
     {
       var genButtonPrefab = ObjectFactory.GetGenerationButtonPrefab();
 
+      // Get IDs and potential reference.
       var json = e.Metadata[MetadataType.MemberIds.GetKey()];
       var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
       var ids = idDoublePairs.Select(it => it.id).ToList();
+
+      RoomReferences references = null;
+
+      if (e.Metadata.ContainsKey(MetadataType.References.GetKey()))
+      {
+        var refJson = e.Metadata[MetadataType.References.GetKey()];
+        references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
+      }
 
       var localScale = displayal.transform.localScale;
       var types = Enum.GetValues(typeof(GenerationRequest.GenTypeEnum));
@@ -122,6 +131,10 @@ namespace Unibas.DBIS.VREP.World
         GenerateButton genButtonComponent = genButton.GetComponent<GenerateButton>();
         genButtonComponent.type = method;
         genButtonComponent.ids = ids;
+        if (references != null && references.References.ContainsKey(method.ToString()))
+        {
+          genButtonComponent.targetRoomId = references.References[method.ToString()];
+        }
 
         TextMesh genButtonText = genButton.GetComponentInChildren<TextMesh>();
         genButtonText.text = method.GetName();
@@ -137,8 +150,8 @@ namespace Unibas.DBIS.VREP.World
       {
         var displayal = await CreateDisplayalFromExhibit(e);
 
-        // Check if the exhibit represents a set of images in order to allow for generation of further rooms.
-        if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
+        // TODO Be smarter about this check and which buttons to add exactly.
+        if (e.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
         {
           AddButtonsToDisplayal(e, displayal);
         }
