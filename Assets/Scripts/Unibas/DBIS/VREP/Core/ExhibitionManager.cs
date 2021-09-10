@@ -17,6 +17,8 @@ namespace Unibas.DBIS.VREP.Core
 
     public Dictionary<string, CuboidExhibitionRoom> RoomMap = new Dictionary<string, CuboidExhibitionRoom>();
 
+    public List<CuboidExhibitionRoom> RoomList = new List<CuboidExhibitionRoom>();
+    
     public void DestroyCurrentExhibition()
     {
       var rooms = RoomMap.Values;
@@ -61,6 +63,12 @@ namespace Unibas.DBIS.VREP.Core
       {
         await LoadRoom(room);
       }
+
+      if (!Exhibition.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
+      {
+        // Not generated, create the usual teleporters.
+        VrepController.ImportedTpSetup();
+      }
     }
 
     public async Task LoadRoom(Room room)
@@ -73,8 +81,12 @@ namespace Unibas.DBIS.VREP.Core
 
       // Add room to map.
       RoomMap[room.Id] = exhibitionRoom;
+      RoomList.Add(exhibitionRoom);
 
-      VrepController.GeneratedTpSetup(room);
+      if (room.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
+      {
+        VrepController.GeneratedTpSetup(room);
+      }
     }
 
     public async void Update()

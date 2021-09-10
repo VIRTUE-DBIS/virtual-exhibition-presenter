@@ -5,6 +5,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core.Config;
+using Unibas.DBIS.VREP.Generation;
 using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
@@ -113,32 +114,106 @@ namespace Unibas.DBIS.VREP.Core
       await exhibitionManager.LoadNewExhibition(id);
     }
 
-    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type,
-      List<string> idList = null)
+    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type)
     {
-      var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, idList));
+      // Obtain the IDs from the origin (displayal).
+      var ids = origin.GetComponent<IdList>().idList;
 
+      var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, ids));
+
+      // Calculate new room's position relative to the room the generation was issued from and set it in the model.
       SetPositionForGeneratedRoom(origin, room);
 
-      var displayal = origin.GetComponent<Displayal>();
-
       // Teleport info, necessary for restoring generated exhibitions.
-      room.Metadata[MetadataType.Predecessor.GetKey()] = displayal.id;
+      room.Metadata[MetadataType.Predecessor.GetKey()] = origin.GetComponent<Displayal>().id;
 
+      // Load the room like a normal room.
       await exhibitionManager.LoadRoom(room);
 
+      // Add the newly generated room to the exhibition model.
+      exhibitionManager.Exhibition.Rooms.Add(room);
+
+      // Update references.
+      // TODO Move metadata manipulation into the Metadata namespace.
+      RoomReferences references;
+      var model = origin.GetComponent<Displayal>().GetExhibit();
+
+      if (model.Metadata.ContainsKey(MetadataType.References.GetKey()))
+      {
+        var refJson = model.Metadata[MetadataType.References.GetKey()];
+        references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
+      }
+      else
+      {
+        references = new RoomReferences();
+      }
+
+      // TODO Consider adding some sort of mapping for GenTypeEnum.
+      references.References[type.ToString()] = room.Id;
+
+      // Store the updated references as metadata.
+      model.Metadata[MetadataType.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
+
+      // Teleport the player.
       TpPlayerToRoom(room);
 
       return room;
     }
 
-    public static void TpPlayerToRoom(Room room)
+    public static void TpPlayerToLocation(Vector3 loc)
     {
       var go = GameObject.FindWithTag("Player");
 
       if (go != null)
       {
-        go.transform.position = new Vector3(room.Position.X, room.Position.Y, room.Position.Z);
+        go.transform.position = loc;
+      }
+    }
+
+    public static void TpPlayerToRoom(Room room)
+    {
+      TpPlayerToLocation(new Vector3(room.Position.X, room.Position.Y, room.Position.Z));
+    }
+
+    public static void ImportedTpSetup()
+    {
+      var roomList = Instance.exhibitionManager.RoomList;
+
+      if (roomList.Count <= 1)
+      {
+        return;
+      }
+
+      var model = new SteamVRTeleportButton.TeleportButtonModel(0.2f, 0.02f, 1.0f, null,
+        TexturingUtility.LoadMaterialByName("NMetal"),
+        TexturingUtility.LoadMaterialByName("NPlastic"));
+      
+      for (int i = 0; i < roomList.Count; i++)
+      {
+        CuboidExhibitionRoom currRoom = roomList[i];
+        CuboidExhibitionRoom nextRoom = (i + 1 == roomList.Count) ? roomList[0] : roomList[i + 1];
+
+        var backTpBtn = SteamVRTeleportButton.Create(
+          nextRoom.gameObject,
+          Vector3.zero,
+          currRoom.gameObject.transform.position,
+          model,
+          "Back"
+        );
+
+        backTpBtn.OnTeleportStart = nextRoom.OnRoomLeave;
+        backTpBtn.OnTeleportEnd = currRoom.OnRoomEnter;
+
+        var fwdTpButton = SteamVRTeleportButton.Create(
+          currRoom.gameObject,
+          Vector3.zero,
+          nextRoom.gameObject.transform.position,
+          model,
+          "Forward"
+        );
+
+        backTpBtn.OnTeleportStart = currRoom.OnRoomLeave;
+        backTpBtn.OnTeleportEnd = nextRoom.OnRoomEnter;
       }
     }
 

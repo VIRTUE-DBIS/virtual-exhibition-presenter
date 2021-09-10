@@ -102,13 +102,7 @@ namespace Unibas.DBIS.VREP.World
         idDoublePairs.ForEach(it => ids.Add(it.id));
       }
 
-      RoomReferences references = null;
-
-      if (e.Metadata.ContainsKey(MetadataType.References.GetKey()))
-      {
-        var refJson = e.Metadata[MetadataType.References.GetKey()];
-        references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
-      }
+      displayal.AddComponent<IdList>().idList = ids;
 
       var localScale = displayal.transform.localScale;
       var types = Enum.GetValues(typeof(GenerationRequest.GenTypeEnum));
@@ -132,11 +126,19 @@ namespace Unibas.DBIS.VREP.World
         );
 
         // Button.
+        RoomReferences references = null;
+
+        if (e.Metadata.ContainsKey(MetadataType.References.GetKey()))
+        {
+          var refJson = e.Metadata[MetadataType.References.GetKey()];
+          references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
+        }
+        
         GenerateButton genButtonComponent = genButton.GetComponent<GenerateButton>();
         genButtonComponent.type = method;
-        genButtonComponent.ids = ids;
         if (references != null && references.References.ContainsKey(method.ToString()))
         {
+          // If a room was already generated from this button, link it.
           genButtonComponent.targetRoomId = references.References[method.ToString()];
         }
 

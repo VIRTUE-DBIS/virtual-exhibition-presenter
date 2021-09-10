@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Generation
 {
-  [Serializable]
-  public class NodeMap
+  public class IdList : MonoBehaviour
   {
-    public Dictionary<int, List<IdDoublePair>> map;
+    public List<String> idList;
   }
 }
