@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
@@ -94,9 +93,14 @@ namespace Unibas.DBIS.VREP.World
       var genButtonPrefab = ObjectFactory.GetGenerationButtonPrefab();
 
       // Get IDs and potential reference.
-      var json = e.Metadata[MetadataType.MemberIds.GetKey()];
-      var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
-      var ids = idDoublePairs.Select(it => it.id).ToList();
+      List<string> ids = new List<string>();
+
+      if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
+      {
+        var json = e.Metadata[MetadataType.MemberIds.GetKey()];
+        var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
+        idDoublePairs.ForEach(it => ids.Add(it.id));
+      }
 
       RoomReferences references = null;
 
