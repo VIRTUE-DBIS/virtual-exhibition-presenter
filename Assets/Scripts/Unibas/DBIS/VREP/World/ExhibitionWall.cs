@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
@@ -104,21 +103,35 @@ namespace Unibas.DBIS.VREP.World
 
       displayal.AddComponent<IdList>().idList = ids;
 
+      var types = new List<GenerationRequest.GenTypeEnum>
+      {
+        GenerationRequest.GenTypeEnum.RANDOM,
+        GenerationRequest.GenTypeEnum.VISUALSIMILARITY,
+        GenerationRequest.GenTypeEnum.SEMANTICSIMILARITY
+      };
+
+      if (ids.Count > 1)
+      {
+        types.Add(GenerationRequest.GenTypeEnum.VISUALSOM);
+        types.Add(GenerationRequest.GenTypeEnum.SEMANTICSOM);
+      }
+
       var localScale = displayal.transform.localScale;
-      var types = Enum.GetValues(typeof(GenerationRequest.GenTypeEnum));
-      var offset = 2.0f;
-      var shift = types.Length / 2;
+      var offset = -2.0f;
+      var shift = types.Count / 2;
       var xFactor = 0.2f / localScale.x;
       var zFactor = 0.2f / localScale.z;
 
-      foreach (GenerationRequest.GenTypeEnum method in types)
+      for (int i = 0; i < types.Count; i++)
       {
+        var method = types[i];
+
         var genButton = Instantiate(genButtonPrefab, displayal.transform, false);
         genButton.name = "Generation Button (" + method.GetName() + ")";
 
         genButton.transform.localRotation = Quaternion.Euler(90.0f, 0.0f, 180.0f);
         genButton.transform.localPosition =
-          new Vector3(offset * ((int)method - shift - 1) * xFactor, 0.0f, 7.5f * zFactor);
+          new Vector3(offset * (i - shift) * xFactor, 0.0f, 7.5f * zFactor);
         genButton.transform.localScale = new Vector3(
           0.75f * xFactor,
           0.75f * zFactor, // Y/Z inverted due to different prefab orientation...
@@ -133,7 +146,7 @@ namespace Unibas.DBIS.VREP.World
           var refJson = e.Metadata[MetadataType.References.GetKey()];
           references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
         }
-        
+
         GenerateButton genButtonComponent = genButton.GetComponent<GenerateButton>();
         genButtonComponent.type = method;
         if (references != null && references.References.ContainsKey(method.ToString()))
