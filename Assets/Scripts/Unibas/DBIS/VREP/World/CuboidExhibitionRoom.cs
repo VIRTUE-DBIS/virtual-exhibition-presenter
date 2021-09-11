@@ -63,6 +63,8 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public void OnRoomLeave()
     {
+      gameObject.SetActive(false);
+
       if (_audioLoader != null)
       {
         _audioLoader.Stop();
@@ -84,6 +86,8 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public void OnRoomEnter()
     {
+      gameObject.SetActive(true);
+
       LoadAmbientAudio();
 
       try

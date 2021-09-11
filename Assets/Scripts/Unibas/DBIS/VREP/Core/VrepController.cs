@@ -107,13 +107,6 @@ namespace Unibas.DBIS.VREP.Core
       return await new GenerationApi().PostApiGenerateExhibitionAsync(CreateGenerationRequest(type, idList));
     }
 
-    public async void GenerateAndLoadExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
-    {
-      var id = await GenerateExhibition(type, idList);
-
-      await exhibitionManager.LoadNewExhibition(id);
-    }
-
     public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type)
     {
       // Obtain the IDs from the origin (displayal).
@@ -155,7 +148,7 @@ namespace Unibas.DBIS.VREP.Core
       model.Metadata[MetadataType.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
 
       // Teleport the player.
-      TpPlayerToRoom(room);
+      TpPlayerToLocation(new Vector3(room.Position.X, room.Position.Y, room.Position.Z));
 
       return room;
     }
@@ -170,50 +163,64 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
-    public static void TpPlayerToRoom(Room room)
+    public static SteamVRTeleportButton CreateTeleport(GameObject origin, Vector3 dest, Vector3 buttonPos, String text,
+      float size = 0.2f)
     {
-      TpPlayerToLocation(new Vector3(room.Position.X, room.Position.Y, room.Position.Z));
+      var model = new SteamVRTeleportButton.TeleportButtonModel(size, 0.02f, 1.0f, null,
+        TexturingUtility.LoadMaterialByName("NMetal"),
+        TexturingUtility.LoadMaterialByName("NPlastic"));
+
+      var btn = SteamVRTeleportButton.Create(
+        origin,
+        new Vector3(buttonPos.x + 0.5f * size, buttonPos.y, buttonPos.z + 0.5f * size),
+        dest,
+        model,
+        text
+      );
+
+      btn.gameObject.transform.localRotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+      return btn;
     }
 
-    public static void ImportedTpSetup()
+    public void LobbyTpSetup(CuboidExhibitionRoom firstRoom)
     {
-      var roomList = Instance.exhibitionManager.RoomList;
+      var lby = GameObject.Find("Lobby");
+
+      if (lby == null)
+      {
+        return;
+      }
+
+      var backTpBtn = CreateTeleport(firstRoom.gameObject, lby.transform.position, Vector3.zero, "Back to Lobby");
+      backTpBtn.OnTeleportStart = firstRoom.OnRoomLeave;
+
+      var fwdTpButton = CreateTeleport(lby, firstRoom.transform.position, Vector3.zero, "Go to Exhibition");
+      fwdTpButton.OnTeleportEnd = firstRoom.OnRoomEnter;
+    }
+
+    public void ImportedTpSetup()
+    {
+      var roomList = exhibitionManager.RoomList;
 
       if (roomList.Count <= 1)
       {
         return;
       }
 
-      var model = new SteamVRTeleportButton.TeleportButtonModel(0.2f, 0.02f, 1.0f, null,
-        TexturingUtility.LoadMaterialByName("NMetal"),
-        TexturingUtility.LoadMaterialByName("NPlastic"));
-      
       for (int i = 0; i < roomList.Count; i++)
       {
         CuboidExhibitionRoom currRoom = roomList[i];
         CuboidExhibitionRoom nextRoom = (i + 1 == roomList.Count) ? roomList[0] : roomList[i + 1];
 
-        var backTpBtn = SteamVRTeleportButton.Create(
-          nextRoom.gameObject,
-          Vector3.zero,
-          currRoom.gameObject.transform.position,
-          model,
-          "Back"
-        );
-
+        var backTpBtn = CreateTeleport(nextRoom.gameObject, currRoom.transform.position, new Vector3(0.3f, 0.0f, 0.0f),
+          "Back");
         backTpBtn.OnTeleportStart = nextRoom.OnRoomLeave;
         backTpBtn.OnTeleportEnd = currRoom.OnRoomEnter;
 
-        var fwdTpButton = SteamVRTeleportButton.Create(
-          currRoom.gameObject,
-          Vector3.zero,
-          nextRoom.gameObject.transform.position,
-          model,
-          "Forward"
-        );
-
-        backTpBtn.OnTeleportStart = currRoom.OnRoomLeave;
-        backTpBtn.OnTeleportEnd = nextRoom.OnRoomEnter;
+        var fwdTpButton = CreateTeleport(currRoom.gameObject, nextRoom.transform.position,
+          new Vector3(-0.3f, 0.0f, 0.0f), "Forward");
+        fwdTpButton.OnTeleportStart = currRoom.OnRoomLeave;
+        fwdTpButton.OnTeleportEnd = nextRoom.OnRoomEnter;
       }
     }
 
@@ -224,10 +231,6 @@ namespace Unibas.DBIS.VREP.Core
         return;
       }
 
-      var model = new SteamVRTeleportButton.TeleportButtonModel(0.2f, 0.02f, 1.0f, null,
-        TexturingUtility.LoadMaterialByName("NMetal"),
-        TexturingUtility.LoadMaterialByName("NPlastic"));
-
       var exhibitId = room.Metadata[MetadataType.Predecessor.GetKey()];
 
       var origin = GameObject.Find(Displayal.NamePrefix + exhibitId);
@@ -237,13 +240,7 @@ namespace Unibas.DBIS.VREP.Core
       var newRoomGo = GameObject.Find(ObjectFactory.RoomNamePrefix + room.Id);
       var newRoom = newRoomGo.GetComponent<CuboidExhibitionRoom>();
 
-      var backTpBtn = SteamVRTeleportButton.Create(
-        newRoomGo,
-        Vector3.zero,
-        oldRoom.transform.position,
-        model,
-        "1 Layer Down"
-      );
+      var backTpBtn = CreateTeleport(newRoomGo, oldRoom.transform.position, Vector3.zero, "Back");
 
       backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
       backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
