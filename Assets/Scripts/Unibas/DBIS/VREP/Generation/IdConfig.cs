@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Generation
 {
-  public class IdList : MonoBehaviour
+  public class IdConfig : MonoBehaviour
   {
-    public List<String> idList;
+    public String originId;
+    public List<String> associatedIds;
   }
 }

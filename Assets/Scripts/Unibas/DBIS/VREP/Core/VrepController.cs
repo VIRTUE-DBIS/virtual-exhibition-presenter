@@ -69,7 +69,7 @@ namespace Unibas.DBIS.VREP.Core
       switch (settings.ExhibitionMode)
       {
         case Mode.Generation:
-          ex = await GenerateExhibition(GenerationRequest.GenTypeEnum.VISUALSOM);
+          ex = await GenerateExhibition(GenMethod.VisualSom);
           break;
         case Mode.Static:
           ex = await LoadExhibitionById();
@@ -87,32 +87,73 @@ namespace Unibas.DBIS.VREP.Core
       return await new ExhibitionApi().GetApiExhibitionsLoadIdWithIdAsync(settings.ExhibitionId);
     }
 
-    public GenerationRequest CreateGenerationRequest(GenerationRequest.GenTypeEnum type, List<string> idList = null)
+    public RoomSpecification GetRoomSpec()
     {
-      idList ??= new List<string>();
-
-      // TODO If the ID list is too short w.r.t. height/width, adjust height/width accordingly.
-
-      return new GenerationRequest(
-        type,
-        idList,
-        settings.GenerationSettings.Height,
-        settings.GenerationSettings.Width,
-        settings.GenerationSettings.Seed
-      );
+      return new RoomSpecification(settings.GenerationSettings.Height, settings.GenerationSettings.Width);
     }
 
-    public async Task<Exhibition> GenerateExhibition(GenerationRequest.GenTypeEnum type, List<string> idList = null)
+    public int GetSeed()
     {
-      return await new GenerationApi().PostApiGenerateExhibitionAsync(CreateGenerationRequest(type, idList));
+      return settings.GenerationSettings.Seed;
     }
 
-    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationRequest.GenTypeEnum type)
+    public async Task<Exhibition> GenerateExhibition(GenMethod method)
     {
-      // Obtain the IDs from the origin (displayal).
-      var ids = origin.GetComponent<IdList>().idList;
+      var ex = await new GenerationApi().PostApiGenerateExhibitionAsync();
+      
+      var room = await GenerateRoomByMethod(method);
+      
+      ex.Rooms.Add(room);
 
-      var room = await new GenerationApi().PostApiGenerateRoomAsync(CreateGenerationRequest(type, ids));
+      return ex;
+    }
+
+    public async Task<Room> GenerateRandomRoom(List<String> idList)
+    {
+      var config = new RandomGenerationRequest(GetRoomSpec(), idList, GetSeed());
+      return await new GenerationApi().PostApiGenerateRoomRandomAsync(config);
+    }
+
+    public async Task<Room> GenerateSimilarityRoom(SimilarityGenerationRequest.GenTypeEnum genType, string objectId)
+    {
+      var config = new SimilarityGenerationRequest(GetRoomSpec(), genType, objectId);
+      return await new GenerationApi().PostApiGenerateRoomSimilarAsync(config);
+    }
+
+    public async Task<Room> GenerateSomRoom(SomGenerationRequest.GenTypeEnum genType, List<String> idList)
+    {
+      var config = new SomGenerationRequest(GetRoomSpec(), genType, idList, GetSeed());
+      return await new GenerationApi().PostApiGenerateRoomSomAsync(config);
+    }
+
+    public async Task<Room> GenerateRoomByMethod(GenMethod type, List<string> ids = null, string originId = "")
+    {
+      ids ??= new List<string>();
+
+      return type switch
+      {
+        GenMethod.RandomAll => await GenerateRandomRoom(new List<string>()),
+
+        GenMethod.RandomList => await GenerateRandomRoom(ids),
+
+        GenMethod.VisualSimilarity => await GenerateSimilarityRoom(SimilarityGenerationRequest.GenTypeEnum.VISUAL,
+          originId),
+
+        GenMethod.SemanticSimilarity => await GenerateSimilarityRoom(SimilarityGenerationRequest.GenTypeEnum.SEMANTIC,
+          originId),
+
+        GenMethod.VisualSom => await GenerateSomRoom(SomGenerationRequest.GenTypeEnum.VISUAL, ids),
+
+        GenMethod.SemanticSom => await GenerateSomRoom(SomGenerationRequest.GenTypeEnum.SEMANTIC, ids),
+
+        _ => throw new ArgumentOutOfRangeException()
+      };
+    }
+
+    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenMethod type)
+    {
+      var config = origin.GetComponent<IdConfig>();
+      var room = await GenerateRoomByMethod(type, config.associatedIds, config.originId);
 
       // Calculate new room's position relative to the room the generation was issued from and set it in the model.
       SetPositionForGeneratedRoom(origin, room);

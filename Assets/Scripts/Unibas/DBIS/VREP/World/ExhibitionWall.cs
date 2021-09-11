@@ -101,24 +101,27 @@ namespace Unibas.DBIS.VREP.World
         idDoublePairs.ForEach(it => ids.Add(it.id));
       }
 
-      displayal.AddComponent<IdList>().idList = ids;
+      var idConfig = displayal.AddComponent<IdConfig>();
+      idConfig.associatedIds = ids;
+      idConfig.originId = e.Metadata[MetadataType.ObjectId.GetKey()];
 
-      var types = new List<GenerationRequest.GenTypeEnum>
+      var types = new List<GenMethod>
       {
-        GenerationRequest.GenTypeEnum.RANDOM,
-        GenerationRequest.GenTypeEnum.VISUALSIMILARITY,
-        GenerationRequest.GenTypeEnum.SEMANTICSIMILARITY
+        GenMethod.RandomAll,
+        GenMethod.VisualSimilarity,
+        GenMethod.SemanticSimilarity,
       };
 
-      if (ids.Count > 1)
+      if (ids.Count > 0)
       {
-        types.Add(GenerationRequest.GenTypeEnum.VISUALSOM);
-        types.Add(GenerationRequest.GenTypeEnum.SEMANTICSOM);
+        types.Insert(0, GenMethod.RandomList);
+        types.Add(GenMethod.VisualSom);
+        types.Add(GenMethod.SemanticSom);
       }
 
       var localScale = displayal.transform.localScale;
       var offset = -2.0f;
-      var shift = types.Count / 2;
+      var shift = (types.Count - 1) / 2.0f;
       var xFactor = 0.2f / localScale.x;
       var zFactor = 0.2f / localScale.z;
 

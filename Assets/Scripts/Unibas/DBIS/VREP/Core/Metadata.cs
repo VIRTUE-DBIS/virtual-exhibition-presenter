@@ -17,11 +17,14 @@ namespace Unibas.DBIS.VREP.Core
 
   public enum MetadataType
   {
-    Generated, // Per room (bool), set by VREM (could be set via VREP).
-    Predecessor, // Per room (refers room ID), set by VREP.
-    Seed, // Per room (int), set by VREM (could be set via VREP).
+    // Per room.
+    Generated, // Set by VREM (could be set via VREP).
+    Predecessor, // Room or exhibit IDs, set by VREP.
+    Seed, // Int, set by VREM (could be set via VREP).
 
-    MemberIds, // Per exhibit (list of IdDoublePairs), set by VREM.
-    References // Per exhibit, set by VREP.
+    // Per exhibit.
+    MemberIds, // List of IdDoublePairs, set by VREM.
+    ObjectId, // Cineast object ID, set by VREM.
+    References // References to other rooms, set by VREP.
   }
 }

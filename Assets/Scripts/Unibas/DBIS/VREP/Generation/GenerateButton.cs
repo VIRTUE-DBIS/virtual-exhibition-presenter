@@ -1,4 +1,3 @@
-using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
@@ -7,7 +6,7 @@ namespace Unibas.DBIS.VREP.Generation
 {
   public class GenerateButton : MonoBehaviour
   {
-    public GenerationRequest.GenTypeEnum type;
+    public GenMethod type;
     public string targetRoomId = "";
 
     public async void ButtonPress()
@@ -21,7 +20,7 @@ namespace Unibas.DBIS.VREP.Generation
         // Room already exists and is loaded, teleport player and return.
         room.OnRoomEnter();
         GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
-        
+
         VrepController.TpPlayerToLocation(room.transform.position);
         return;
       }
