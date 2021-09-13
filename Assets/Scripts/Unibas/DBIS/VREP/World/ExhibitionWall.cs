@@ -124,17 +124,22 @@ namespace Unibas.DBIS.VREP.World
       var shift = (types.Count - 1) / 2.0f;
       var xFactor = 0.2f / localScale.x;
       var zFactor = 0.2f / localScale.z;
+      var displayalHeight = displayal.GetComponent<BoxCollider>().size.z;
 
-      for (int i = 0; i < types.Count; i++)
+      var parentGameObj = new GameObject("Button Wrapper");
+      parentGameObj.AddComponent<ButtonWrapper>();
+      parentGameObj.transform.SetParent(displayal.transform, false);
+
+      for (var i = 0; i < types.Count; i++)
       {
         var method = types[i];
 
-        var genButton = Instantiate(genButtonPrefab, displayal.transform, false);
+        var genButton = Instantiate(genButtonPrefab, parentGameObj.transform, false);
         genButton.name = "Generation Button (" + method.GetName() + ")";
 
         genButton.transform.localRotation = Quaternion.Euler(90.0f, 0.0f, 180.0f);
         genButton.transform.localPosition =
-          new Vector3(offset * (i - shift) * xFactor, 0.0f, 7.5f * zFactor);
+          new Vector3(offset * (i - shift) * xFactor, 0.0f, 0.5f * displayalHeight + 0.75f * zFactor);
         genButton.transform.localScale = new Vector3(
           0.75f * xFactor,
           0.75f * zFactor, // Y/Z inverted due to different prefab orientation...
