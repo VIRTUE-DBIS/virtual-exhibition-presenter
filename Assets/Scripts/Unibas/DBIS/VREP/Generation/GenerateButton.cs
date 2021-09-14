@@ -1,5 +1,4 @@
 using Unibas.DBIS.VREP.Core;
-using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
@@ -26,7 +25,7 @@ namespace Unibas.DBIS.VREP.Generation
         return;
       }
 
-      var parent = gameObject.GetComponentInParent<Displayal>().gameObject;
+      var parent = gameObject.GetComponentInParent<ButtonWrapper>().displayal.gameObject;
 
       var newRoom = await VrepController.Instance.GenerateAndLoadRoomForExhibition(parent, type);
       targetRoomId = newRoom.Id;

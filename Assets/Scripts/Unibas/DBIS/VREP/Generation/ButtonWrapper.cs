@@ -1,10 +1,15 @@
 ﻿using System;
+using Unibas.DBIS.VREP.LegacyObjects;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Generation
 {
     public class ButtonWrapper : MonoBehaviour
     {
+        public Displayal displayal;
+
+        private const float ThreshDist = 3.0f;
+
         public void Update()
         {
             var cameraPosition = Camera.allCameras[0].transform.position;
@@ -14,7 +19,7 @@ namespace Unibas.DBIS.VREP.Generation
 
             foreach (var r in gameObject.GetComponentsInChildren<Renderer>())
             {
-                r.enabled = Math.Abs(dist) < 2.0;
+                r.enabled = Math.Abs(dist) < ThreshDist;
             }
         }
     }

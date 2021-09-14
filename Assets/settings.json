@@ -6,7 +6,7 @@
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
   "CeilingLogoEnabled": true,
-  "PlaygroundEnabled": false,
+  "PlaygroundEnabled": true,
   "ExhibitionMode": 1,
   "ExhibitionId": "613c8f6cbdd0f735b1eb8b9a",
   "GenerationSettings": {

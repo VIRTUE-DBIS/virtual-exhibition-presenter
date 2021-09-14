@@ -66,13 +66,6 @@ namespace Unibas.DBIS.VREP.World
         displayal.transform.Find("Directional light").gameObject.SetActive(false);
       }
 
-      Displayal displayalComponent = displayal.gameObject.GetComponent<Displayal>();
-      displayalComponent.SetExhibitModel(e);
-      displayalComponent.originalPosition = pos;
-      displayalComponent.originalRotation = rot;
-
-      displayals.Add(displayalComponent);
-
       var image = displayal.transform.Find("Plane").gameObject.AddComponent<ImageLoader>();
       image.ReloadImage(e.Path);
       displayal.transform.localScale = ScalingUtility.ConvertMeters2PlaneScaleSize(e.Size.X, e.Size.Y);
@@ -83,6 +76,13 @@ namespace Unibas.DBIS.VREP.World
         closenessDetector.url = e.Audio;
         Debug.Log("Added audio to display object.");
       }
+      
+      Displayal displayalComponent = displayal.gameObject.GetComponent<Displayal>();
+      displayalComponent.SetExhibitModel(e);
+      displayalComponent.originalPosition = pos;
+      displayalComponent.originalRotation = rot;
+
+      displayals.Add(displayalComponent);
 
       return displayal;
     }
@@ -127,8 +127,13 @@ namespace Unibas.DBIS.VREP.World
       var displayalHeight = displayal.GetComponent<BoxCollider>().size.z;
 
       var parentGameObj = new GameObject("Button Wrapper");
-      parentGameObj.AddComponent<ButtonWrapper>();
-      parentGameObj.transform.SetParent(displayal.transform, false);
+      parentGameObj.transform.SetParent(displayal.transform.parent, false);
+      parentGameObj.transform.localPosition = displayal.transform.localPosition;
+      parentGameObj.transform.localRotation = displayal.transform.localRotation;
+      parentGameObj.transform.localScale = displayal.transform.localScale;
+
+      var wrapperObj = parentGameObj.AddComponent<ButtonWrapper>();
+      wrapperObj.displayal = displayal.GetComponent<Displayal>();
 
       for (var i = 0; i < types.Count; i++)
       {
@@ -177,7 +182,6 @@ namespace Unibas.DBIS.VREP.World
       {
         var displayal = await CreateDisplayalFromExhibit(e);
 
-        // TODO Be smarter about this check and which buttons to add exactly.
         if (e.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
         {
           AddButtonsToDisplayal(e, displayal);

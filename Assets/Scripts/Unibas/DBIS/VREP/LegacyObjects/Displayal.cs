@@ -84,20 +84,24 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
       if (VrepController.Instance.settings.PlaygroundEnabled)
       {
-        // TODO Find a fix so this works regardless of image dimensions.
-        const float magicOffset = 0.5f;
+        var goTransform = gameObject.transform;
+        var goLocalPosition = goTransform.localPosition;
+        var displayalHeight = gameObject.GetComponent<BoxCollider>().size.z * goTransform.localScale.z;
 
         var anchor = ModelFactory.CreateCuboid(_anchor);
-        var col = anchor.AddComponent<BoxCollider>();
-
-        col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
-        col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
-
         anchor.name = "Anchor (" + id + ")";
         anchor.transform.parent = transform.parent;
-        anchor.transform.localPosition = new Vector3(_exhibitModel.Position.X - _anchor.width / 2,
-          _exhibitModel.Position.Y - (_exhibitModel.Size.Y / 2 + magicOffset),
-          -_anchor.depth);
+        
+        var col = anchor.AddComponent<BoxCollider>();
+        col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
+        col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
+        
+        // TODO Check if this works for all dimensions. 
+        anchor.transform.localPosition = new Vector3(
+          goLocalPosition.x - 0.5f * _anchor.width,
+          goLocalPosition.y - 0.5f * displayalHeight - 0.5f * _anchor.height,
+          0.0f -_anchor.depth
+        );
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }
     }
