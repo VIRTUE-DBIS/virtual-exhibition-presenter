@@ -44,11 +44,14 @@ namespace Unibas.DBIS.VREP.Core
         VrepController.Instance.ImportedTpSetup();
       }
 
+      // Hide all rooms except the first one.
+      RoomList.ForEach(it => it.gameObject.SetActive(it == RoomList.First()));
+
       // Setup TP to first room.
       VrepController.Instance.LobbyTpSetup(RoomList[0]);
 
-      // Hide all rooms except the first one.
-      RoomList.ForEach(it => it.gameObject.SetActive(it == RoomList.First()));
+      // TP player.
+      VrepController.TpPlayerToObjPos(RoomList[0].gameObject);
     }
 
     public async Task LoadRoom(Room room)

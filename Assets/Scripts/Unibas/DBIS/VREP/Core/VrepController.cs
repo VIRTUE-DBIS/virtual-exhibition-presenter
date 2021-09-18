@@ -194,6 +194,11 @@ namespace Unibas.DBIS.VREP.Core
       return room;
     }
 
+    public static void TpPlayerToObjPos(GameObject go)
+    {
+      TpPlayerToLocation(go.transform.position);
+    }
+    
     public static void TpPlayerToLocation(Vector3 loc)
     {
       var go = GameObject.FindWithTag("Player");

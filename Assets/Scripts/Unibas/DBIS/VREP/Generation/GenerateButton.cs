@@ -8,12 +8,18 @@ namespace Unibas.DBIS.VREP.Generation
   {
     public GenMethod type;
     public string targetRoomId = "";
+    private bool _isQueried;
 
     public async void ButtonPress()
     {
       Debug.Log("Pressed.");
 
       var room = VrepController.Instance.exhibitionManager.RoomList.Find(it => it.RoomData.Id == targetRoomId);
+
+      if (room == null && _isQueried)
+      {
+        return;
+      }
 
       if (room != null) // This is also null if the room was removed (in which case we want to generate a new one).
       {
@@ -24,11 +30,20 @@ namespace Unibas.DBIS.VREP.Generation
         VrepController.TpPlayerToLocation(room.transform.position);
         return;
       }
+      
+      // Block.
+      _isQueried = true;
 
       var parent = gameObject.GetComponentInParent<ButtonWrapper>().displayal.gameObject;
 
       var newRoom = await VrepController.Instance.GenerateAndLoadRoomForExhibition(parent, type);
       targetRoomId = newRoom.Id;
+      
+      // Deactivate room.
+      // GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
+
+      // Unblock.
+      _isQueried = false;
     }
   }
 }
