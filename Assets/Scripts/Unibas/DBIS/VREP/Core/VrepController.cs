@@ -16,8 +16,8 @@ namespace Unibas.DBIS.VREP.Core
   public class VrepController : MonoBehaviour
   {
     public static VrepController Instance;
+    public static Vector3 LobbySpawn = new Vector3(0, -9, 0);
 
-    public Vector3 lobbySpawn = new Vector3(0, -9, 0);
     public ExhibitionManager exhibitionManager;
 
     public Settings settings;
@@ -52,7 +52,7 @@ namespace Unibas.DBIS.VREP.Core
       // Reset player to lobby.
       if (settings.StartInLobby)
       {
-        ResetPlayerToLobby();
+        TpPlayerToLobby();
       }
 
       // VREM Client settings.
@@ -100,9 +100,9 @@ namespace Unibas.DBIS.VREP.Core
     public async Task<Exhibition> GenerateExhibition(GenMethod method)
     {
       var ex = await new GenerationApi().PostApiGenerateExhibitionAsync();
-      
+
       var room = await GenerateRoomByMethod(method);
-      
+
       ex.Rooms.Add(room);
 
       return ex;
@@ -198,7 +198,7 @@ namespace Unibas.DBIS.VREP.Core
     {
       TpPlayerToLocation(go.transform.position);
     }
-    
+
     public static void TpPlayerToLocation(Vector3 loc)
     {
       var go = GameObject.FindWithTag("Player");
@@ -206,6 +206,16 @@ namespace Unibas.DBIS.VREP.Core
       if (go != null)
       {
         go.transform.position = loc;
+      }
+    }
+
+    public static void TpPlayerToLobby()
+    {
+      var lby = GameObject.Find("Lobby");
+
+      if (lby != null)
+      {
+        TpPlayerToLocation(LobbySpawn);
       }
     }
 
@@ -290,18 +300,6 @@ namespace Unibas.DBIS.VREP.Core
 
       backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
       backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
-    }
-
-    public void ResetPlayerToLobby()
-    {
-      var go = GameObject.FindWithTag("Player");
-      var lby = GameObject.Find("Lobby");
-
-      if (go != null && lby != null)
-      {
-        go.transform.position = new Vector3(0, -9.9f, 0);
-        lby.SetActive(true);
-      }
     }
 
     private static void SetPositionForGeneratedRoom(GameObject origin, Room room)

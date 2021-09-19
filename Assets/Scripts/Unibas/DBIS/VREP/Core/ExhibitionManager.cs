@@ -29,6 +29,11 @@ namespace Unibas.DBIS.VREP.Core
       await LoadExhibition();
     }
 
+    public void DisableExtensionRooms()
+    {
+      RoomList.ForEach(it => it.gameObject.SetActive(it == RoomList.First()));
+    }
+
     public async Task LoadExhibition()
     {
       DestroyCurrentExhibition();
@@ -45,7 +50,7 @@ namespace Unibas.DBIS.VREP.Core
       }
 
       // Hide all rooms except the first one.
-      RoomList.ForEach(it => it.gameObject.SetActive(it == RoomList.First()));
+      DisableExtensionRooms();
 
       // Setup TP to first room.
       VrepController.Instance.LobbyTpSetup(RoomList[0]);
@@ -68,12 +73,34 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
+    void RestoreExhibits()
+    {
+      RoomList.ForEach(r => r.RestoreWallExhibits());
+    }
+
+    public void Restore()
+    {
+      RestoreExhibits();
+      DisableExtensionRooms();
+      VrepController.TpPlayerToLobby();
+    }
+
     public async void Update()
     {
       // Could be used to save exhibitions via hotkey.
       if (Input.GetKeyDown(KeyCode.F8))
       {
         await new ExhibitionApi().PostApiExhibitionsSaveAsync(Exhibition);
+      }
+
+      if (Input.GetKey(KeyCode.F10))
+      {
+        Restore();
+      }
+
+      if (Input.GetKey(KeyCode.F12))
+      {
+        RestoreExhibits();
       }
     }
   }
