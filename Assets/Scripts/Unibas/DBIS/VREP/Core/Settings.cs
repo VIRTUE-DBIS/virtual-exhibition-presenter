@@ -21,6 +21,8 @@ namespace Unibas.DBIS.VREP.Core.Config
     public int Width = 16;
 
     public int Seed = 0;
+
+    public int NumEpochs = 1;
   }
 
   /// <summary>

@@ -76,7 +76,7 @@ namespace Unibas.DBIS.VREP.World
         closenessDetector.url = e.Audio;
         Debug.Log("Added audio to display object.");
       }
-      
+
       Displayal displayalComponent = displayal.gameObject.GetComponent<Displayal>();
       displayalComponent.SetExhibitModel(e);
       displayalComponent.originalPosition = pos;
@@ -144,11 +144,11 @@ namespace Unibas.DBIS.VREP.World
 
         genButton.transform.localRotation = Quaternion.Euler(90.0f, 0.0f, 180.0f);
         genButton.transform.localPosition =
-          new Vector3(offset * (i - shift) * xFactor, 0.0f, 0.5f * displayalHeight + 0.75f * zFactor);
+          new Vector3(offset * (i - shift) * xFactor, 0.5f, 0.5f * displayalHeight + 0.75f * zFactor);
         genButton.transform.localScale = new Vector3(
           0.75f * xFactor,
           0.75f * zFactor, // Y/Z inverted due to different prefab orientation...
-          0.01f
+          2.0f
         );
 
         // Button.

@@ -12,6 +12,7 @@
   "GenerationSettings": {
     "height": 1,
     "width": 16,
-    "seed": 0
+    "seed": 0,
+    "numEpochs": 25
   }
 }

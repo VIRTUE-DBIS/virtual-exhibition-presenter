@@ -96,6 +96,11 @@ namespace Unibas.DBIS.VREP.Core
     {
       return settings.GenerationSettings.Seed;
     }
+    
+    public int GetNumEpochs()
+    {
+      return settings.GenerationSettings.NumEpochs;
+    }
 
     public async Task<Exhibition> GenerateExhibition(GenMethod method)
     {
@@ -122,7 +127,7 @@ namespace Unibas.DBIS.VREP.Core
 
     public async Task<Room> GenerateSomRoom(SomGenerationRequest.GenTypeEnum genType, List<String> idList)
     {
-      var config = new SomGenerationRequest(GetRoomSpec(), genType, idList, GetSeed());
+      var config = new SomGenerationRequest(GetRoomSpec(), genType, idList, GetSeed(), GetNumEpochs());
       return await new GenerationApi().PostApiGenerateRoomSomAsync(config);
     }
 
