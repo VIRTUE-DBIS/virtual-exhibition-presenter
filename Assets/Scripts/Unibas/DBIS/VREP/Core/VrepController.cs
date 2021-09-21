@@ -19,6 +19,8 @@ namespace Unibas.DBIS.VREP.Core
 
     public ExhibitionManager exhibitionManager;
 
+    public bool isGenerating;
+
     public Settings settings;
     public string settingsPath;
 
@@ -98,7 +100,7 @@ namespace Unibas.DBIS.VREP.Core
     {
       return settings.GenerationSettings.Seed;
     }
-    
+
     public int GetNumEpochs()
     {
       return settings.GenerationSettings.NumEpochs;
