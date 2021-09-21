@@ -33,6 +33,8 @@ namespace Unibas.DBIS.VREP.Core
     public int NumEpochs = 1;
 
     public ButtonMode ButtonMode = ButtonMode.All;
+
+    public bool BackButton = false;
   }
 
   /// <summary>

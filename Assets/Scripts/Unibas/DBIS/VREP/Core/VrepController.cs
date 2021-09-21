@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
@@ -305,8 +306,23 @@ namespace Unibas.DBIS.VREP.Core
       var newRoomGo = GameObject.Find(ObjectFactory.RoomNamePrefix + room.Id);
       var newRoom = newRoomGo.GetComponent<CuboidExhibitionRoom>();
 
-      var backTpBtn = CreateTeleport(newRoomGo, oldRoom.transform.position, Vector3.zero, "Back");
+      var lastPosX = 0.0f;
+      var targetRelativePos = new Vector3(0.0f, 0.0f, 1.0f);
 
+      if (Instance.settings.GenerationSettings.BackButton)
+      {
+        var mainTpBtn = CreateTeleport(newRoomGo, targetRelativePos, new Vector3(0.1f, 0.0f, 0.0f), "Back to start");
+        mainTpBtn.OnTeleportStart = Instance.exhibitionManager.DisableExtensionRooms;
+        mainTpBtn.OnTeleportEnd = Instance.exhibitionManager.RoomList.First().OnRoomEnter;
+        lastPosX = -0.1f;
+      }
+
+      var backTpBtn = CreateTeleport(
+        newRoomGo,
+        oldRoom.transform.position + targetRelativePos,
+        new Vector3(lastPosX, 0.0f, 0.0f),
+        "Back to last"
+      );
       backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
       backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
     }
