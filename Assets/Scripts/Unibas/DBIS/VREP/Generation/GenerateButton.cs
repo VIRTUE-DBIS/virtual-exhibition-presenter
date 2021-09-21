@@ -1,6 +1,8 @@
 using Unibas.DBIS.VREP.Core;
+using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Unibas.DBIS.VREP.Generation
 {
@@ -34,12 +36,17 @@ namespace Unibas.DBIS.VREP.Generation
       VrepController.Instance.isGenerating = true;
 
       var parent = gameObject.GetComponentInParent<ButtonWrapper>().displayal.gameObject;
+      var buttonRenderer = gameObject.GetComponentInChildren<Button>().gameObject.GetComponent<MeshRenderer>();
+
+      buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultYellow");
 
       var newRoom = await VrepController.Instance.GenerateAndLoadRoomForExhibition(parent, type);
       targetRoomId = newRoom.Id;
 
       // Deactivate room.
-      GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
+      // GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
+      
+      buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultGreen");
 
       // Unblock.
       VrepController.Instance.isGenerating = false;
