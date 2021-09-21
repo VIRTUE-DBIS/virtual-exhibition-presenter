@@ -75,7 +75,14 @@ namespace Unibas.DBIS.VREP.Core
 
     void RestoreExhibits()
     {
-      RoomList.ForEach(r => r.RestoreWallExhibits());
+      RoomList.ForEach(r =>
+      {
+        // Only restores exhibits for the active rooms.
+        if (r.gameObject.activeSelf)
+        {
+          r.RestoreWallExhibits();
+        }
+      });
     }
 
     public void Restore()
