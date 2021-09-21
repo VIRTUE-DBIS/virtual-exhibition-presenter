@@ -4,12 +4,20 @@ using System.IO;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
 
-namespace Unibas.DBIS.VREP.Core.Config
+namespace Unibas.DBIS.VREP.Core
 {
-  public enum Mode
+  public enum GenerationMode
   {
     Static,
-    Generation
+    GenerationVisual,
+    GenerationSemantic
+  }
+
+  public enum ButtonMode
+  {
+    All,
+    Visual,
+    Semantic
   }
 
   [Serializable]
@@ -23,12 +31,15 @@ namespace Unibas.DBIS.VREP.Core.Config
     public int Seed = 0;
 
     public int NumEpochs = 1;
+
+    public ButtonMode ButtonMode = ButtonMode.All;
   }
 
   /// <summary>
   /// Settings class; serialized from/to JSON.
   /// </summary>
   [Serializable]
+
   public class Settings
   {
     /// <summary>
@@ -76,7 +87,7 @@ namespace Unibas.DBIS.VREP.Core.Config
     /// </summary>
     public bool PlaygroundEnabled;
 
-    public Mode ExhibitionMode = Mode.Static;
+    public GenerationMode ExhibitionMode = GenerationMode.Static;
 
     /// <summary>
     /// The ID of the exhibition to load.

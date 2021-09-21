@@ -40,7 +40,7 @@ namespace Unibas.DBIS.VREP.Generation
       targetRoomId = newRoom.Id;
       
       // Deactivate room.
-      // GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
+      GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
 
       // Unblock.
       _isQueried = false;

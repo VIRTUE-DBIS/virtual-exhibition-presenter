@@ -1,5 +1,5 @@
 {
-  "VremAddress": "http://127.0.0.1:4545",
+  "VremAddress": "http://127.0.0.1:4546",
   "WallTimerCount": 240,
   "StartInLobby": true,
   "SpotsEnabled": false,
@@ -13,6 +13,7 @@
     "height": 1,
     "width": 16,
     "seed": 0,
-    "numEpochs": 25
+    "numEpochs": 25,
+    "buttonMode": 1
   }
 }

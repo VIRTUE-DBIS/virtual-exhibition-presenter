@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
-using Unibas.DBIS.VREP.Core.Config;
 using Unibas.DBIS.VREP.Generation;
 using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Utils;
@@ -68,11 +67,14 @@ namespace Unibas.DBIS.VREP.Core
 
       switch (settings.ExhibitionMode)
       {
-        case Mode.Generation:
+        case GenerationMode.Static:
+          ex = await LoadExhibitionById();
+          break;
+        case GenerationMode.GenerationVisual:
           ex = await GenerateExhibition(GenMethod.VisualSom);
           break;
-        case Mode.Static:
-          ex = await LoadExhibitionById();
+        case GenerationMode.GenerationSemantic:
+          ex = await GenerateExhibition(GenMethod.SemanticSom);
           break;
         default:
           Debug.LogError("Invalid exhibition mode specified!");

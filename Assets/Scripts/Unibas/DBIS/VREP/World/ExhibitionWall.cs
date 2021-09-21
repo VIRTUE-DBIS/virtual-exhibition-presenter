@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
@@ -57,7 +58,7 @@ namespace Unibas.DBIS.VREP.World
 
       // Non-90° as they would tip over otherwise (exhibits stand on the little bar below).
       var rot = VrepController.Instance.settings.PlaygroundEnabled
-        ? Quaternion.Euler(92.5f, 0, 180) // Slightly more than 90° or it would fall down.
+        ? Quaternion.Euler(91.0f, 0, 180) // Slightly more than 90° or it would fall down.
         : Quaternion.Euler(90, 0, 180);
       displayal.transform.localRotation = rot; // Required due to prefab orientation.
 
@@ -87,6 +88,56 @@ namespace Unibas.DBIS.VREP.World
       return displayal;
     }
 
+    private List<GenMethod> GetButtonTypes(int numIds)
+    {
+      var mode = VrepController.Instance.settings.GenerationSettings.ButtonMode;
+      var types = new List<GenMethod>();
+
+      if (mode == ButtonMode.All)
+      {
+        // types.Add(GenMethod.RandomAll);
+
+        if (numIds > 0)
+        {
+          types.Add(GenMethod.RandomList);
+        }
+      }
+
+      if (mode == ButtonMode.Visual || mode == ButtonMode.All)
+      {
+        types.Add(GenMethod.VisualSimilarity);
+
+        if (numIds > 0)
+        {
+          types.Add(GenMethod.VisualSom);
+        }
+      }
+
+      if (mode == ButtonMode.Semantic || mode == ButtonMode.All)
+      {
+        types.Add(GenMethod.SemanticSimilarity);
+
+        if (numIds > 0)
+        {
+          types.Add(GenMethod.SemanticSom);
+        }
+      }
+
+      switch (mode)
+      {
+        case ButtonMode.All:
+          break;
+        case ButtonMode.Visual:
+          break;
+        case ButtonMode.Semantic:
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
+
+      return types;
+    }
+
     private void AddButtonsToDisplayal(Exhibit e, GameObject displayal)
     {
       var genButtonPrefab = ObjectFactory.GetGenerationButtonPrefab();
@@ -105,19 +156,7 @@ namespace Unibas.DBIS.VREP.World
       idConfig.associatedIds = ids;
       idConfig.originId = e.Metadata[MetadataType.ObjectId.GetKey()];
 
-      var types = new List<GenMethod>
-      {
-        GenMethod.RandomAll,
-        GenMethod.VisualSimilarity,
-        GenMethod.SemanticSimilarity,
-      };
-
-      if (ids.Count > 0)
-      {
-        types.Insert(0, GenMethod.RandomList);
-        types.Add(GenMethod.VisualSom);
-        types.Add(GenMethod.SemanticSom);
-      }
+      List<GenMethod> types = GetButtonTypes(ids.Count);
 
       var localScale = displayal.transform.localScale;
       var offset = -2.0f;

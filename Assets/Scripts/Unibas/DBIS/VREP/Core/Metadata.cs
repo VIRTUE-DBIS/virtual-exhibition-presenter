@@ -1,6 +1,6 @@
 namespace Unibas.DBIS.VREP.Core
 {
-  public static class MetadataMethods
+  public static class MetadataUtil
   {
     public static string GetKey(this MetadataType mt)
     {
