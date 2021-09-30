@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
+using Unibas.DBIS.VREP.Generation;
 using Unibas.DBIS.VREP.World;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ namespace Unibas.DBIS.VREP.Core
       await LoadExhibition();
     }
 
-    public void DisableExtensionRooms()
+    public void EnableOnlyMainRoom()
     {
       RoomList.ForEach(it => it.gameObject.SetActive(it == RoomList.First()));
     }
@@ -40,17 +41,17 @@ namespace Unibas.DBIS.VREP.Core
 
       foreach (var room in Exhibition.Rooms)
       {
-        await LoadRoom(room);
+        var go = await LoadRoom(room);
+        go.SetActive(false);
       }
 
-      if (!Exhibition.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
+      if (!Exhibition.Metadata.ContainsKey(GenMetadata.Generated.GetKey()))
       {
         // Not generated, connect all rooms.
         VrepController.Instance.ImportedTpSetup();
       }
 
-      // Hide all rooms except the first one.
-      DisableExtensionRooms();
+      EnableOnlyMainRoom();
 
       // Setup TP to first room.
       VrepController.Instance.LobbyTpSetup(RoomList[0]);
@@ -59,7 +60,7 @@ namespace Unibas.DBIS.VREP.Core
       VrepController.TpPlayerToObjPos(RoomList[0].gameObject);
     }
 
-    public async Task LoadRoom(Room room)
+    public async Task<GameObject> LoadRoom(Room room)
     {
       var roomGameObject = await ObjectFactory.BuildRoom(room);
       var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
@@ -67,10 +68,12 @@ namespace Unibas.DBIS.VREP.Core
       // Add room to map.
       RoomList.Add(exhibitionRoom);
 
-      if (room.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
+      if (room.Metadata.ContainsKey(GenMetadata.Generated.GetKey()))
       {
         VrepController.GeneratedTpSetup(room);
       }
+
+      return roomGameObject;
     }
 
     void RestoreExhibits()
@@ -88,7 +91,7 @@ namespace Unibas.DBIS.VREP.Core
     public void Restore()
     {
       RestoreExhibits();
-      DisableExtensionRooms();
+      EnableOnlyMainRoom();
       VrepController.TpPlayerToLobby();
     }
 

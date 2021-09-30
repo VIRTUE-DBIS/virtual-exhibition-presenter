@@ -163,7 +163,9 @@ namespace Unibas.DBIS.VREP.Core
       SetPositionForGeneratedRoom(origin, room);
 
       // Teleport info, necessary for restoring generated exhibitions.
-      room.Metadata[MetadataType.Predecessor.GetKey()] = origin.GetComponent<Displayal>().id;
+      // room.Metadata[MetadataType.PredecessorExhibit.GetKey()] = origin.GetComponent<Displayal>().id;
+      room.Metadata[GenMetadata.PredecessorRoom.GetKey()] =
+        origin.GetComponentInParent<CuboidExhibitionRoom>().RoomData.Id;
 
       // Load the room like a normal room.
       await exhibitionManager.LoadRoom(room);
@@ -176,9 +178,9 @@ namespace Unibas.DBIS.VREP.Core
       RoomReferences references;
       var model = origin.GetComponent<Displayal>().GetExhibit();
 
-      if (model.Metadata.ContainsKey(MetadataType.References.GetKey()))
+      if (model.Metadata.ContainsKey(GenMetadata.References.GetKey()))
       {
-        var refJson = model.Metadata[MetadataType.References.GetKey()];
+        var refJson = model.Metadata[GenMetadata.References.GetKey()];
         references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
       }
       else
@@ -186,11 +188,10 @@ namespace Unibas.DBIS.VREP.Core
         references = new RoomReferences();
       }
 
-      // TODO Consider adding some sort of mapping for GenTypeEnum.
       references.References[type.ToString()] = room.Id;
 
       // Store the updated references as metadata.
-      model.Metadata[MetadataType.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
+      model.Metadata[GenMetadata.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
 
       // Teleport the player.
       TpPlayerToLocation(new Vector3(room.Position.X, room.Position.Y, room.Position.Z));
@@ -286,16 +287,19 @@ namespace Unibas.DBIS.VREP.Core
 
     public static void GeneratedTpSetup(Room room)
     {
-      if (!room.Metadata.ContainsKey(MetadataType.Predecessor.GetKey()))
+      if (!room.Metadata.ContainsKey(GenMetadata.PredecessorRoom.GetKey()))
       {
         return;
       }
 
-      var exhibitId = room.Metadata[MetadataType.Predecessor.GetKey()];
+      // Get exhibit ID (could also be used to port player back in front of the exhibit).
+      var roomId = room.Metadata[GenMetadata.PredecessorRoom.GetKey()];
 
-      var origin = GameObject.Find(Displayal.NamePrefix + exhibitId);
-
-      var oldRoom = origin.GetComponentInParent<CuboidExhibitionRoom>();
+      // Get ID of the room the exhibit is part of.
+      var oldRoom = Instance.exhibitionManager.RoomList.Find(it => it.RoomData.Id == roomId);
+      
+      // Activate room.
+      oldRoom.gameObject.SetActive(true);
 
       var newRoomGo = GameObject.Find(ObjectFactory.RoomNamePrefix + room.Id);
       var newRoom = newRoomGo.GetComponent<CuboidExhibitionRoom>();
@@ -306,7 +310,7 @@ namespace Unibas.DBIS.VREP.Core
       if (Instance.settings.GenerationSettings.BackButton)
       {
         var mainTpBtn = CreateTeleport(newRoomGo, targetRelativePos, new Vector3(0.1f, 0.0f, 0.0f), "Back to start");
-        mainTpBtn.OnTeleportStart = Instance.exhibitionManager.DisableExtensionRooms;
+        mainTpBtn.OnTeleportStart = Instance.exhibitionManager.EnableOnlyMainRoom;
         mainTpBtn.OnTeleportEnd = Instance.exhibitionManager.RoomList.First().OnRoomEnter;
         lastPosX = -0.1f;
       }
@@ -319,6 +323,9 @@ namespace Unibas.DBIS.VREP.Core
       );
       backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
       backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
+      
+      // Deactivate room.
+      oldRoom.gameObject.SetActive(false);
     }
 
     private static void SetPositionForGeneratedRoom(GameObject origin, Room room)

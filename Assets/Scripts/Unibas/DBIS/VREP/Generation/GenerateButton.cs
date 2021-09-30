@@ -11,6 +11,23 @@ namespace Unibas.DBIS.VREP.Generation
     public GenMethod type;
     public string targetRoomId = "";
 
+    private MeshRenderer GetButtonRenderer()
+    {
+      return gameObject.GetComponentInChildren<Button>().gameObject.GetComponent<MeshRenderer>();
+    }
+
+    public void SetButtonLoading()
+    {
+      var buttonRenderer = GetButtonRenderer();
+      buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultYellow");
+    }
+
+    public void SetButtonReady()
+    {
+      var buttonRenderer = GetButtonRenderer();
+      buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultGreen");
+    }
+
     public async void ButtonPress()
     {
       Debug.Log("Pressed.");
@@ -24,11 +41,21 @@ namespace Unibas.DBIS.VREP.Generation
 
       if (room != null) // This is also null if the room was removed (in which case we want to generate a new one).
       {
+        Debug.Log("Already exists.");
         // Room already exists and is loaded, teleport player and return.
-        room.OnRoomEnter();
+
+        // Update button again, required for loaded rooms.
+        SetButtonReady();
+        
+        // Teleport.
+        VrepController.TpPlayerToLocation(room.transform.position);
+
+        // Deactivate old room.
         GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
 
-        VrepController.TpPlayerToLocation(room.transform.position);
+        // Activate new room.
+        room.OnRoomEnter();
+
         return;
       }
 
@@ -36,9 +63,8 @@ namespace Unibas.DBIS.VREP.Generation
       VrepController.Instance.isGenerating = true;
 
       var parent = gameObject.GetComponentInParent<ButtonWrapper>().displayal.gameObject;
-      var buttonRenderer = gameObject.GetComponentInChildren<Button>().gameObject.GetComponent<MeshRenderer>();
 
-      buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultYellow");
+      SetButtonLoading();
 
       var newRoom = await VrepController.Instance.GenerateAndLoadRoomForExhibition(parent, type);
       targetRoomId = newRoom.Id;
@@ -46,7 +72,7 @@ namespace Unibas.DBIS.VREP.Generation
       // Deactivate room.
       // GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
 
-      buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultGreen");
+      SetButtonReady();
 
       // Unblock.
       VrepController.Instance.isGenerating = false;

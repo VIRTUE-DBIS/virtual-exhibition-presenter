@@ -94,18 +94,18 @@ namespace Unibas.DBIS.VREP.World
       // Get IDs and potential reference.
       List<string> ids = new List<string>();
 
-      if (e.Metadata.ContainsKey(MetadataType.MemberIds.GetKey()))
+      if (e.Metadata.ContainsKey(GenMetadata.MemberIds.GetKey()))
       {
-        var json = e.Metadata[MetadataType.MemberIds.GetKey()];
+        var json = e.Metadata[GenMetadata.MemberIds.GetKey()];
         var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
         idDoublePairs.ForEach(it => ids.Add(it.id));
       }
 
       var idConfig = displayal.AddComponent<IdConfig>();
       idConfig.associatedIds = ids;
-      idConfig.originId = e.Metadata[MetadataType.ObjectId.GetKey()];
+      idConfig.originId = e.Metadata[GenMetadata.ObjectId.GetKey()];
 
-      List<GenMethod> types = GenTypeUtil.GetButtonTypes(ids.Count);
+      List<GenMethod> types = GenMethodUtil.GetButtonTypes(ids.Count);
 
       var localScale = displayal.transform.localScale;
       var offset = -2.0f;
@@ -142,9 +142,9 @@ namespace Unibas.DBIS.VREP.World
         // Button.
         RoomReferences references = null;
 
-        if (e.Metadata.ContainsKey(MetadataType.References.GetKey()))
+        if (e.Metadata.ContainsKey(GenMetadata.References.GetKey()))
         {
-          var refJson = e.Metadata[MetadataType.References.GetKey()];
+          var refJson = e.Metadata[GenMetadata.References.GetKey()];
           references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
         }
 
@@ -170,7 +170,7 @@ namespace Unibas.DBIS.VREP.World
       {
         var displayal = await CreateDisplayalFromExhibit(e);
 
-        if (e.Metadata.ContainsKey(MetadataType.Generated.GetKey()))
+        if (e.Metadata.ContainsKey(GenMetadata.Generated.GetKey()))
         {
           AddButtonsToDisplayal(e, displayal);
         }

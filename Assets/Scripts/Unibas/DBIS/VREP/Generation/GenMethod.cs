@@ -14,7 +14,7 @@ namespace Unibas.DBIS.VREP.Generation
     SemanticSom
   }
 
-  public static class GenTypeUtil
+  public static class GenMethodUtil
   {
     public static string GetName(this GenMethod gr)
     {

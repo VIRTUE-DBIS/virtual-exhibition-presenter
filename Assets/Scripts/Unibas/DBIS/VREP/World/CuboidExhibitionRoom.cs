@@ -88,6 +88,8 @@ namespace Unibas.DBIS.VREP.World
     {
       gameObject.SetActive(true);
 
+      RestoreWallExhibits();
+
       LoadAmbientAudio();
 
       try
@@ -162,7 +164,15 @@ namespace Unibas.DBIS.VREP.World
     public void RestoreWallExhibits()
     {
       Walls.ForEach(w => w.RestoreDisplayals());
-      gameObject.transform.Find("Timer").GetComponent<Countdown>().Restart();
+
+      try
+      {
+        gameObject.transform.Find("Timer").GetComponent<Countdown>().Restart();
+      }
+      catch (Exception)
+      {
+        Debug.Log("No timer to reset was found.");
+      }
     }
   }
 }
