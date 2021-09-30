@@ -18,12 +18,12 @@ namespace Unibas.DBIS.VREP.Generation
     {
       return gr switch
       {
-        GenMethod.RandomAll => ("Random (all)"),
-        GenMethod.RandomList => ("Random (cluster)"),
-        GenMethod.VisualSimilarity => ("Visual Sim."),
-        GenMethod.SemanticSimilarity => ("Semantic Sim."),
-        GenMethod.VisualSom => ("Visual SOM"),
-        GenMethod.SemanticSom => ("Semantic SOM"),
+        GenMethod.RandomAll => ("Random (All)"),
+        GenMethod.RandomList => ("Random (Cluster)"),
+        GenMethod.VisualSimilarity => ("Visual Similarity"),
+        GenMethod.SemanticSimilarity => ("Semantic Similarity"),
+        GenMethod.VisualSom => ("Visual Cluster"),
+        GenMethod.SemanticSom => ("Semantic Cluster"),
         _ => throw new ArgumentOutOfRangeException(nameof(gr), gr, null)
       };
     }

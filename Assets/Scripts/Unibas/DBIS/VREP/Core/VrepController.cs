@@ -124,13 +124,13 @@ namespace Unibas.DBIS.VREP.Core
       return await new GenerationApi().PostApiGenerateRoomRandomAsync(config);
     }
 
-    public async Task<Room> GenerateSimilarityRoom(SimilarityGenerationRequest.GenTypeEnum genType, string objectId)
+    public async Task<Room> GenerateSimilarityRoom(string genType, string objectId)
     {
       var config = new SimilarityGenerationRequest(GetRoomSpec(), genType, objectId);
       return await new GenerationApi().PostApiGenerateRoomSimilarAsync(config);
     }
 
-    public async Task<Room> GenerateSomRoom(SomGenerationRequest.GenTypeEnum genType, List<String> idList)
+    public async Task<Room> GenerateSomRoom(string genType, List<String> idList)
     {
       var config = new SomGenerationRequest(GetRoomSpec(), genType, idList, GetSeed(), GetNumEpochs());
       return await new GenerationApi().PostApiGenerateRoomSomAsync(config);
@@ -143,18 +143,11 @@ namespace Unibas.DBIS.VREP.Core
       return type switch
       {
         GenMethod.RandomAll => await GenerateRandomRoom(new List<string>()),
-
         GenMethod.RandomList => await GenerateRandomRoom(ids),
-
-        GenMethod.VisualSimilarity => await GenerateSimilarityRoom(SimilarityGenerationRequest.GenTypeEnum.VISUAL,
-          originId),
-
-        GenMethod.SemanticSimilarity => await GenerateSimilarityRoom(SimilarityGenerationRequest.GenTypeEnum.SEMANTIC,
-          originId),
-
-        GenMethod.VisualSom => await GenerateSomRoom(SomGenerationRequest.GenTypeEnum.VISUAL, ids),
-
-        GenMethod.SemanticSom => await GenerateSomRoom(SomGenerationRequest.GenTypeEnum.SEMANTIC, ids),
+        GenMethod.VisualSimilarity => await GenerateSimilarityRoom("visual", originId),
+        GenMethod.SemanticSimilarity => await GenerateSimilarityRoom("semantic", originId),
+        GenMethod.VisualSom => await GenerateSomRoom("visual", ids),
+        GenMethod.SemanticSom => await GenerateSomRoom("semantic", ids),
 
         _ => throw new ArgumentOutOfRangeException()
       };

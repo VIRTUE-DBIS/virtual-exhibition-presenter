@@ -322,7 +322,7 @@ TextMesh:
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 64
+  m_FontSize: 54
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -376,8 +376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 5
-  ids: []
-  destination: {x: 0, y: 0, z: 0}
+  targetRoomId: 
 --- !u!114 &3688521999265350482
 MonoBehaviour:
   m_ObjectHideFlags: 0
