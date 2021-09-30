@@ -1,6 +1,4 @@
-﻿using Unibas.DBIS.VREP.Core;
-using Unibas.DBIS.VREP.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Unibas.DBIS.VREP.World
 {
@@ -9,6 +7,7 @@ namespace Unibas.DBIS.VREP.World
   /// </summary>
   public class Lobby : MonoBehaviour
   {
+    /*
     private SteamVRTeleportButton _text;
     private SteamVRTeleportButton _next;
     private SteamVRTeleportButton _wall;
@@ -34,21 +33,6 @@ namespace Unibas.DBIS.VREP.World
           false),
         "Wall");
     }
-
-    /// <summary>
-    /// Sets the triggers for the teleport buttons to execute upon entering an exhibition room.
-    /// Currently only supports 1 room!
-    /// </summary>
-    /// <param name="manager">The ExhibitionManager object holding room details.</param>
-    public void ActivateRoomTrigger(ExhibitionManager manager)
-    {
-      /*var room = manager.GetRoomByIndex(0);
-
-      if (room == null) return;
-
-      _text.OnTeleportEnd = room.OnRoomEnter;
-      _next.OnTeleportEnd = room.OnRoomEnter;
-      _wall.OnTeleportEnd = room.OnRoomEnter;*/
-    }
+    */
   }
 }

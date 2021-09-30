@@ -1,6 +1,6 @@
 using System;
 
-namespace Unibas.DBIS.VREP.Generation
+namespace Unibas.DBIS.VREP.Generation.Model
 {
   [Serializable]
   public class IdDoublePair

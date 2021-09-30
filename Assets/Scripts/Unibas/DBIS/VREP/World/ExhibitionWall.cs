@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Generation;
+using Unibas.DBIS.VREP.Generation.Model;
 using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Multimedia;
 using Unibas.DBIS.VREP.Utils;
@@ -75,7 +75,6 @@ namespace Unibas.DBIS.VREP.World
       {
         var closenessDetector = displayal.AddComponent<ClosenessDetector>();
         closenessDetector.url = e.Audio;
-        Debug.Log("Added audio to display object.");
       }
 
       Displayal displayalComponent = displayal.gameObject.GetComponent<Displayal>();
@@ -86,56 +85,6 @@ namespace Unibas.DBIS.VREP.World
       displayals.Add(displayalComponent);
 
       return displayal;
-    }
-
-    private List<GenMethod> GetButtonTypes(int numIds)
-    {
-      var mode = VrepController.Instance.settings.GenerationSettings.ButtonMode;
-      var types = new List<GenMethod>();
-
-      if (mode == ButtonMode.All)
-      {
-        // types.Add(GenMethod.RandomAll);
-
-        if (numIds > 0)
-        {
-          types.Add(GenMethod.RandomList);
-        }
-      }
-
-      if (mode == ButtonMode.Visual || mode == ButtonMode.All)
-      {
-        types.Add(GenMethod.VisualSimilarity);
-
-        if (numIds > 0)
-        {
-          types.Add(GenMethod.VisualSom);
-        }
-      }
-
-      if (mode == ButtonMode.Semantic || mode == ButtonMode.All)
-      {
-        types.Add(GenMethod.SemanticSimilarity);
-
-        if (numIds > 0)
-        {
-          types.Add(GenMethod.SemanticSom);
-        }
-      }
-
-      switch (mode)
-      {
-        case ButtonMode.All:
-          break;
-        case ButtonMode.Visual:
-          break;
-        case ButtonMode.Semantic:
-          break;
-        default:
-          throw new ArgumentOutOfRangeException();
-      }
-
-      return types;
     }
 
     private void AddButtonsToDisplayal(Exhibit e, GameObject displayal)
@@ -156,7 +105,7 @@ namespace Unibas.DBIS.VREP.World
       idConfig.associatedIds = ids;
       idConfig.originId = e.Metadata[MetadataType.ObjectId.GetKey()];
 
-      List<GenMethod> types = GetButtonTypes(ids.Count);
+      List<GenMethod> types = GenTypeUtil.GetButtonTypes(ids.Count);
 
       var localScale = displayal.transform.localScale;
       var offset = -2.0f;

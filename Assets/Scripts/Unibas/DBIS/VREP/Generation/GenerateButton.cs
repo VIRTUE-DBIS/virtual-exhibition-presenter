@@ -45,7 +45,7 @@ namespace Unibas.DBIS.VREP.Generation
 
       // Deactivate room.
       // GetComponentInParent<CuboidExhibitionRoom>().OnRoomLeave();
-      
+
       buttonRenderer.material = TexturingUtility.LoadMaterialByName("DefaultGreen");
 
       // Unblock.

@@ -91,16 +91,16 @@ namespace Unibas.DBIS.VREP.LegacyObjects
         var anchor = ModelFactory.CreateCuboid(_anchor);
         anchor.name = "Anchor (" + id + ")";
         anchor.transform.parent = transform.parent;
-        
+
         var col = anchor.AddComponent<BoxCollider>();
         col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
         col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
-        
+
         // TODO Check if this works for all dimensions. 
         anchor.transform.localPosition = new Vector3(
           goLocalPosition.x - 0.5f * _anchor.width,
           goLocalPosition.y - 0.5f * displayalHeight - 0.5f * _anchor.height,
-          0.0f -_anchor.depth
+          0.0f - _anchor.depth
         );
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }

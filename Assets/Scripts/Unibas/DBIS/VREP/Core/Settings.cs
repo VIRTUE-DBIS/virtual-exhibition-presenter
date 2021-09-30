@@ -41,7 +41,6 @@ namespace Unibas.DBIS.VREP.Core
   /// Settings class; serialized from/to JSON.
   /// </summary>
   [Serializable]
-
   public class Settings
   {
     /// <summary>

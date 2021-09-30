@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Unibas.DBIS.VREP.Generation
+namespace Unibas.DBIS.VREP.Generation.Model
 {
   [Serializable]
   public class RoomReferences

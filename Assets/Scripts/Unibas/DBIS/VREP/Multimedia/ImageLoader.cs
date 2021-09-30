@@ -21,7 +21,6 @@ namespace Unibas.DBIS.VREP.Multimedia
 
       var tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
 
-      // TODO Load N/A image here if we have an empty array.
       tex.LoadImage(imageData);
 
       if (tex.height > 1024 || tex.width > 1024)

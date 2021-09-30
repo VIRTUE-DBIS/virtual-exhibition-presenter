@@ -6,6 +6,7 @@ using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.VREP.Generation;
+using Unibas.DBIS.VREP.Generation.Model;
 using Unibas.DBIS.VREP.LegacyObjects;
 using Unibas.DBIS.VREP.Utils;
 using Unibas.DBIS.VREP.World;
