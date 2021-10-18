@@ -45,7 +45,7 @@ namespace Unibas.DBIS.VREP.Core
         go.SetActive(false);
       }
 
-      if (!Exhibition.Metadata.ContainsKey(GenMetadata.Generated.GetKey()))
+      if (!Exhibition.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
       {
         // Not generated, connect all rooms.
         VrepController.Instance.ImportedTpSetup();
@@ -68,7 +68,7 @@ namespace Unibas.DBIS.VREP.Core
       // Add room to map.
       RoomList.Add(exhibitionRoom);
 
-      if (room.Metadata.ContainsKey(GenMetadata.Generated.GetKey()))
+      if (room.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
       {
         VrepController.GeneratedTpSetup(room);
       }

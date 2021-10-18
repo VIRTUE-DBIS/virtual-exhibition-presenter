@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 namespace Unibas.DBIS.VREP.Generation
 {
-  public class GenerateButton : MonoBehaviour
+  public class GenerationButton : MonoBehaviour
   {
-    public GenMethod type;
+    public GenerationMethod type;
     public string targetRoomId = "";
 
     private MeshRenderer GetButtonRenderer()

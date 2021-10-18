@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Generation.Model
 {
-  public class IdConfig : MonoBehaviour
+  public class IdListPair : MonoBehaviour
   {
     public String originId;
     public List<String> associatedIds;

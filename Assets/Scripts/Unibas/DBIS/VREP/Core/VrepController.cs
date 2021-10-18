@@ -75,10 +75,10 @@ namespace Unibas.DBIS.VREP.Core
           ex = await LoadExhibitionById();
           break;
         case GenerationMode.GenerationVisual:
-          ex = await GenerateExhibition(GenMethod.VisualSom);
+          ex = await GenerateExhibition(GenerationMethod.VisualSom);
           break;
         case GenerationMode.GenerationSemantic:
-          ex = await GenerateExhibition(GenMethod.SemanticSom);
+          ex = await GenerateExhibition(GenerationMethod.SemanticSom);
           break;
         default:
           Debug.LogError("Invalid exhibition mode specified!");
@@ -108,7 +108,7 @@ namespace Unibas.DBIS.VREP.Core
       return settings.GenerationSettings.NumEpochs;
     }
 
-    public async Task<Exhibition> GenerateExhibition(GenMethod method)
+    public async Task<Exhibition> GenerateExhibition(GenerationMethod method)
     {
       var ex = await new GenerationApi().PostApiGenerateExhibitionAsync();
 
@@ -137,26 +137,26 @@ namespace Unibas.DBIS.VREP.Core
       return await new GenerationApi().PostApiGenerateRoomSomAsync(config);
     }
 
-    public async Task<Room> GenerateRoomByMethod(GenMethod type, List<string> ids = null, string originId = "")
+    public async Task<Room> GenerateRoomByMethod(GenerationMethod type, List<string> ids = null, string originId = "")
     {
       ids ??= new List<string>();
 
       return type switch
       {
-        GenMethod.RandomAll => await GenerateRandomRoom(new List<string>()),
-        GenMethod.RandomList => await GenerateRandomRoom(ids),
-        GenMethod.VisualSimilarity => await GenerateSimilarityRoom("visual", originId),
-        GenMethod.SemanticSimilarity => await GenerateSimilarityRoom("semantic", originId),
-        GenMethod.VisualSom => await GenerateSomRoom("visual", ids),
-        GenMethod.SemanticSom => await GenerateSomRoom("semantic", ids),
+        GenerationMethod.RandomAll => await GenerateRandomRoom(new List<string>()),
+        GenerationMethod.RandomList => await GenerateRandomRoom(ids),
+        GenerationMethod.VisualSimilarity => await GenerateSimilarityRoom("visual", originId),
+        GenerationMethod.SemanticSimilarity => await GenerateSimilarityRoom("semantic", originId),
+        GenerationMethod.VisualSom => await GenerateSomRoom("visual", ids),
+        GenerationMethod.SemanticSom => await GenerateSomRoom("semantic", ids),
 
         _ => throw new ArgumentOutOfRangeException()
       };
     }
 
-    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenMethod type)
+    public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationMethod type)
     {
-      var config = origin.GetComponent<IdConfig>();
+      var config = origin.GetComponent<IdListPair>();
       var room = await GenerateRoomByMethod(type, config.associatedIds, config.originId);
 
       // Calculate new room's position relative to the room the generation was issued from and set it in the model.
@@ -164,7 +164,7 @@ namespace Unibas.DBIS.VREP.Core
 
       // Teleport info, necessary for restoring generated exhibitions.
       // room.Metadata[MetadataType.PredecessorExhibit.GetKey()] = origin.GetComponent<Displayal>().id;
-      room.Metadata[GenMetadata.PredecessorRoom.GetKey()] =
+      room.Metadata[GenerationMetadata.PredecessorRoom.GetKey()] =
         origin.GetComponentInParent<CuboidExhibitionRoom>().RoomData.Id;
 
       // Load the room like a normal room.
@@ -178,9 +178,9 @@ namespace Unibas.DBIS.VREP.Core
       RoomReferences references;
       var model = origin.GetComponent<Displayal>().GetExhibit();
 
-      if (model.Metadata.ContainsKey(GenMetadata.References.GetKey()))
+      if (model.Metadata.ContainsKey(GenerationMetadata.References.GetKey()))
       {
-        var refJson = model.Metadata[GenMetadata.References.GetKey()];
+        var refJson = model.Metadata[GenerationMetadata.References.GetKey()];
         references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
       }
       else
@@ -191,7 +191,7 @@ namespace Unibas.DBIS.VREP.Core
       references.References[type.ToString()] = room.Id;
 
       // Store the updated references as metadata.
-      model.Metadata[GenMetadata.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
+      model.Metadata[GenerationMetadata.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
 
       // Teleport the player.
       TpPlayerToLocation(new Vector3(room.Position.X, room.Position.Y, room.Position.Z));
@@ -287,13 +287,13 @@ namespace Unibas.DBIS.VREP.Core
 
     public static void GeneratedTpSetup(Room room)
     {
-      if (!room.Metadata.ContainsKey(GenMetadata.PredecessorRoom.GetKey()))
+      if (!room.Metadata.ContainsKey(GenerationMetadata.PredecessorRoom.GetKey()))
       {
         return;
       }
 
       // Get exhibit ID (could also be used to port player back in front of the exhibit).
-      var roomId = room.Metadata[GenMetadata.PredecessorRoom.GetKey()];
+      var roomId = room.Metadata[GenerationMetadata.PredecessorRoom.GetKey()];
 
       // Get ID of the room the exhibit is part of.
       var oldRoom = Instance.exhibitionManager.RoomList.Find(it => it.RoomData.Id == roomId);

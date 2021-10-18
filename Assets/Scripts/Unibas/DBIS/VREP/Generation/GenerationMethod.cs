@@ -4,7 +4,7 @@ using Unibas.DBIS.VREP.Core;
 
 namespace Unibas.DBIS.VREP.Generation
 {
-  public enum GenMethod
+  public enum GenerationMethod
   {
     RandomAll,
     RandomList,
@@ -14,26 +14,26 @@ namespace Unibas.DBIS.VREP.Generation
     SemanticSom
   }
 
-  public static class GenMethodUtil
+  public static class GenerationMethodUtil
   {
-    public static string GetName(this GenMethod gr)
+    public static string GetName(this GenerationMethod gr)
     {
       return gr switch
       {
-        GenMethod.RandomAll => "Random (All)",
-        GenMethod.RandomList => "Random (Cluster)",
-        GenMethod.VisualSimilarity => "Visual Similarity",
-        GenMethod.SemanticSimilarity => "Semantic Similarity",
-        GenMethod.VisualSom => "Visual Cluster",
-        GenMethod.SemanticSom => "Semantic Cluster",
+        GenerationMethod.RandomAll => "Random (All)",
+        GenerationMethod.RandomList => "Random (Cluster)",
+        GenerationMethod.VisualSimilarity => "Visual Similarity",
+        GenerationMethod.SemanticSimilarity => "Semantic Similarity",
+        GenerationMethod.VisualSom => "Visual Cluster",
+        GenerationMethod.SemanticSom => "Semantic Cluster",
         _ => throw new ArgumentOutOfRangeException(nameof(gr), gr, null)
       };
     }
 
-    public static List<GenMethod> GetButtonTypes(int numIds)
+    public static List<GenerationMethod> GetButtonTypes(int numIds)
     {
       var mode = VrepController.Instance.settings.GenerationSettings.ButtonMode;
-      var types = new List<GenMethod>();
+      var types = new List<GenerationMethod>();
 
       // Some buttons only get added if there are IDs assigned to the image, as it would not make any sense otherwise.
       if (mode == ButtonMode.All)
@@ -41,26 +41,26 @@ namespace Unibas.DBIS.VREP.Generation
 
         if (numIds > 1)
         {
-          types.Add(GenMethod.RandomList);
+          types.Add(GenerationMethod.RandomList);
         }
 
       if (mode == ButtonMode.Visual || mode == ButtonMode.All)
       {
-        types.Add(GenMethod.VisualSimilarity);
+        types.Add(GenerationMethod.VisualSimilarity);
 
         if (numIds > 1)
         {
-          types.Add(GenMethod.VisualSom);
+          types.Add(GenerationMethod.VisualSom);
         }
       }
 
       if (mode == ButtonMode.Semantic || mode == ButtonMode.All)
       {
-        types.Add(GenMethod.SemanticSimilarity);
+        types.Add(GenerationMethod.SemanticSimilarity);
 
         if (numIds > 1)
         {
-          types.Add(GenMethod.SemanticSom);
+          types.Add(GenerationMethod.SemanticSom);
         }
       }
 

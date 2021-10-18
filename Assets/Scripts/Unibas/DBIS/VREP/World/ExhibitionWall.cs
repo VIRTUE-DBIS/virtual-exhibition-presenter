@@ -94,18 +94,18 @@ namespace Unibas.DBIS.VREP.World
       // Get IDs and potential reference.
       List<string> ids = new List<string>();
 
-      if (e.Metadata.ContainsKey(GenMetadata.MemberIds.GetKey()))
+      if (e.Metadata.ContainsKey(GenerationMetadata.MemberIds.GetKey()))
       {
-        var json = e.Metadata[GenMetadata.MemberIds.GetKey()];
+        var json = e.Metadata[GenerationMetadata.MemberIds.GetKey()];
         var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
         idDoublePairs.ForEach(it => ids.Add(it.id));
       }
 
-      var idConfig = displayal.AddComponent<IdConfig>();
+      var idConfig = displayal.AddComponent<IdListPair>();
       idConfig.associatedIds = ids;
-      idConfig.originId = e.Metadata[GenMetadata.ObjectId.GetKey()];
+      idConfig.originId = e.Metadata[GenerationMetadata.ObjectId.GetKey()];
 
-      List<GenMethod> types = GenMethodUtil.GetButtonTypes(ids.Count);
+      List<GenerationMethod> types = GenerationMethodUtil.GetButtonTypes(ids.Count);
 
       var localScale = displayal.transform.localScale;
       var offset = -2.0f;
@@ -142,13 +142,13 @@ namespace Unibas.DBIS.VREP.World
         // Button.
         RoomReferences references = null;
 
-        if (e.Metadata.ContainsKey(GenMetadata.References.GetKey()))
+        if (e.Metadata.ContainsKey(GenerationMetadata.References.GetKey()))
         {
-          var refJson = e.Metadata[GenMetadata.References.GetKey()];
+          var refJson = e.Metadata[GenerationMetadata.References.GetKey()];
           references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
         }
 
-        GenerateButton genButtonComponent = genButton.GetComponent<GenerateButton>();
+        GenerationButton genButtonComponent = genButton.GetComponent<GenerationButton>();
         genButtonComponent.type = method;
         if (references != null && references.References.ContainsKey(method.ToString()))
         {
@@ -170,7 +170,7 @@ namespace Unibas.DBIS.VREP.World
       {
         var displayal = await CreateDisplayalFromExhibit(e);
 
-        if (e.Metadata.ContainsKey(GenMetadata.Generated.GetKey()))
+        if (e.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
         {
           AddButtonsToDisplayal(e, displayal);
         }
