@@ -14,12 +14,19 @@ using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Core
 {
+  /// <summary>
+  /// Controller for the exhibition.
+  /// This class is way too heavy and would require refactoring.
+  /// TODO The refactoring should be done on any further development of VREP.
+  /// </summary>
   public class VrepController : MonoBehaviour
   {
-    public static VrepController Instance;
     public static Vector3 LobbySpawn = new Vector3(0, -9, 0);
 
-    public ExhibitionManager exhibitionManager;
+    public static VrepController Instance;
+
+    public Exhibition Exhibition;
+    public List<CuboidExhibitionRoom> RoomList = new List<CuboidExhibitionRoom>();
 
     public bool isGenerating;
 
@@ -49,9 +56,6 @@ namespace Unibas.DBIS.VREP.Core
       // Clean address.
       SanitizeHost();
 
-      // Create exhibition manager.
-      exhibitionManager = gameObject.AddComponent<ExhibitionManager>();
-
       // Reset player to lobby.
       if (settings.StartInLobby)
       {
@@ -65,6 +69,127 @@ namespace Unibas.DBIS.VREP.Core
       await LoadInitialExhibition();
     }
 
+    public async void Update()
+    {
+      // Could be used to save exhibitions via hotkey.
+      if (Input.GetKeyDown(KeyCode.F8))
+      {
+        await new ExhibitionApi().PostApiExhibitionsSaveAsync(Exhibition);
+      }
+
+      if (Input.GetKey(KeyCode.F10))
+      {
+        Restore();
+      }
+
+      if (Input.GetKey(KeyCode.F12))
+      {
+        RestoreExhibits();
+      }
+    }
+
+    /// <summary>
+    /// Destroys the currently loaded exhibition.
+    /// </summary>
+    public void DestroyCurrentExhibition()
+    {
+      RoomList.ForEach(r => Destroy(r.gameObject));
+    }
+
+    /// <summary>
+    /// Loads a new exhibition.
+    /// </summary>
+    public async Task LoadNewExhibition(Exhibition ex)
+    {
+      Exhibition = ex;
+
+      await LoadExhibition();
+    }
+
+    /// <summary>
+    /// Disables all rooms except the primary room of a generated exhibition.
+    /// </summary>
+    public void EnableOnlyMainRoom()
+    {
+      RoomList.ForEach(it => it.gameObject.SetActive(it == RoomList.First()));
+    }
+
+    /// <summary>
+    /// Loads the exhibition model specified in the Exhibition field.
+    /// </summary>
+    public async Task LoadExhibition()
+    {
+      DestroyCurrentExhibition();
+
+      foreach (var room in Exhibition.Rooms)
+      {
+        var go = await LoadRoom(room);
+        go.SetActive(false);
+      }
+
+      if (!Exhibition.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
+      {
+        // Not generated, connect all rooms.
+        VrepController.Instance.ImportedTpSetup();
+      }
+
+      EnableOnlyMainRoom();
+
+      // Setup TP to first room.
+      VrepController.Instance.LobbyTpSetup(RoomList[0]);
+
+      // TP player.
+      VrepController.TpPlayerToObjPos(RoomList[0].gameObject);
+    }
+
+    /// <summary>
+    /// Loads a room model.
+    /// </summary>
+    /// <param name="room">The room model to load.</param>
+    public async Task<GameObject> LoadRoom(Room room)
+    {
+      var roomGameObject = await ObjectFactory.BuildRoom(room);
+      var exhibitionRoom = roomGameObject.GetComponent<CuboidExhibitionRoom>();
+
+      // Add room to map.
+      RoomList.Add(exhibitionRoom);
+
+      if (room.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
+      {
+        VrepController.GeneratedTpSetup(room);
+      }
+
+      return roomGameObject;
+    }
+
+    /// <summary>
+    /// Restores positions of all exhibits.
+    /// </summary>
+    void RestoreExhibits()
+    {
+      RoomList.ForEach(r =>
+      {
+        // Only restores exhibits for the active rooms.
+        if (r.gameObject.activeSelf)
+        {
+          r.RestoreWallExhibits();
+        }
+      });
+    }
+
+    /// <summary>
+    /// Restores positions of all exhibits and teleports the player to the lobby.
+    /// </summary>
+    public void Restore()
+    {
+      RestoreExhibits();
+      EnableOnlyMainRoom();
+      VrepController.TpPlayerToLobby();
+    }
+
+    /// <summary>
+    /// Loads the initial exhibition as specified in the configuration.
+    /// </summary>
     public async Task LoadInitialExhibition()
     {
       Exhibition ex;
@@ -85,29 +210,50 @@ namespace Unibas.DBIS.VREP.Core
           throw new ArgumentOutOfRangeException();
       }
 
-      await exhibitionManager.LoadNewExhibition(ex);
+      await Instance.LoadNewExhibition(ex);
     }
 
+    /// <summary>
+    /// Loads an exhibition by the ID specified in the settings.
+    /// </summary>
+    /// <returns>The exhibition model.</returns>
     public async Task<Exhibition> LoadExhibitionById()
     {
       return await new ExhibitionApi().GetApiExhibitionsLoadIdWithIdAsync(settings.ExhibitionId);
     }
 
+    /// <summary>
+    /// Obtains the room specification from the configuration file.
+    /// </summary>
+    /// <returns>The specified room configuration.</returns>
     public RoomSpecification GetRoomSpec()
     {
       return new RoomSpecification(settings.GenerationSettings.Height, settings.GenerationSettings.Width);
     }
 
+    /// <summary>
+    /// Obtains the seed from the configuration file.
+    /// </summary>
+    /// <returns>The specified seed.</returns>
     public int GetSeed()
     {
       return settings.GenerationSettings.Seed;
     }
 
+    /// <summary>
+    /// Obtains the number of epochs to train SOMs for in VREM from the configuration file.
+    /// </summary>
+    /// <returns>The number of epochs.</returns>
     public int GetNumEpochs()
     {
       return settings.GenerationSettings.NumEpochs;
     }
 
+    /// <summary>
+    /// Generates an exhibition based on a method.
+    /// </summary>
+    /// <param name="method">The method to use for the initial room</param>
+    /// <returns>The generated exhibition model.</returns>
     public async Task<Exhibition> GenerateExhibition(GenerationMethod method)
     {
       var ex = await new GenerationApi().PostApiGenerateExhibitionAsync();
@@ -119,24 +265,48 @@ namespace Unibas.DBIS.VREP.Core
       return ex;
     }
 
+    /// <summary>
+    /// Generates a random room.
+    /// </summary>
+    /// <param name="idList">The ID list to use for the random room.</param>
+    /// <returns>The room model.</returns>
     public async Task<Room> GenerateRandomRoom(List<String> idList)
     {
       var config = new RandomGenerationRequest(GetRoomSpec(), idList, GetSeed());
       return await new GenerationApi().PostApiGenerateRoomRandomAsync(config);
     }
 
+    /// <summary>
+    /// Generates a similarity room.
+    /// </summary>
+    /// <param name="genType">The type of features to use for generation.</param>
+    /// <param name="objectId">The originating object ID</param>
+    /// <returns>The room model.</returns>
     public async Task<Room> GenerateSimilarityRoom(string genType, string objectId)
     {
       var config = new SimilarityGenerationRequest(GetRoomSpec(), genType, objectId);
       return await new GenerationApi().PostApiGenerateRoomSimilarAsync(config);
     }
 
+    /// <summary>
+    /// Generates a SOM room.
+    /// </summary>
+    /// <param name="genType">The type of features to use for generation.</param>
+    /// <param name="idList">The ID list to use for the SOM room.</param>
+    /// <returns>The room model.</returns>
     public async Task<Room> GenerateSomRoom(string genType, List<String> idList)
     {
       var config = new SomGenerationRequest(GetRoomSpec(), genType, idList, GetSeed(), GetNumEpochs());
       return await new GenerationApi().PostApiGenerateRoomSomAsync(config);
     }
 
+    /// <summary>
+    /// Sends a generation request to VREM for a given method.
+    /// </summary>
+    /// <param name="type">The type of room to generate.</param>
+    /// <param name="ids">The list of IDs to use for generation.</param>
+    /// <param name="originId">The ID of the originating object (relevant for similarity rooms).</param>
+    /// <returns>The generated room model.</returns>
     public async Task<Room> GenerateRoomByMethod(GenerationMethod type, List<string> ids = null, string originId = "")
     {
       ids ??= new List<string>();
@@ -154,6 +324,12 @@ namespace Unibas.DBIS.VREP.Core
       };
     }
 
+    /// <summary>
+    /// Generates and loads a room for an exhibition.
+    /// </summary>
+    /// <param name="origin">The originating exhibit for the generation.</param>
+    /// <param name="type">The type of room to generate.</param>
+    /// <returns>The newly created/obtained room received from VREM.</returns>
     public async Task<Room> GenerateAndLoadRoomForExhibition(GameObject origin, GenerationMethod type)
     {
       var config = origin.GetComponent<IdListPair>();
@@ -168,10 +344,10 @@ namespace Unibas.DBIS.VREP.Core
         origin.GetComponentInParent<CuboidExhibitionRoom>().RoomData.Id;
 
       // Load the room like a normal room.
-      await exhibitionManager.LoadRoom(room);
+      await Instance.LoadRoom(room);
 
       // Add the newly generated room to the exhibition model.
-      exhibitionManager.Exhibition.Rooms.Add(room);
+      Instance.Exhibition.Rooms.Add(room);
 
       // Update references.
       // TODO Move metadata manipulation into the Metadata namespace.
@@ -199,11 +375,19 @@ namespace Unibas.DBIS.VREP.Core
       return room;
     }
 
+    /// <summary>
+    /// Teleports the player to the location of a game object.
+    /// </summary>
+    /// <param name="go">The game object to teleport the player to.</param>
     public static void TpPlayerToObjPos(GameObject go)
     {
       TpPlayerToLocation(go.transform.position);
     }
 
+    /// <summary>
+    /// Teleports the player to a location.
+    /// </summary>
+    /// <param name="loc">Vector specifying the location to teleport the player to.</param>
     public static void TpPlayerToLocation(Vector3 loc)
     {
       var go = GameObject.FindWithTag("Player");
@@ -214,6 +398,9 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
+    /// <summary>
+    /// Teleports the player to the lobby.
+    /// </summary>
     public static void TpPlayerToLobby()
     {
       var lby = GameObject.Find("Lobby");
@@ -224,6 +411,15 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
+    /// <summary>
+    /// Create a teleport button model.
+    /// </summary>
+    /// <param name="origin">The (room of) origin of the teleport.</param>
+    /// <param name="dest">Destination coordinates for the teleport.</param>
+    /// <param name="buttonPos">The position of the button in the room.</param>
+    /// <param name="text">The text to display on the button.</param>
+    /// <param name="size">The size of the button.</param>
+    /// <returns>The created teleport button object.</returns>
     public static SteamVRTeleportButton CreateTeleport(GameObject origin, Vector3 dest, Vector3 buttonPos, String text,
       float size = 0.2f)
     {
@@ -243,6 +439,10 @@ namespace Unibas.DBIS.VREP.Core
       return btn;
     }
 
+    /// <summary>
+    /// Sets up teleportation for the lobby.
+    /// </summary>
+    /// <param name="firstRoom">The first room of the exhibition to teleport to from the lobby.</param>
     public void LobbyTpSetup(CuboidExhibitionRoom firstRoom)
     {
       var lby = GameObject.Find("Lobby");
@@ -259,9 +459,12 @@ namespace Unibas.DBIS.VREP.Core
       fwdTpButton.OnTeleportEnd = firstRoom.OnRoomEnter;
     }
 
+    /// <summary>
+    /// Sets up teleportation for an imported exhibition.
+    /// </summary>
     public void ImportedTpSetup()
     {
-      var roomList = exhibitionManager.RoomList;
+      var roomList = Instance.RoomList;
 
       if (roomList.Count <= 1)
       {
@@ -285,6 +488,10 @@ namespace Unibas.DBIS.VREP.Core
       }
     }
 
+    /// <summary>
+    /// Sets up teleportation for a generated room.
+    /// </summary>
+    /// <param name="room">The generated room model.</param>
     public static void GeneratedTpSetup(Room room)
     {
       if (!room.Metadata.ContainsKey(GenerationMetadata.PredecessorRoom.GetKey()))
@@ -296,8 +503,8 @@ namespace Unibas.DBIS.VREP.Core
       var roomId = room.Metadata[GenerationMetadata.PredecessorRoom.GetKey()];
 
       // Get ID of the room the exhibit is part of.
-      var oldRoom = Instance.exhibitionManager.RoomList.Find(it => it.RoomData.Id == roomId);
-      
+      var oldRoom = Instance.RoomList.Find(it => it.RoomData.Id == roomId);
+
       // Activate room.
       oldRoom.gameObject.SetActive(true);
 
@@ -310,8 +517,8 @@ namespace Unibas.DBIS.VREP.Core
       if (Instance.settings.GenerationSettings.BackButton)
       {
         var mainTpBtn = CreateTeleport(newRoomGo, targetRelativePos, new Vector3(0.1f, 0.0f, 0.0f), "Back to start");
-        mainTpBtn.OnTeleportStart = Instance.exhibitionManager.EnableOnlyMainRoom;
-        mainTpBtn.OnTeleportEnd = Instance.exhibitionManager.RoomList.First().OnRoomEnter;
+        mainTpBtn.OnTeleportStart = Instance.EnableOnlyMainRoom;
+        mainTpBtn.OnTeleportEnd = Instance.RoomList.First().OnRoomEnter;
         lastPosX = -0.1f;
       }
 
@@ -323,11 +530,16 @@ namespace Unibas.DBIS.VREP.Core
       );
       backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
       backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
-      
+
       // Deactivate room.
       oldRoom.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Sets the position for a generated room based on its origin.
+    /// </summary>
+    /// <param name="origin">The game object the room was created from.</param>
+    /// <param name="room">The generated room model.</param>
     private static void SetPositionForGeneratedRoom(GameObject origin, Room room)
     {
       const float heightIncrement = 15.0f;
@@ -367,8 +579,7 @@ namespace Unibas.DBIS.VREP.Core
         settings.VremAddress += "/";
       }
 
-      // TODO TLS support.
-      if (!settings.VremAddress.StartsWith("http://"))
+      if (!settings.VremAddress.StartsWith("http://") && !settings.VremAddress.StartsWith("https://"))
       {
         settings.VremAddress = "http://" + settings.VremAddress;
       }

@@ -32,7 +32,7 @@ namespace Unibas.DBIS.VREP.Generation
     {
       Debug.Log("Pressed.");
 
-      var room = VrepController.Instance.exhibitionManager.RoomList.Find(it => it.RoomData.Id == targetRoomId);
+      var room = VrepController.Instance.RoomList.Find(it => it.RoomData.Id == targetRoomId);
 
       if (room == null && VrepController.Instance.isGenerating)
       {
