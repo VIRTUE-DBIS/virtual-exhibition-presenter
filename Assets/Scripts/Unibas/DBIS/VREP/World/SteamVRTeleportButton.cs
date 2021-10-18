@@ -109,9 +109,9 @@ namespace Unibas.DBIS.VREP.World
       var border = GetButtonBorder();
       var cubeModel = new ComplexCuboidModel();
 
-      cubeModel.Add(Vector3.zero, new CuboidModel(size, size, height, this.model.plateMaterial));
+      cubeModel.Add(Vector3.zero, new CuboidModel(size, size, height, model.plateMaterial));
       cubeModel.Add(new Vector3(border, border, -height),
-        new CuboidModel(size - 2 * border, size - 2 * border, height, this.model.buttonMaterial));
+        new CuboidModel(size - 2 * border, size - 2 * border, height, model.buttonMaterial));
 
       return cubeModel;
     }

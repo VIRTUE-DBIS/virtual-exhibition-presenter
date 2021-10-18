@@ -28,13 +28,13 @@ namespace Unibas.DBIS.VREP.Core
 
     public int Width = 16;
 
-    public int Seed = 0;
+    public int Seed;
 
     public int NumEpochs = 1;
 
     public ButtonMode ButtonMode = ButtonMode.All;
 
-    public bool BackButton = false;
+    public bool BackButton;
   }
 
   /// <summary>
@@ -184,10 +184,8 @@ namespace Unibas.DBIS.VREP.Core
       {
         return Application.dataPath + "/" + FileName;
       }
-      else
-      {
-        return Application.dataPath + "/../" + FileName;
-      }
+
+      return Application.dataPath + "/../" + FileName;
     }
 
     /// <summary>

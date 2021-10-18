@@ -1,6 +1,7 @@
 ﻿using System;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using RestSharp.Extensions;
+using Unibas.DBIS.VREP.Utils;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.Multimedia

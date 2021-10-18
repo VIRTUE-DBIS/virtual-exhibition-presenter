@@ -1,6 +1,6 @@
+using System;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
-using System;
 
 namespace Unibas.DBIS.VREP.Utils
 {

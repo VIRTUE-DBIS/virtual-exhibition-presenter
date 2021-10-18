@@ -1,8 +1,9 @@
-namespace Unibas.DBIS.VREP.Multimedia
-{
-  using System.Threading;
-  using UnityEngine;
+using System.Threading;
+using UnityEngine;
+using Object = System.Object;
 
+namespace Unibas.DBIS.VREP.Utils
+{
   /// <summary>
   /// Taken from http://wiki.unity3d.com/index.php/TextureScale
   /// Copyright to Eric Haines.
@@ -75,7 +76,7 @@ namespace Unibas.DBIS.VREP.Multimedia
         {
           threadData = new ThreadData(slice * i, slice * (i + 1));
           ParameterizedThreadStart ts = useBilinear
-            ? new ParameterizedThreadStart(BilinearScale)
+            ? BilinearScale
             : new ParameterizedThreadStart(PointScale);
           Thread thread = new Thread(ts);
           thread.Start(threadData);
@@ -119,7 +120,7 @@ namespace Unibas.DBIS.VREP.Multimedia
       return tex;
     }
 
-    public static void BilinearScale(System.Object obj)
+    public static void BilinearScale(Object obj)
     {
       ThreadData threadData = (ThreadData)obj;
       for (var y = threadData.Start; y < threadData.End; y++)
@@ -146,7 +147,7 @@ namespace Unibas.DBIS.VREP.Multimedia
       _mutex.ReleaseMutex();
     }
 
-    public static void PointScale(System.Object obj)
+    public static void PointScale(Object obj)
     {
       ThreadData threadData = (ThreadData)obj;
       for (var y = threadData.Start; y < threadData.End; y++)

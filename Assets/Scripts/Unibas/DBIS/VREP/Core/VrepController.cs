@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Client;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
+using Newtonsoft.Json;
 using Unibas.DBIS.VREP.Generation;
 using Unibas.DBIS.VREP.Generation.Model;
 using Unibas.DBIS.VREP.LegacyObjects;
@@ -130,16 +131,16 @@ namespace Unibas.DBIS.VREP.Core
       if (!Exhibition.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
       {
         // Not generated, connect all rooms.
-        VrepController.Instance.ImportedTpSetup();
+        Instance.ImportedTpSetup();
       }
 
       EnableOnlyMainRoom();
 
       // Setup TP to first room.
-      VrepController.Instance.LobbyTpSetup(RoomList[0]);
+      Instance.LobbyTpSetup(RoomList[0]);
 
       // TP player.
-      VrepController.TpPlayerToObjPos(RoomList[0].gameObject);
+      TpPlayerToObjPos(RoomList[0].gameObject);
     }
 
     /// <summary>
@@ -156,7 +157,7 @@ namespace Unibas.DBIS.VREP.Core
 
       if (room.Metadata.ContainsKey(GenerationMetadata.Generated.GetKey()))
       {
-        VrepController.GeneratedTpSetup(room);
+        GeneratedTpSetup(room);
       }
 
       return roomGameObject;
@@ -184,7 +185,7 @@ namespace Unibas.DBIS.VREP.Core
     {
       RestoreExhibits();
       EnableOnlyMainRoom();
-      VrepController.TpPlayerToLobby();
+      TpPlayerToLobby();
     }
 
     /// <summary>
@@ -357,7 +358,7 @@ namespace Unibas.DBIS.VREP.Core
       if (model.Metadata.ContainsKey(GenerationMetadata.References.GetKey()))
       {
         var refJson = model.Metadata[GenerationMetadata.References.GetKey()];
-        references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
+        references = JsonConvert.DeserializeObject<RoomReferences>(refJson);
       }
       else
       {
@@ -367,7 +368,7 @@ namespace Unibas.DBIS.VREP.Core
       references.References[type.ToString()] = room.Id;
 
       // Store the updated references as metadata.
-      model.Metadata[GenerationMetadata.References.GetKey()] = Newtonsoft.Json.JsonConvert.SerializeObject(references);
+      model.Metadata[GenerationMetadata.References.GetKey()] = JsonConvert.SerializeObject(references);
 
       // Teleport the player.
       TpPlayerToLocation(new Vector3(room.Position.X, room.Position.Y, room.Position.Z));
@@ -409,6 +410,24 @@ namespace Unibas.DBIS.VREP.Core
       {
         TpPlayerToLocation(LobbySpawn);
       }
+    }
+
+    /// <summary>
+    /// Computes the entry point for a given room object and the associated model (holding the entry point).
+    /// </summary>
+    /// <param name="roomGo">The game object for the room.</param>
+    /// <param name="roomModel">The model data for the room.</param>
+    /// <returns>A vector with the absolute coordinates of the entry point.</returns>
+    public static Vector3 CalcEntryPointForRoom(GameObject roomGo, Room roomModel)
+    {
+      var roomPos = roomGo.transform.position;
+      var entryPos = roomModel.EntryPoint;
+
+      return new Vector3(
+        roomPos.x + entryPos.X,
+        roomPos.y + entryPos.Y,
+        roomPos.z + entryPos.Z
+      );
     }
 
     /// <summary>
@@ -455,7 +474,9 @@ namespace Unibas.DBIS.VREP.Core
       var backTpBtn = CreateTeleport(firstRoom.gameObject, lby.transform.position, Vector3.zero, "Back to Lobby");
       backTpBtn.OnTeleportStart = firstRoom.OnRoomLeave;
 
-      var fwdTpButton = CreateTeleport(lby, firstRoom.transform.position, Vector3.zero, "Go to Exhibition");
+      var posFwd = CalcEntryPointForRoom(firstRoom.gameObject, firstRoom.RoomData);
+
+      var fwdTpButton = CreateTeleport(lby, posFwd, Vector3.zero, "Go to Exhibition");
       fwdTpButton.OnTeleportEnd = firstRoom.OnRoomEnter;
     }
 
@@ -476,13 +497,15 @@ namespace Unibas.DBIS.VREP.Core
         CuboidExhibitionRoom currRoom = roomList[i];
         CuboidExhibitionRoom nextRoom = (i + 1 == roomList.Count) ? roomList[0] : roomList[i + 1];
 
-        var backTpBtn = CreateTeleport(nextRoom.gameObject, currRoom.transform.position, new Vector3(0.3f, 0.0f, 0.0f),
-          "Back");
+        var posBack = CalcEntryPointForRoom(currRoom.gameObject, currRoom.RoomData);
+
+        var backTpBtn = CreateTeleport(nextRoom.gameObject, posBack, new Vector3(0.3f, 0.0f, 0.0f), "Back");
         backTpBtn.OnTeleportStart = nextRoom.OnRoomLeave;
         backTpBtn.OnTeleportEnd = currRoom.OnRoomEnter;
 
-        var fwdTpButton = CreateTeleport(currRoom.gameObject, nextRoom.transform.position,
-          new Vector3(-0.3f, 0.0f, 0.0f), "Forward");
+        var posFwd = CalcEntryPointForRoom(nextRoom.gameObject, nextRoom.RoomData);
+
+        var fwdTpButton = CreateTeleport(currRoom.gameObject, posFwd, new Vector3(-0.3f, 0.0f, 0.0f), "Forward");
         fwdTpButton.OnTeleportStart = currRoom.OnRoomLeave;
         fwdTpButton.OnTeleportEnd = nextRoom.OnRoomEnter;
       }
@@ -512,24 +535,28 @@ namespace Unibas.DBIS.VREP.Core
       var newRoom = newRoomGo.GetComponent<CuboidExhibitionRoom>();
 
       var lastPosX = 0.0f;
-      var targetRelativePos = new Vector3(0.0f, 0.0f, 1.0f);
+
+      var mainRoom = Instance.RoomList[0];
+      var posMain = CalcEntryPointForRoom(mainRoom.gameObject, mainRoom.RoomData);
 
       if (Instance.settings.GenerationSettings.BackButton)
       {
-        var mainTpBtn = CreateTeleport(newRoomGo, targetRelativePos, new Vector3(0.1f, 0.0f, 0.0f), "Back to start");
+        var mainTpBtn = CreateTeleport(newRoomGo, posMain, new Vector3(0.1f, 0.0f, 0.0f), "Back to start");
         mainTpBtn.OnTeleportStart = Instance.EnableOnlyMainRoom;
         mainTpBtn.OnTeleportEnd = Instance.RoomList.First().OnRoomEnter;
         lastPosX = -0.1f;
       }
 
-      var backTpBtn = CreateTeleport(
+      var posPrev = CalcEntryPointForRoom(oldRoom.gameObject, oldRoom.RoomData);
+
+      var prevTpBtn = CreateTeleport(
         newRoomGo,
-        oldRoom.transform.position + targetRelativePos,
+        posPrev,
         new Vector3(lastPosX, 0.0f, 0.0f),
         "Back to last"
       );
-      backTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
-      backTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
+      prevTpBtn.OnTeleportStart = newRoom.OnRoomLeave;
+      prevTpBtn.OnTeleportEnd = oldRoom.OnRoomEnter;
 
       // Deactivate room.
       oldRoom.gameObject.SetActive(false);

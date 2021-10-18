@@ -1,9 +1,11 @@
+using System;
+
 namespace Unibas.DBIS.VREP.World
 {
   /// <summary>
   /// Store various settings for building exhibitions.
   /// </summary>
-  [System.Serializable]
+  [Serializable]
   public class ExhibitionBuildingSettings
   {
     /// <summary>

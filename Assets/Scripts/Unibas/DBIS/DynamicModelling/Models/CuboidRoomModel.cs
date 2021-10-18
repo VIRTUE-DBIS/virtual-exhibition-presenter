@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Unibas.DBIS.DynamicModelling.Models
 {
-  [System.Serializable]
+  [Serializable]
   public class CuboidRoomModel : IModel
   {
     public Vector3 position;

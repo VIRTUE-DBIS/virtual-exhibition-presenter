@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
+using Newtonsoft.Json;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
 using Unibas.DBIS.VREP.Generation;
@@ -97,7 +98,7 @@ namespace Unibas.DBIS.VREP.World
       if (e.Metadata.ContainsKey(GenerationMetadata.MemberIds.GetKey()))
       {
         var json = e.Metadata[GenerationMetadata.MemberIds.GetKey()];
-        var idDoublePairs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
+        var idDoublePairs = JsonConvert.DeserializeObject<List<IdDoublePair>>(json);
         idDoublePairs.ForEach(it => ids.Add(it.id));
       }
 
@@ -145,7 +146,7 @@ namespace Unibas.DBIS.VREP.World
         if (e.Metadata.ContainsKey(GenerationMetadata.References.GetKey()))
         {
           var refJson = e.Metadata[GenerationMetadata.References.GetKey()];
-          references = Newtonsoft.Json.JsonConvert.DeserializeObject<RoomReferences>(refJson);
+          references = JsonConvert.DeserializeObject<RoomReferences>(refJson);
         }
 
         GenerationButton genButtonComponent = genButton.GetComponent<GenerationButton>();

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Unibas.DBIS.DynamicModelling.Models
@@ -9,7 +10,7 @@ namespace Unibas.DBIS.DynamicModelling.Models
   /// In Unity3d these parameters are along the x, y and z axis.
   /// 
   /// </summary>
-  [System.Serializable]
+  [Serializable]
   public class CuboidModel : IModel
   {
     /// <summary>
