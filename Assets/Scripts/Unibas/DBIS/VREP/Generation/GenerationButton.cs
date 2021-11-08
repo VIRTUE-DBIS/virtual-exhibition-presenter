@@ -30,7 +30,7 @@ namespace Unibas.DBIS.VREP.Generation
 
     public async void ButtonPress()
     {
-      Debug.Log("Pressed.");
+      Debug.Log("Generation button pressed.");
 
       var room = VrepController.Instance.RoomList.Find(it => it.RoomData.Id == targetRoomId);
 
@@ -41,7 +41,7 @@ namespace Unibas.DBIS.VREP.Generation
 
       if (room != null) // This is also null if the room was removed (in which case we want to generate a new one).
       {
-        Debug.Log("Already exists.");
+        Debug.Log("Room already exists.");
         // Room already exists and is loaded, teleport player and return.
 
         // Update button again, required for loaded rooms.

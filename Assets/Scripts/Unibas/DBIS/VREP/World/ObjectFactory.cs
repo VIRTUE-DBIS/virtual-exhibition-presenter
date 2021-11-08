@@ -164,7 +164,7 @@ namespace Unibas.DBIS.VREP.World
       {
         if (!orientation.Equals(wallData.Direction)) continue;
 
-        Debug.Log("Material " + wallData.Texture + " for room " + roomData.Position);
+        Debug.Log("Material " + wallData.Texture + " for room " + roomData.Position + ".");
 
         return TexturingUtility.LoadMaterialByName(wallData.Texture, true);
       }

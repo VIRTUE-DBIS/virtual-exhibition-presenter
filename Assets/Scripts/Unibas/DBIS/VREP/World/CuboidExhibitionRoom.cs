@@ -70,13 +70,11 @@ namespace Unibas.DBIS.VREP.World
         _audioLoader.Stop();
       }
 
-      try
+      var timer = gameObject.transform.Find("Timer");
+
+      if (timer != null)
       {
-        gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
-      }
-      catch (Exception)
-      {
-        Debug.Log("No timer to disable was found.");
+        timer.transform.GetComponent<MeshRenderer>().enabled = false;
       }
     }
 
@@ -92,23 +90,20 @@ namespace Unibas.DBIS.VREP.World
 
       LoadAmbientAudio();
 
-      try
+      var timer = gameObject.transform.Find("Timer");
+
+      if (timer != null)
       {
-        gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
-      }
-      catch (Exception)
-      {
-        Debug.Log("No timer to enable was found.");
+        timer.transform.GetComponent<MeshRenderer>().enabled = true;
       }
     }
 
     /// <summary>
-    /// Places the exhibits in this room's space.
+    /// Places 3D objects in the room.
     /// Currently not implemented.
     /// </summary>
     public static void PopulateRoom()
     {
-      Debug.LogWarning("Cannot place 3D objects yet.");
     }
 
     /// <summary>
@@ -165,13 +160,11 @@ namespace Unibas.DBIS.VREP.World
     {
       Walls.ForEach(w => w.RestoreDisplayals());
 
-      try
+      var timer = gameObject.transform.Find("Timer");
+
+      if (timer != null)
       {
-        gameObject.transform.Find("Timer").GetComponent<Countdown>().Restart();
-      }
-      catch (Exception)
-      {
-        Debug.Log("No timer to reset was found.");
+        timer.GetComponent<Countdown>().Restart();
       }
     }
   }
