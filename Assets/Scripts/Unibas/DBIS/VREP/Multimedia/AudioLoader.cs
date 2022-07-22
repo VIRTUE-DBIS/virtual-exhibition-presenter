@@ -1,18 +1,22 @@
+#region
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#endregion
+
 namespace Unibas.DBIS.VREP.Multimedia
 {
   /// <summary>
-  /// Audio loader component for exhibits.
+  ///   Audio loader component for exhibits.
   /// </summary>
   public class AudioLoader : MonoBehaviour
   {
     private AudioSource _audioSource;
+    private string _lastUrl;
 
     private bool _loaded;
-    private string _lastUrl;
 
     private void Start()
     {
@@ -20,7 +24,7 @@ namespace Unibas.DBIS.VREP.Multimedia
     }
 
     /// <summary>
-    /// Loads an audio source from the provided URL.
+    ///   Loads an audio source from the provided URL.
     /// </summary>
     /// <param name="url">The full audio URL.</param>
     /// <returns>The result yielded from the request.</returns>
@@ -56,22 +60,18 @@ namespace Unibas.DBIS.VREP.Multimedia
     }
 
     /// <summary>
-    ///  Plays the audio which was previously loaded via ReloadAudio().
+    ///   Plays the audio which was previously loaded via ReloadAudio().
     /// </summary>
     public void Play()
     {
       if (_loaded)
-      {
         _audioSource.Play();
-      }
       else
-      {
         ReloadAudio(_lastUrl);
-      }
     }
 
     /// <summary>
-    /// Stops the audio which was previously loaded (and playing).
+    ///   Stops the audio which was previously loaded (and playing).
     /// </summary>
     public void Stop()
     {
@@ -79,15 +79,12 @@ namespace Unibas.DBIS.VREP.Multimedia
     }
 
     /// <summary>
-    /// Reloads an audio source from the provided URL.
+    ///   Reloads an audio source from the provided URL.
     /// </summary>
     /// <param name="url">The full audio source URL.</param>
     public void ReloadAudio(string url)
     {
-      if (!string.IsNullOrEmpty(url))
-      {
-        StartCoroutine(LoadAudio(url));
-      }
+      if (!string.IsNullOrEmpty(url)) StartCoroutine(LoadAudio(url));
     }
   }
 }

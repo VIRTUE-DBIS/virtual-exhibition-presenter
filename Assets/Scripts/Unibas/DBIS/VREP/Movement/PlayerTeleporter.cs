@@ -11,8 +11,6 @@ namespace Unibas.DBIS.VREP.Movement
   {
     public Vector3 destination = Vector3.zero;
 
-    public float minDistance = 1f;
-
     /// <summary>
     /// Teleports a player to the destination set.
     /// </summary>

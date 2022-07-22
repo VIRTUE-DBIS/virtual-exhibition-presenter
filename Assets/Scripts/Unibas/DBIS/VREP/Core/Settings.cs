@@ -1,9 +1,42 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using UnityEngine;
+using Valve.Newtonsoft.Json;
 
 namespace Unibas.DBIS.VREP.Core
 {
+  public enum GenerationMode
+  {
+    Static,
+    GenerationVisual,
+    GenerationSemantic
+  }
+
+  public enum ButtonMode
+  {
+    All,
+    Visual,
+    Semantic
+  }
+
+  [Serializable]
+  [SuppressMessage("ReSharper", "InconsistentNaming")]
+  public class GenerationSettings
+  {
+    public int Height = 1;
+
+    public int Width = 16;
+
+    public int Seed;
+
+    public int NumEpochs = 1;
+
+    public ButtonMode ButtonMode = ButtonMode.All;
+
+    public bool BackButton;
+  }
+
   /// <summary>
   /// Settings class; serialized from/to JSON.
   /// </summary>
@@ -14,6 +47,11 @@ namespace Unibas.DBIS.VREP.Core
     /// The Address of the VREM server instance, inclusive port.
     /// </summary>
     public string VremAddress;
+
+    /// <summary>
+    /// Whether in each room a timer is placed on the wall, counting down provided seconds.
+    /// </summary>
+    public int WallTimerCount;
 
     /// <summary>
     /// Whether the player starts in the lobby.
@@ -45,21 +83,20 @@ namespace Unibas.DBIS.VREP.Core
     public bool CeilingLogoEnabled = true;
 
     /// <summary>
-    /// Whether in each room a timer is placed on the wall, counting down provided seconds.
-    /// </summary>
-    public int WallTimerCount;
-
-    /// <summary>
     /// Whether experimental features are enabled.
     /// Default: False
     /// </summary>
     public bool PlaygroundEnabled;
+
+    public GenerationMode ExhibitionMode = GenerationMode.Static;
 
     /// <summary>
     /// The ID of the exhibition to load.
     /// Default: Empty
     /// </summary>
     public string ExhibitionId;
+
+    public GenerationSettings GenerationSettings = new GenerationSettings();
 
     /// <summary>
     /// The file name of this settings file.
@@ -90,7 +127,7 @@ namespace Unibas.DBIS.VREP.Core
       if (File.Exists(GetPath()))
       {
         var json = File.ReadAllText(GetPath());
-        return JsonUtility.FromJson<Settings>(json);
+        return JsonConvert.DeserializeObject<Settings>(json);
       }
 
       return CreateDefault();
@@ -109,7 +146,7 @@ namespace Unibas.DBIS.VREP.Core
       if (!File.Exists(filePath)) return CreateDefault();
 
       var json = File.ReadAllText(filePath);
-      return JsonUtility.FromJson<Settings>(json);
+      return JsonConvert.DeserializeObject<Settings>(json);
     }
 
     private Settings()
@@ -123,7 +160,7 @@ namespace Unibas.DBIS.VREP.Core
     /// <returns>The created default Settings object.</returns>
     private static Settings CreateDefault()
     {
-      var s = new Settings {_default = true};
+      var s = new Settings { _default = true };
       return s;
     }
 
@@ -147,10 +184,8 @@ namespace Unibas.DBIS.VREP.Core
       {
         return Application.dataPath + "/" + FileName;
       }
-      else
-      {
-        return Application.dataPath + "/../" + FileName;
-      }
+
+      return Application.dataPath + "/../" + FileName;
     }
 
     /// <summary>
@@ -160,12 +195,12 @@ namespace Unibas.DBIS.VREP.Core
     {
       if (!File.Exists(GetPath()))
       {
-        var json = JsonUtility.ToJson(this, true);
+        var json = JsonConvert.SerializeObject(this);
         File.WriteAllText(GetPath(), json);
       }
       else
       {
-        Debug.Log("Configuration already exists, will not override settings.");
+        Debug.Log("Configuration already exists, not overriding settings.");
       }
     }
   }

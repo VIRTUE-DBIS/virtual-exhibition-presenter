@@ -155,17 +155,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbySpawn: {x: 0, y: -9, z: 0}
+  exhibitionManager: {fileID: 0}
   settings:
+    VremAddress: 
+    WallTimerCount: 0
     StartInLobby: 1
-    VREMAddress: http://127.0.0.1:4567
     SpotsEnabled: 0
     LobbyFloorLogoEnabled: 1
     LobbyCeilingLogoEnabled: 1
     CeilingLogoEnabled: 1
-    WallTimerCount: 0
     PlaygroundEnabled: 0
-    RequestExhibitions: 0
+    ExhibitionMode: 0
     ExhibitionId: 
+    GenerationSettings:
+      Height: 1
+      Width: 16
+      Seed: 0
   settingsPath: 
 --- !u!4 &123453532
 Transform:

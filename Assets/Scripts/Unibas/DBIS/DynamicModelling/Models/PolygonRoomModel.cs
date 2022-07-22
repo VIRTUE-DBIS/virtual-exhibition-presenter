@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Unibas.DBIS.DynamicModelling.Models
 {
-  [System.Serializable]
+  [Serializable]
   public class PolygonRoomModel : IModel
   {
     public Vector3 position;

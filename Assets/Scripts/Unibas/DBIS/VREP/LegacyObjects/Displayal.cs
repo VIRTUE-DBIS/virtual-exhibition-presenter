@@ -1,7 +1,7 @@
-﻿using Unibas.DBIS.DynamicModelling;
+﻿using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
+using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Core;
-using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.LegacyObjects
@@ -11,6 +11,8 @@ namespace Unibas.DBIS.VREP.LegacyObjects
   /// </summary>
   public class Displayal : MonoBehaviour
   {
+    public const string NamePrefix = "Displayal ";
+
     // The corresponding exhibit for this displayal.
     private Exhibit _exhibitModel;
     public string id;
@@ -43,19 +45,19 @@ namespace Unibas.DBIS.VREP.LegacyObjects
     public void SetExhibitModel(Exhibit exhibit)
     {
       _exhibitModel = exhibit;
-      id = _exhibitModel.id;
-      name = "Displayal (" + id + ")";
+      id = _exhibitModel.Id;
+      name = NamePrefix + id;
 
       var tp = transform.Find("TitlePlaquette");
       if (tp != null)
       {
-        if (string.IsNullOrEmpty(exhibit.name))
+        if (string.IsNullOrEmpty(exhibit.Name))
         {
           tp.gameObject.SetActive(false);
         }
         else
         {
-          tp.GetComponent<Plaquette>().text.text = exhibit.name;
+          tp.GetComponent<Plaquette>().text.text = exhibit.Name;
         }
       }
       else
@@ -66,13 +68,13 @@ namespace Unibas.DBIS.VREP.LegacyObjects
       var dp = transform.Find("DescriptionPlaquette");
       if (dp != null)
       {
-        if (string.IsNullOrEmpty(exhibit.description))
+        if (string.IsNullOrEmpty(exhibit.Description))
         {
           dp.gameObject.SetActive(false);
         }
         else
         {
-          dp.GetComponent<Plaquette>().text.text = exhibit.description;
+          dp.GetComponent<Plaquette>().text.text = exhibit.Description;
         }
       }
       else
@@ -82,20 +84,24 @@ namespace Unibas.DBIS.VREP.LegacyObjects
 
       if (VrepController.Instance.settings.PlaygroundEnabled)
       {
-        // TODO Find a fix so this works regardless of image dimensions.
-        const float magicOffset = 0.5f;
+        var goTransform = gameObject.transform;
+        var goLocalPosition = goTransform.localPosition;
+        var displayalHeight = gameObject.GetComponent<BoxCollider>().size.z * goTransform.localScale.z;
 
         var anchor = ModelFactory.CreateCuboid(_anchor);
-        var col = anchor.AddComponent<BoxCollider>();
+        anchor.name = "Anchor (" + id + ")";
+        anchor.transform.parent = transform.parent;
 
+        var col = anchor.AddComponent<BoxCollider>();
         col.center = new Vector3(_anchor.width / 2, _anchor.height / 2, _anchor.depth / 2);
         col.size = new Vector3(_anchor.width, _anchor.height, _anchor.depth);
 
-        anchor.name = "Anchor (" + id + ")";
-        anchor.transform.parent = transform.parent;
-        anchor.transform.localPosition = new Vector3(_exhibitModel.position.x - _anchor.width / 2,
-          _exhibitModel.position.y - (_exhibitModel.size.y / 2 + magicOffset),
-          -_anchor.depth);
+        // TODO Check if this works for all dimensions. 
+        anchor.transform.localPosition = new Vector3(
+          goLocalPosition.x - 0.5f * _anchor.width,
+          goLocalPosition.y - 0.5f * displayalHeight - 0.5f * _anchor.height,
+          0.0f - _anchor.depth
+        );
         anchor.transform.localRotation = Quaternion.Euler(Vector3.zero);
       }
     }

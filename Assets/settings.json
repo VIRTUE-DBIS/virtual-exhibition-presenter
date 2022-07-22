@@ -1,11 +1,20 @@
 {
-  "VremAddress": "http://127.0.0.1:4545",
+  "VremAddress": "http://localhost:4545",
+  "WallTimerCount": 240,
   "StartInLobby": true,
   "SpotsEnabled": false,
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
   "CeilingLogoEnabled": true,
-  "WallTimerCount": 240,
-  "PlaygroundEnabled": true,
-  "ExhibitionId": "60f6c6d93578e5226f507630"
+  "PlaygroundEnabled": false,
+  "ExhibitionMode": 1,
+  "ExhibitionId": "613c8f6cbdd0f735b1eb8b9a",
+  "GenerationSettings": {
+    "height": 1,
+    "width": 16,
+    "seed": 0,
+    "numEpochs": 25,
+    "buttonMode": 1,
+    "backButton": false
+  }
 }

@@ -1,9 +1,11 @@
+using System;
+
 namespace Unibas.DBIS.VREP.World
 {
   /// <summary>
   /// Store various settings for building exhibitions.
   /// </summary>
-  [System.Serializable]
+  [Serializable]
   public class ExhibitionBuildingSettings
   {
     /// <summary>
@@ -18,8 +20,8 @@ namespace Unibas.DBIS.VREP.World
     public string standardDisplayalPrefabName = "Displayal";
     public string throwableDisplayalPrefabName = "ThrowableDisplayal";
 
-    private static ExhibitionBuildingSettings instance;
+    private static ExhibitionBuildingSettings _instance;
 
-    public static ExhibitionBuildingSettings Instance => instance ??= new ExhibitionBuildingSettings();
+    public static ExhibitionBuildingSettings Instance => _instance ??= new ExhibitionBuildingSettings();
   }
 }

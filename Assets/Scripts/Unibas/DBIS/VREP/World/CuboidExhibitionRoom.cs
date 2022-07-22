@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Model;
 using Unibas.DBIS.DynamicModelling.Models;
 using Unibas.DBIS.VREP.Multimedia;
-using Unibas.DBIS.VREP.VREM.Model;
 using UnityEngine;
 
 namespace Unibas.DBIS.VREP.World
@@ -14,7 +16,6 @@ namespace Unibas.DBIS.VREP.World
   /// The room may has 3D exhibits associated with it, which are placed by PopulateRoom().
   ///
   /// There are two handlers for entering and leaving the room: OnRoomEnter() and OnRoomLeave() respectively.
-  /// It is expected that these handlers are called when appropriate.
   ///
   /// The room is set up as its corresponding model is defined (RoomData). The virtual 3D appearance is driven by its model.
   /// </summary>
@@ -50,10 +51,10 @@ namespace Unibas.DBIS.VREP.World
     /// <summary>
     /// Populates this room (walls load their exhibits).
     /// </summary>
-    public void Populate()
+    public async Task Populate()
     {
       PopulateRoom(); // Not yet implemented.
-      PopulateWalls();
+      await PopulateWalls();
     }
 
     /// <summary>
@@ -62,12 +63,19 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public void OnRoomLeave()
     {
+      gameObject.SetActive(false);
+
       if (_audioLoader != null)
       {
         _audioLoader.Stop();
       }
 
-      gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = false;
+      var timer = gameObject.transform.Find("Timer");
+
+      if (timer != null)
+      {
+        timer.transform.GetComponent<MeshRenderer>().enabled = false;
+      }
     }
 
     /// <summary>
@@ -76,25 +84,37 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public void OnRoomEnter()
     {
+      gameObject.SetActive(true);
+
+      RestoreWallExhibits();
+
       LoadAmbientAudio();
-      gameObject.transform.Find("Timer").transform.GetComponent<MeshRenderer>().enabled = true;
+
+      var timer = gameObject.transform.Find("Timer");
+
+      if (timer != null)
+      {
+        timer.transform.GetComponent<MeshRenderer>().enabled = true;
+      }
     }
 
     /// <summary>
-    /// Places the exhibits in this room's space.
+    /// Places 3D objects in the room.
     /// Currently not implemented.
     /// </summary>
     public static void PopulateRoom()
     {
-      Debug.LogWarning("Cannot place 3D objects yet.");
     }
 
     /// <summary>
     /// Induces the walls to place their exhibits.
     /// </summary>
-    public void PopulateWalls()
+    public async Task PopulateWalls()
     {
-      Walls.ForEach(ew => ew.AttachExhibits());
+      foreach (var w in Walls)
+      {
+        await w.AttachExhibits();
+      }
     }
 
     /// <summary>
@@ -102,7 +122,7 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     /// <param name="orientation">The orientation for which the wall is requested.</param>
     /// <returns>The ExhibitionWall component for the specified orientation.</returns>
-    public ExhibitionWall GetWallForOrientation(WallOrientation orientation)
+    public ExhibitionWall GetWallForOrientation(Wall.DirectionEnum orientation)
     {
       return Walls.Find(wall => wall.GetOrientation() == orientation);
     }
@@ -113,7 +133,7 @@ namespace Unibas.DBIS.VREP.World
     /// </summary>
     public void LoadAmbientAudio()
     {
-      if (string.IsNullOrEmpty(RoomData.GetURLEncodedAudioPath())) return;
+      if (string.IsNullOrEmpty(RoomData.Ambient)) return;
       Debug.Log("Add audio to room.");
 
       if (_audioLoader == null)
@@ -121,7 +141,7 @@ namespace Unibas.DBIS.VREP.World
         _audioLoader = gameObject.AddComponent<AudioLoader>();
       }
 
-      _audioLoader.ReloadAudio(RoomData.GetURLEncodedAudioPath());
+      _audioLoader.ReloadAudio(RoomData.Ambient);
     }
 
     /// <summary>
@@ -130,9 +150,8 @@ namespace Unibas.DBIS.VREP.World
     /// <returns>A 3D vector representing the entry point of this room.</returns>
     public Vector3 GetEntryPoint()
     {
-      return transform.position + RoomData.entrypoint;
+      return transform.position + new Vector3(RoomData.EntryPoint.X, RoomData.EntryPoint.Y, RoomData.EntryPoint.Z);
     }
-
 
     /// <summary>
     /// Restores all exhibits on all walls and resets the countdown for all of them.
@@ -140,7 +159,13 @@ namespace Unibas.DBIS.VREP.World
     public void RestoreWallExhibits()
     {
       Walls.ForEach(w => w.RestoreDisplayals());
-      gameObject.transform.Find("Timer").GetComponent<Countdown>().Restart();
+
+      var timer = gameObject.transform.Find("Timer");
+
+      if (timer != null)
+      {
+        timer.GetComponent<Countdown>().Restart();
+      }
     }
   }
 }

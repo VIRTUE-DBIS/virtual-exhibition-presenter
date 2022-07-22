@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections;
+using Ch.Unibas.Dmi.Dbis.Vrem.Client.Api;
+using RestSharp.Extensions;
+using Unibas.DBIS.VREP.Utils;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Multimedia
 {
@@ -12,13 +13,7 @@ namespace Unibas.DBIS.VREP.Multimedia
   {
     private MeshRenderer _renderer;
 
-    /// <summary>
-    /// Reloads an image from the provided URL. If the image is too large, it gets downscaled to reduce memory usage.
-    /// This allows larger exhibitions.
-    /// </summary>
-    /// <param name="url">The full image URL.</param>
-    /// <returns>The result yielded from the request.</returns>
-    private IEnumerator LoadImage(string url)
+    public void AddImage(byte[] imageData)
     {
       if (_renderer == null)
       {
@@ -26,35 +21,16 @@ namespace Unibas.DBIS.VREP.Multimedia
       }
 
       var tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-      var hasError = false;
 
-      // Do NOT use UnityWebRequestTexture here or you will run out of memory quickly if you load many images.
-      using (var request = UnityWebRequest.Get(url))
+      tex.LoadImage(imageData);
+
+      if (tex.height > 1024 || tex.width > 1024)
       {
-        yield return request.SendWebRequest();
-        if (!(request.result == UnityWebRequest.Result.ConnectionError ||
-              request.result == UnityWebRequest.Result.ProtocolError))
-        {
-          tex.LoadImage(request.downloadHandler.data);
-
-          // Rescale so we don't run out of memory upon loading huge images.
-          // TODO This should only be a temporary resolution; consider adjusting this based on the exhibits size vector.
-          if (tex.height > 1024 || tex.width > 1024)
-          {
-            var resize = 1024.0 / Math.Max(tex.height, tex.width);
-            TextureScale.Bilinear(tex, (int) (tex.width * resize), (int) (tex.height * resize));
-          }
-        }
-        else
-        {
-          Debug.LogError(request.error);
-          Debug.LogError(request.url);
-          Debug.LogError(request.GetResponseHeaders());
-          hasError = true;
-        }
+        var resize = 1024.0 / Math.Max(tex.height, tex.width);
+        TextureScale.Bilinear(tex, (int)(tex.width * resize), (int)(tex.height * resize));
       }
 
-      _renderer.material.mainTexture = hasError ? Resources.Load<Texture>("Textures/not-available") : tex;
+      _renderer.material.mainTexture = tex;
 
       GC.Collect();
     }
@@ -63,9 +39,11 @@ namespace Unibas.DBIS.VREP.Multimedia
     /// Reloads an image from the provided URL.
     /// </summary>
     /// <param name="url">The full image URL.</param>
-    public void ReloadImage(string url)
+    public async void ReloadImage(string url)
     {
-      StartCoroutine(LoadImage(url));
+      var req = await new ContentApi().GetApiContentWithPathAsync(url);
+
+      AddImage(req.ReadAsBytes());
     }
   }
 }

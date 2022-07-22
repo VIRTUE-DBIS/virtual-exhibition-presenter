@@ -13,7 +13,7 @@ namespace ObjImport
 
     private IEnumerator LoadModel(string url)
     {
-      Debug.Log("Loading " + url);
+      Debug.Log("Loading model " + url + ".");
       using var request = UnityWebRequest.Get(url);
 
       yield return request.SendWebRequest();
