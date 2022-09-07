@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "ch.unibas.dmi.dbis.vrem.client": {
-      "version": "https://github.com/VIRTUE-DBIS/vrem-unity-interface.git#main",
+      "version": "https://github.com/VIRTUE-DBIS/vrem-unity-interface.git#all-dlls",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d103145d8ef7af5fac243c1beaa6e1dbb4caed00"
+      "hash": "3630657b206f3715543fc2011806597ec4c5aa33"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -20,11 +20,10 @@
       "dependencies": {}
     },
     "com.unity.collab-proxy": {
-      "version": "1.13.5",
+      "version": "1.17.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0",
         "com.unity.services.core": "1.0.1"
       },
       "url": "https://packages.unity.com"
@@ -46,7 +45,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.11",
+      "version": "2.0.16",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -55,15 +54,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
-      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -85,7 +77,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.29",
+      "version": "1.1.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -126,7 +118,7 @@
       }
     },
     "com.unity.xr.legacyinputhelpers": {
-      "version": "2.1.8",
+      "version": "2.1.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {
